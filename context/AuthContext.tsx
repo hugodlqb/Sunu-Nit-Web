@@ -41,7 +41,7 @@ export function AuthProvider({
             .from("persons")
             .select("*")
             .eq("auth_user_id", userId)
-            .single();
+            .maybeSingle();
 
         if (error) {
 
@@ -49,6 +49,14 @@ export function AuthProvider({
 
             setProfile(null);
 
+            return;
+
+        }
+
+        if (!data) {
+
+            console.warn("Perfil no encontrado para usuario:", userId);
+            setProfile(null);
             return;
 
         }
@@ -62,13 +70,18 @@ export function AuthProvider({
 
         async function loadUser() {
 
-            const {
+            const { data, error } = await supabase.auth.getUser();
 
-                data: {
-                    user
-                }
+            if (error) {
 
-            } = await supabase.auth.getUser();
+                console.error("Error fetching authenticated user:", error);
+                setUser(null);
+                setProfile(null);
+                return;
+
+            }
+
+            const user = data?.user ?? null;
 
             setUser(user);
 

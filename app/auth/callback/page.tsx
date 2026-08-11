@@ -18,7 +18,7 @@ export default function AuthCallback() {
 
             if (error) {
 
-                console.error(error);
+                console.error("Auth callback error:", error);
 
                 router.replace("/");
 

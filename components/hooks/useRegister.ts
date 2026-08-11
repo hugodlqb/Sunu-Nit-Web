@@ -138,6 +138,11 @@ export function useRegister() {
 
         }
 
+        const redirectTo =
+            typeof window !== "undefined"
+                ? `${window.location.origin}/auth/callback`
+                : undefined;
+
         const { data, error } = await supabase.auth.signUp({
 
             email: form.email,
@@ -145,8 +150,7 @@ export function useRegister() {
 
             options: {
 
-                emailRedirectTo:
-                    "http://localhost:3000/auth/callback",
+                emailRedirectTo: redirectTo,
 
                 data: {
 
