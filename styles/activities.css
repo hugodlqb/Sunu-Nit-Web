@@ -1,0 +1,259 @@
+/* ===========================================
+   ACTIVITIES
+=========================================== */
+
+.activities-swiper {
+    overflow: visible;
+}
+
+.activity-card {
+
+    display: flex;
+    flex-direction: column;
+
+    height: 430px;
+
+    background: white;
+
+    border-radius: var(--radius-md);
+
+    overflow: hidden;
+
+    cursor: pointer;
+
+    border: 1px solid var(--color-border);
+
+    box-shadow: var(--shadow-sm);
+
+    transition: .35s ease;
+}
+
+.activity-card:hover {
+
+    transform: translateY(-8px);
+
+    box-shadow: var(--shadow-lg);
+
+}
+
+.activity-image {
+
+    position: relative;
+
+    height: 72%;
+
+    overflow: hidden;
+
+}
+
+.activity-image img{
+
+    object-fit: cover;
+
+    transition: .6s ease;
+
+}
+
+.activity-card:hover .activity-image img{
+
+    transform: scale(1.08);
+
+}
+
+.activity-info{
+
+    flex:1;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:space-between;
+
+    padding:1.5rem;
+
+}
+
+.activity-info h3{
+
+    margin:0;
+
+    color:var(--color-primary);
+
+    font-size:1.3rem;
+
+    line-height:1.35;
+
+}
+
+.activity-btn {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+
+    background: none;
+    border: none;
+
+    color: var(--color-primary);
+
+    font-weight: 700;
+    cursor: pointer;
+
+    padding: 0;
+
+    transition: .3s ease;
+}
+
+
+.activity-btn:hover {
+    gap: .7rem;
+    color: var(--color-secondary);
+}
+
+.activity-btn svg{
+
+    transition:.25s;
+
+}
+
+.activity-card:hover .activity-btn svg{
+
+    transform:translateX(6px);
+
+}
+
+/* =========================
+   ACTIVITIES CAROUSEL
+========================= */
+
+#activities .swiper {
+    overflow: hidden;
+    padding: 1rem 0 2rem;
+}
+
+#activities .swiper-button-next,
+#activities .swiper-button-prev{
+
+    color:var(--color-primary);
+
+    width:48px;
+
+    height:48px;
+
+    background:white;
+
+    border-radius:50%;
+
+    box-shadow:var(--shadow-md);
+
+    border:1px solid var(--color-border);
+
+}
+
+#activities .swiper-button-next::after,
+#activities .swiper-button-prev::after{
+
+    font-size:18px;
+
+    font-weight:bold;
+
+}
+
+#activities .swiper-button-disabled{
+
+    opacity:.3;
+
+}
+
+/* ===========================================
+   ACTIVITY CARD HEADER COLORS
+=========================================== */
+
+
+.activity-info{
+
+    transition:.3s ease;
+
+}
+
+
+/* Desayunos */
+
+.activity-breakfast .activity-info{
+
+    background:#F5EAD7;
+
+}
+
+
+/* Salud */
+
+.activity-health .activity-info{
+
+    background:#E3F0E7;
+
+}
+
+
+/* Higiene */
+
+.activity-hygiene .activity-info{
+
+    background:#E8EEF5;
+
+}
+
+
+/* Voluntariado */
+
+.activity-volunteers .activity-info{
+
+    background:#F6E4DD;
+
+}
+
+
+/* Equipo */
+
+.activity-team .activity-info{
+
+    background:#EEE8F5;
+
+}
+
+
+/* ===========================================
+   RESPONSIVE
+=========================================== */
+
+@media(max-width:1100px){
+
+    .activity-card{
+
+        height:400px;
+
+    }
+
+}
+
+@media(max-width:768px){
+
+    .activity-card{
+
+        height:360px;
+
+    }
+
+    .activity-info{
+
+        padding:1.2rem;
+
+    }
+
+    .activity-info h3{
+
+        font-size:1.15rem;
+
+    }
+
+}

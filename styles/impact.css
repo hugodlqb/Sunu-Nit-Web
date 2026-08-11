@@ -1,0 +1,153 @@
+/* ==========================
+   IMPACT SECTION
+========================== */
+
+.cloud-card {
+    min-height: 420px;
+    width: 100%;
+    max-width: none;
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+
+    background-size: 100% 50%;
+    background-repeat: no-repeat;
+    background-position: top center;
+
+    margin: 0 auto;
+    position: relative;
+
+    transition: var(--transition);
+}
+
+.cloud-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+
+.cloud-content {
+
+    position: absolute;
+
+    bottom: 0;
+    left: 0;
+
+    width: 100%;
+    height: 50%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    background: rgba(255,255,255,.9);
+
+    padding: 1rem;
+
+    text-align: center;
+
+}
+
+.cloud-title-wrapper {
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+
+}
+
+.cloud-title-wrapper h4 {
+    margin: 0;
+}
+
+.cloud-icon {
+
+    width: 60px;
+    height: 60px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 50%;
+
+    font-size: 1.8rem;
+
+}
+
+.cloud-desc {
+
+    color: var(--color-text-muted);
+
+    font-size: 1rem;
+
+    margin: 1rem 0;
+
+}
+
+.btn-ver-mas {
+
+    margin-top: auto;
+
+    align-self: flex-start;
+
+    background: transparent;
+
+    border: none;
+
+    cursor: pointer;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: .5rem;
+
+    color: var(--color-text-main);
+
+    font-size: .95rem;
+
+    font-weight: 600;
+
+    transition: var(--transition);
+
+}
+
+.btn-ver-mas:hover {
+
+    color: var(--color-primary);
+
+}
+
+.btn-ver-mas svg {
+
+    color: var(--color-accent);
+
+}
+
+/* ==========================
+   RESPONSIVE
+========================== */
+
+@media (max-width:1023px){
+
+    .cloud-card{
+
+        max-width:600px;
+
+    }
+
+}
+
+@media (max-width:767px){
+
+    .cloud-card{
+
+        width:90%;
+        max-width:100%;
+
+    }
+
+}

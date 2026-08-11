@@ -1,0 +1,222 @@
+/* ==========================
+   ACCOUNT PANEL
+========================== */
+
+.account-panel {
+  position: fixed;
+
+  top: 0;
+  right: 0;
+
+  width: 100%;
+  height: 100vh;
+
+  background: var(--color-primary);
+
+  z-index: 9000;
+
+  display: flex;
+
+  flex-direction: column;
+
+  animation: accountSlideIn 0.35s ease forwards;
+}
+
+
+.account-panel.closing {
+
+    animation: accountSlideOut .3s ease forwards;
+
+}
+
+
+
+@keyframes accountSlideIn {
+
+    from {
+
+        transform:translateX(100%);
+
+    }
+
+    to {
+
+        transform:translateX(0);
+
+    }
+
+}
+
+
+
+@keyframes accountSlideOut {
+
+    from {
+
+        transform:translateX(0);
+
+    }
+
+    to {
+
+        transform:translateX(100%);
+
+    }
+
+}
+
+/* ==========================
+   HEADER
+========================== */
+
+.account-header {
+  height: 80px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  position: relative;
+
+  padding: 0 2rem;
+}
+
+.account-header h2 {
+  color: white;
+
+  font-size: 2rem;
+
+  font-weight: 700;
+
+  margin: 0;
+}
+
+.account-close {
+  position: absolute;
+
+  left: 2rem;
+
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  background: rgba(255, 255, 255, 0.15);
+
+  border: none;
+
+  width: 45px;
+
+  height: 45px;
+
+  border-radius: 50%;
+
+  color: white;
+
+  font-size: 2rem;
+
+  cursor: pointer;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  transition: 0.25s;
+}
+
+.account-close:hover {
+  background: white;
+
+  color: var(--color-primary);
+}
+
+/* ==========================
+   BODY
+========================== */
+
+.account-body {
+  flex: 1;
+
+  display: flex;
+
+  background: white;
+
+  border-radius: 30px 30px 0 0;
+
+  overflow: hidden;
+}
+
+/* ==========================
+   SIDEBAR
+========================== */
+
+.account-sidebar {
+  width: 280px;
+
+  background: #fafafa;
+
+  padding: 2rem;
+
+  border-right: 1px solid var(--color-border);
+}
+
+.account-sidebar button {
+
+    width:100%;
+
+    padding:1rem;
+
+    margin-bottom:.7rem;
+
+    border:none;
+
+    background:transparent;
+
+    text-align:left;
+
+    border-radius:12px;
+
+    font-size:1rem;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:1rem;
+
+}
+
+.account-sidebar button:hover {
+  background: #f1f1f1;
+}
+
+.account-sidebar button.active {
+  background: var(--color-primary);
+
+  color: white;
+}
+
+/* ==========================
+   CONTENT
+========================== */
+
+.account-content {
+  flex: 1;
+
+  padding: 3rem;
+
+  overflow-y: auto;
+}
+
+.account-content h2 {
+  color: var(--color-primary);
+}

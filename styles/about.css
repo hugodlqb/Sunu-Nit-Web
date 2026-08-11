@@ -1,0 +1,260 @@
+/* =========================
+   ABOUT SECTION
+========================= */
+
+.about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+}
+
+.about-team-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 220px);
+    gap: 2rem;
+    justify-content: center;
+}
+
+.about-team-grid .team-card:nth-child(3) {
+    grid-column: 1 / 3;
+    justify-self: center;
+}
+
+/* =========================
+   SECTION HEADER
+========================= */
+
+
+.section-header {
+
+    text-align: center;
+
+    max-width: 700px;
+
+    margin: 0 auto 3rem;
+
+}
+
+
+.section-header h2 {
+
+    font-size: 2.5rem;
+
+    font-weight: 700;
+
+    color: var(--color-primary);
+
+    margin-bottom: 1rem;
+
+}
+
+
+.section-subtitle {
+
+    color: var(--color-text-muted);
+
+    font-size: 1.1rem;
+
+    line-height: 1.6;
+
+}
+
+/* =========================
+   ABOUT BENEFITS
+========================= */
+
+
+.about-benefits {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 0.5rem;
+
+    margin: 1.5rem 0;
+
+}
+
+
+.about-benefits p {
+
+    background: none;
+
+    padding: 0;
+
+    border: none;
+
+    box-shadow: none;
+
+    font-weight: 600;
+
+    color: var(--color-primary);
+
+    text-align: center;
+
+}
+
+
+.check {
+
+    color:var(--color-primary);
+
+    font-weight:800;
+
+    margin-right:.5rem;
+
+}
+
+/* =========================
+   TEAM CARDS
+========================= */
+
+.team-card {
+
+    background: white;
+
+    border-radius: var(--radius-md);
+
+    padding: 1.5rem;
+
+    text-align: center;
+
+    box-shadow: var(--shadow-md);
+
+    border: 1px solid var(--color-border);
+
+    transition: transform .3s ease;
+
+    width: 220px;
+
+    min-height: 300px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: flex-start;
+
+}
+
+
+.team-card:hover {
+
+    transform: translateY(-5px);
+
+}
+
+
+.team-card h3 {
+
+    font-size: 1.3rem;
+
+    color: var(--color-primary);
+
+    margin-bottom: .5rem;
+
+}
+
+
+.team-role {
+
+    color: var(--color-text-muted);
+
+    font-size: .95rem;
+
+}
+
+.team-img {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    overflow: hidden;
+
+    margin-bottom: 1rem;
+
+    box-shadow: var(--shadow-md);
+    border: 4px solid white;
+}
+
+.team-img img {
+    object-fit: cover;
+}
+
+.team-role {
+    color: var(--color-secondary);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+
+/* =========================
+   SECTION
+========================= */
+
+#about.section {
+    padding: 6rem 0;
+}
+
+
+/* =========================
+   TEXT
+========================= */
+
+.about-text-content {
+    padding-right: 1rem;
+}
+
+
+.about-text-content p {
+    color: var(--color-text-muted);
+    line-height: 1.7;
+}
+
+
+.about-text-content h3 {
+    color: var(--color-primary);
+}
+
+
+.text-lg {
+    font-size: 1.25rem;
+}
+
+
+.mb-2 {
+    margin-bottom: 2rem;
+}
+
+
+.mb-4 {
+    margin-bottom: 6rem;
+}
+
+
+.mt-2 {
+    margin-top: 2rem;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:900px) {
+
+    .about-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .about-team-grid {
+        grid-template-columns: 1fr;
+    }
+
+}

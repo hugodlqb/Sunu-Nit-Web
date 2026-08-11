@@ -1,0 +1,303 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+
+:root {
+
+    --color-bg: #FFFFFF;
+    --color-bg-light: #F9F7F1;
+    --color-bg-alt: #F4F0E8;
+
+    --color-primary: #2C4C3B;
+    --color-secondary: #C14A36;
+    --color-secondary-hover: #a13a29;
+    --color-accent: #D19A3E;
+
+    --color-text-main: #222222;
+    --color-text-muted: #555555;
+
+    --color-border: #E5E2DA;
+
+
+    --font-main: 'Outfit', sans-serif;
+
+
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+
+
+    --shadow-sm: 0 4px 12px rgba(0, 0, 0, .03);
+    --shadow-md: 0 12px 30px rgba(0, 0, 0, .06);
+
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+body {
+
+    font-family: var(--font-main);
+    color: var(--color-text-main);
+    background: white;
+
+}
+
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.btn {
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: .85rem 2rem;
+
+    border-radius: 50px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+}
+
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+}
+
+
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+
+}
+
+.container {
+
+    width: 100%;
+    max-width: 1200px;
+
+    margin: 0 auto;
+
+    padding-left: 5%;
+    padding-right: 5%;
+
+}
+
+.container-sm {
+
+    max-width: 850px;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+/* =========================
+   SECTION
+========================= */
+
+.section {
+    padding: 7rem 0;
+    scroll-margin-top: 110px;
+}
+
+
+.section-white {
+    background-color: var(--color-bg);
+}
+
+
+.section-light {
+    background-color: var(--color-bg-light);
+}
+
+
+.section-alt {
+    background-color: var(--color-bg-alt);
+}
+
+
+
+/* =========================
+   BTN-PRIMARY
+========================= */
+
+.btn-primary {
+
+    background: var(--color-secondary);
+    color: white;
+
+}
+
+
+.btn-primary:hover {
+
+    background: var(--color-secondary-hover);
+
+}
+
+
+/* =========================
+   FLOATING COLLABORATE BUTTON
+========================= */
+
+.floating-collab-btn {
+
+    position: fixed;
+
+    right: 2.5rem;
+    bottom: 2.5rem;
+
+    z-index: 5000;
+    padding: 1.8rem 2.5rem;
+
+    font-size: 2rem;
+    font-weight: 800;
+
+    border-radius: 50px;
+
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+
+    box-shadow: 0 12px 35px rgba(0, 0, 0, .20);
+
+    transition: var(--transition);
+
+}
+
+.floating-collab-btn.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+
+.floating-collab-btn svg {
+    animation: heartBeat 2s infinite;
+
+    width: 45px;
+    height: 45px;
+}
+
+
+@keyframes heartBeat {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    10% {
+        transform: scale(1.15);
+    }
+
+    20% {
+        transform: scale(1);
+    }
+
+}
+
+
+.floating-collab-btn:hover {
+
+    transform: translateY(-5px) scale(1.03);
+
+}
+
+
+.floating-collab-btn:hover {
+
+    transform: translateY(-4px);
+
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.header {
+
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+
+    background-color: var(--color-bg-alt);
+
+    z-index: 1000;
+
+    padding: 1rem 0;
+
+    box-shadow: 0 1px 0 rgba(0, 0, 0, .05);
+
+}
+
+.logo img {
+
+    object-fit: contain;
+
+}
+
+.activity-content::-webkit-scrollbar {
+
+    width: 4px;
+
+}
+
+
+.activity-content::-webkit-scrollbar-track {
+
+    background: transparent;
+
+}
+
+
+.activity-content::-webkit-scrollbar-thumb {
+
+    background: var(--color-secondary);
+    border-radius: 20px;
+
+}
+
+
+@media(max-width:768px) {
+
+    .floating-collab-btn {
+
+        right: 1rem;
+        bottom: 1rem;
+
+        padding: 1rem 1.8rem;
+
+        font-size: 1.1rem;
+
+    }
+
+
+    .floating-collab-btn svg {
+
+        width: 26px;
+        height: 26px;
+
+    }
+
+}

@@ -1,0 +1,39 @@
+{
+  "name": "sununit-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "clean-collab": "postcss styles/detailsmodal.css -o styles/about.clean.css"
+  },
+  "dependencies": {
+    "@phosphor-icons/react": "^2.1.10",
+    "@supabase/supabase-js": "^2.112.0",
+    "next": "16.2.12",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "react-phone-number-input": "^3.4.17",
+    "swiper": "^14.0.7"
+  },
+  "devDependencies": {
+    "@fullhuman/postcss-purgecss": "^8.0.0",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "cssnano": "^8.0.2",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.12",
+    "postcss-cli": "^11.0.1",
+    "purgecss": "^8.0.0",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  },
+  "allowScripts": {
+    "sharp@0.34.5": true,
+    "unrs-resolver@1.12.2": true
+  }
+}

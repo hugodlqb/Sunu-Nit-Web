@@ -1,0 +1,526 @@
+/* ==== HEADER ==== */
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.95);
+    z-index: 1000;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
+    padding: 1rem 0;
+    transition: var(--transition);
+}
+
+
+/* CONTENEDOR */
+
+.header-content {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+/* ==== LOGO ==== */
+
+.header-logo {
+    width: 200px;
+    height: 65px;
+    margin-left: -10rem;
+}
+
+/* ==== NAVIGATION ==== */
+
+.nav {
+    display: flex;
+    align-items: center;
+    gap: 1.3rem;
+
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+
+    white-space: nowrap;
+}
+
+
+.nav a {
+
+    position: relative;
+
+    color: var(--color-text-muted);
+
+    font-weight: 700;
+
+    font-size: 1rem;
+
+    white-space: nowrap;
+
+    padding: .5rem 0;
+
+    transition: .25s ease;
+
+}
+
+
+
+/* línea inferior animada */
+
+.nav a::after {
+
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+
+    bottom: 0;
+
+    width: 0;
+
+    height: 3px;
+
+    background: var(--color-secondary);
+
+    border-radius: 10px;
+
+    transition: .25s ease;
+
+}
+
+
+
+.nav a:hover {
+
+    color: var(--color-primary);
+
+}
+
+
+
+.nav a:hover::after {
+
+    width: 100%;
+
+}
+
+.nav a.active {
+
+    color: var(--color-primary);
+
+}
+
+
+.nav a.active::after {
+
+    width: 100%;
+
+}
+
+
+/* ==== ACTIONS ==== */
+
+.header-actions {
+    display:flex;
+    align-items:center;
+    gap:1.5rem;
+
+    position:absolute;
+    right:-10%;
+
+    flex-shrink:0;
+    z-index:10;
+}
+
+/* LOGIN */
+
+.user-btn {
+
+    background: transparent;
+    border: none;
+
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    cursor: pointer;
+
+    color: var(--color-text-muted);
+
+    font-family: inherit;
+    font-size: 1.1rem;
+    font-weight: 600;
+
+    padding: 0.5rem;
+
+    transition: var(--transition);
+
+}
+
+
+.user-btn:hover {
+
+    color: var(--color-primary);
+
+}
+
+/* ==== IDIOMAS ==== */
+
+
+.lang-selector {
+
+    position: relative;
+
+    border-left: 1px solid var(--color-border);
+
+    margin-right: 0;
+    padding-left: 1.5rem;
+
+}
+
+
+.lang-btn {
+
+    background: none;
+    border: none;
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+
+    color: var(--color-text-muted);
+
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+
+}
+
+
+
+.lang-menu {
+
+    position: absolute;
+
+    top: calc(100% + 10px);
+    right: 0;
+
+    background: white;
+
+    min-width: 140px;
+
+    border-radius: var(--radius-sm);
+
+    box-shadow: var(--shadow-md);
+
+    border: 1px solid var(--color-border);
+
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+
+}
+
+
+
+.lang-option {
+
+    padding: 0.8rem 1rem;
+
+    background: white;
+
+    border: none;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    font-family: inherit;
+
+    font-size: 1rem;
+
+}
+
+
+.lang-option:hover {
+
+    background: var(--color-bg-light);
+
+}
+
+
+
+/* ==== MOBILE ==== */
+
+
+.mobile-toggle {
+
+    display: none;
+
+    background: none;
+    border: none;
+
+    font-size: 2rem;
+
+    color: var(--color-primary);
+
+    cursor: pointer;
+
+}
+.user-popover hr {
+
+    border: none;
+
+    border-top: 1px solid var(--color-border);
+
+    margin: 1rem 0;
+
+}
+/* ======================
+   USER MENU
+====================== */
+
+
+.user-menu-container {
+    position: relative;
+}
+
+
+.user-popover {
+
+    position: absolute;
+
+    top: calc(100% + 15px);
+
+    right: 0;
+
+    width: 280px;
+
+    background: white;
+
+    border-radius: var(--radius-md);
+
+    padding: 1.5rem;
+
+    box-shadow: var(--shadow-md);
+
+    border: 1px solid var(--color-border);
+
+    z-index: 2000;
+
+}
+
+
+.user-popover h4 {
+
+    margin-bottom: 1rem;
+
+    color: var(--color-primary);
+
+}
+
+
+
+.form-input {
+
+    width: 100%;
+
+    padding: .75rem 1rem;
+
+    margin-bottom: .8rem;
+
+    border-radius: var(--radius-sm);
+
+    border: 1px solid var(--color-border);
+
+    font-family: inherit;
+
+}
+
+
+
+.user-popover .btn {
+
+    width: 100%;
+
+    justify-content: center;
+
+}
+
+.user-popover .btn svg {
+    margin-left: .5rem;
+}
+
+.user-register {
+
+    margin-top: 1.2rem;
+
+    padding-top: 1rem;
+
+    border-top: 1px solid var(--color-border);
+
+    text-align: center;
+
+    font-size: .9rem;
+
+}
+
+
+
+.user-register button {
+
+    display: block;
+
+    width: 100%;
+
+    margin-top: .5rem;
+
+    border: none;
+
+    background: none;
+
+    color: var(--color-primary);
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+}
+
+
+
+/* ==== RESPONSIVE ==== */
+
+
+@media(max-width:1200px) {
+
+    .logo {
+        margin-right: 2rem;
+    }
+
+
+    .nav {
+
+        gap: 1rem;
+
+    }
+
+
+    .nav a {
+
+        font-size: 0.95rem;
+
+    }
+
+
+    .header-actions {
+
+        gap: 1rem;
+    }
+
+}
+
+
+
+.user-menu-option {
+
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: .75rem;
+
+    padding: .8rem 1rem;
+
+    border: none;
+
+    background: white;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    font-family: inherit;
+
+    font-size: 1rem;
+
+    border-radius: var(--radius-sm);
+
+    transition: .2s ease;
+
+}
+
+
+.user-menu-option:hover {
+
+    background:#f5f5f5;
+
+}
+
+
+@media(max-width:768px) {
+
+
+    .nav {
+
+        position: fixed;
+
+        top: 80px;
+        left: -100%;
+
+        width: 100%;
+        height: calc(100vh - 80px);
+
+        background: white;
+
+        flex-direction: column;
+
+        padding: 3rem;
+
+        transition: 0.3s;
+
+    }
+
+
+    .nav.active {
+
+        left: 0;
+
+    }
+
+
+    .nav a {
+
+        font-size: 1.35rem;
+
+    }
+
+
+    .header-actions {
+
+        margin-left: auto;
+
+    }
+
+
+    .user-btn span,
+    .header-collab-btn {
+
+        display: none;
+
+    }
+
+
+    .mobile-toggle {
+
+        display: block;
+
+    }
+
+
+}

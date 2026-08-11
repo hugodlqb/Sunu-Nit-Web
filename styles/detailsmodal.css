@@ -1,0 +1,397 @@
+/* =========================
+   ACTIVITY MODAL OVERLAY
+========================= */
+
+.activity-modal-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.65);
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  z-index: 9999;
+
+  padding: 2rem;
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.activity-modal {
+  background: white;
+
+  width: 100%;
+
+  max-width: 900px;
+
+  max-height: 90vh;
+
+  border-radius: 24px;
+
+  position: relative;
+
+  box-shadow: var(--shadow-lg);
+
+  overflow: hidden;
+}
+
+.activity-content {
+  max-height: 90vh;
+
+  overflow-y: auto;
+}
+
+/* =========================
+   CLOSE
+========================= */
+
+.activity-close {
+  position: fixed;
+
+  top: calc(5vh + 1.2rem);
+
+  right: calc((100vw - min(900px, 90vw)) / 2 + 1.2rem);
+
+  z-index: 10000;
+
+  width: 42px;
+
+  height: 42px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: var(--color-secondary);
+
+  color: white;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  cursor: pointer;
+
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+
+  transition: 0.25s ease;
+}
+
+.activity-close:hover {
+  background: var(--color-secondary-hover);
+
+  transform: scale(1.08);
+}
+
+.activity-close:hover {
+  background: var(--color-secondary-hover);
+
+  transform: scale(1.08);
+}
+
+.activity-close:hover {
+  background: var(--color-secondary-hover);
+
+  transform: scale(1.08);
+}
+
+/* =========================
+   MAIN CONTENT
+========================= */
+
+.activity-content {
+  padding: 0;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.activity-header {
+  background: var(--color-primary);
+
+  color: white;
+
+  padding: 3rem;
+}
+
+.activity-header h2 {
+  color: white;
+
+  font-size: 2.2rem;
+
+  margin: 1rem 0;
+
+  line-height: 1.2;
+}
+
+.activity-summary {
+  color: rgba(255, 255, 255, 0.9);
+
+  font-size: 1.15rem;
+
+  line-height: 1.7;
+
+  max-width: 750px;
+}
+
+.activity-category {
+  display: inline-block;
+
+  background: var(--color-secondary);
+
+  color: white;
+
+  padding: 0.45rem 1.2rem;
+
+  border-radius: 50px;
+
+  font-weight: 700;
+}
+
+/* =========================
+   UPDATES
+========================= */
+
+.activity-updates {
+  display: flex;
+
+  flex-direction: column;
+}
+
+.activity-update {
+  padding: 3rem;
+}
+
+.activity-update.update-beige {
+  background: #f5ead7;
+}
+
+.activity-update.update-light {
+  background: #f9f7f1;
+}
+
+/* =========================
+   UPDATE TEXT
+========================= */
+
+.activity-date {
+  color: var(--color-secondary);
+
+  font-weight: 700;
+
+  font-size: 0.95rem;
+
+  display: block;
+
+  margin-bottom: 0.7rem;
+}
+
+.activity-update h3 {
+  color: var(--color-primary);
+
+  font-size: 1.5rem;
+
+  margin-bottom: 1rem;
+}
+
+.activity-update p {
+  color: #444;
+
+  font-size: 1.05rem;
+
+  line-height: 1.75;
+
+  margin-bottom: 1.8rem;
+}
+
+/* =========================
+   IMAGE CAROUSEL
+========================= */
+
+.activity-swiper {
+  width: 100%;
+
+  height: 360px;
+
+  border-radius: 18px;
+
+  overflow: hidden;
+}
+
+.activity-update-image {
+  position: relative;
+
+  width: 100%;
+
+  height: 100%;
+}
+
+.activity-update-image img {
+  object-fit: cover;
+}
+
+/* =========================
+   DETAILS MODAL (IMPACT / NEWS)
+========================= */
+
+.details-modal-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.65);
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  z-index: 9999;
+
+  padding: 2rem;
+}
+
+.details-modal-content {
+  background: white;
+
+  width: 100%;
+
+  max-width: 800px;
+
+  max-height: 90vh;
+
+  overflow: hidden;
+
+  border-radius: 24px;
+
+  position: relative;
+
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+/* CERRAR */
+
+.details-modal-close {
+  position: absolute;
+
+  top: 1rem;
+
+  right: 1rem;
+
+  z-index: 10;
+
+  width: 42px;
+
+  height: 42px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: var(--color-secondary);
+
+  color: white;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  cursor: pointer;
+
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.details-modal-close:hover {
+  background: var(--color-secondary-hover);
+
+  transform: scale(1.05);
+}
+
+/* IMAGEN */
+
+.modal-img-container {
+  width: 100%;
+}
+
+.modal-img-container img {
+  width: 100%;
+
+  height: 400px;
+
+  object-fit: cover;
+}
+
+/* TEXTO */
+
+.modal-text-container {
+  padding: 2.5rem;
+}
+
+.modal-text-container h3 {
+  color: var(--color-primary);
+
+  font-size: 2rem;
+
+  margin-bottom: 1rem;
+}
+
+.modal-text-container p {
+  color: var(--color-text-muted);
+
+  font-size: 1.1rem;
+
+  line-height: 1.7;
+}
+
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 768px) {
+  .details-modal-overlay {
+    padding: 1rem;
+  }
+
+  .modal-img-container img {
+    height: 250px;
+  }
+
+  .modal-text-container {
+    padding: 1.5rem;
+  }
+  
+  .activity-modal-overlay {
+    padding: 1rem;
+  }
+
+  .activity-header {
+    padding: 2rem;
+  }
+
+  .activity-update {
+    padding: 2rem;
+  }
+
+  .activity-header h2 {
+    font-size: 1.7rem;
+  }
+
+  .activity-swiper {
+    height: 250px;
+  }
+}
