@@ -208,8 +208,11 @@ export default function RegisterForm({
                         defaultCountry="ES"
 
                         countrySelectProps={{
-                            tabIndex: -1
+                            tabIndex: -1,
+                            "aria-hidden": true
                         }}
+
+                        inputProps={{ tabIndex: 0 }}
 
                         value={form.phone}
 

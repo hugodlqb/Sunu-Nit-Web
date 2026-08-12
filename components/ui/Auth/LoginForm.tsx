@@ -17,12 +17,17 @@ export default function LoginForm({
     const { t } = useLanguage();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [resetEmail, setResetEmail] = useState("");
+    const [showResetForm, setShowResetForm] = useState(false);
 
     const [showPassword, setShowPassword] = useState(false);
 
     const [error, setError] = useState("");
+    const [resetError, setResetError] = useState("");
+    const [resetMessage, setResetMessage] = useState("");
 
     const [loading, setLoading] = useState(false);
+    const [resetLoading, setResetLoading] = useState(false);
 
 
 
@@ -64,9 +69,45 @@ export default function LoginForm({
             onSuccess();
         }
 
-
     }
 
+    async function handleResetPassword() {
+
+        setResetError("");
+        setResetMessage("");
+
+        if (!resetEmail) {
+            setResetError("Introduce tu correo para recibir el enlace de recuperación.");
+            return;
+        }
+
+        setResetLoading(true);
+
+        const redirectTo =
+            typeof window !== "undefined"
+                ? `${window.location.origin}/auth/reset`
+                : undefined;
+
+        const { error } = await (supabase.auth as any).resetPasswordForEmail(
+            resetEmail,
+            {
+                redirectTo
+            }
+        );
+
+        setResetLoading(false);
+
+        if (error) {
+            console.error("Error sending reset email:", error);
+            setResetError(error.message);
+            return;
+        }
+
+        setResetMessage(
+            "Si el correo existe, te hemos enviado un enlace para restablecer la contraseña."
+        );
+
+    }
 
 
     return (
@@ -140,6 +181,60 @@ export default function LoginForm({
                 )
             }
 
+            {showResetForm ? (
+                <div className="reset-password-panel">
+                    <p>Introduce tu correo para recibir un enlace de recuperación.</p>
+
+                    <input
+                        type="email"
+                        placeholder={t.register_email}
+                        className="form-input"
+                        value={resetEmail}
+                        onChange={(e) => setResetEmail(e.target.value)}
+                    />
+
+                    {resetError && (
+                        <div className="auth-message error">
+                            {resetError}
+                        </div>
+                    )}
+
+                    {resetMessage && (
+                        <div className="auth-message success">
+                            {resetMessage}
+                        </div>
+                    )}
+
+                    <button
+                        className="btn btn-secondary w-100"
+                        type="button"
+                        onClick={handleResetPassword}
+                        disabled={resetLoading}
+                    >
+                        {resetLoading ? "Enviando..." : "Enviar enlace de recuperación"}
+                    </button>
+
+                    <button
+                        type="button"
+                        className="link-button"
+                        onClick={() => setShowResetForm(false)}
+                    >
+                        Volver al login
+                    </button>
+                </div>
+            ) : (
+                <button
+                    type="button"
+                    className="link-button forgot-password"
+                    onClick={() => {
+                        setShowResetForm(true);
+                        setResetError("");
+                        setResetMessage("");
+                    }}
+                >
+                    ¿Has olvidado tu contraseña?
+                </button>
+            )}
 
             <button
                 className="btn btn-primary w-100"
