@@ -14,26 +14,52 @@ export default function ResetPasswordPage() {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        async function restoreSession() {
-            const { data, error } = await (supabase.auth as any).getSessionFromUrl({ storeSession: true });
+        let timer: ReturnType<typeof setTimeout> | null = null;
+        let subscription: any = null;
 
-            if (error) {
-                console.error("Reset callback error:", error);
+        async function init() {
+            try {
+                // Try to read an existing session first
+                const getSessionRes: any = await supabase.auth.getSession();
+                const currentSession = getSessionRes?.data?.session ?? getSessionRes?.session ?? null;
+
+                if (currentSession) {
+                    setStatus("ready");
+                    return;
+                }
+
+                // Listen for auth state changes (e.g., Supabase restores a session after the redirect)
+                const res: any = supabase.auth.onAuthStateChange((event: string, session: any) => {
+                    if (session) {
+                        setStatus("ready");
+                    }
+                });
+
+                // Normalize subscription object across possible return shapes
+                subscription = res?.data?.subscription ?? res?.subscription ?? res;
+
+                // If no session appears within a short time, show an error to the user
+                timer = setTimeout(() => {
+                    setError("Enlace de recuperación inválido o caducado.");
+                    setStatus("error");
+                }, 10000);
+            } catch (err) {
+                console.error("Reset callback init error:", err);
                 setError("No se pudo completar el enlace de recuperación.");
                 setStatus("error");
-                return;
             }
-
-            if (!data?.session) {
-                setError("Enlace de recuperación inválido o caducado.");
-                setStatus("error");
-                return;
-            }
-
-            setStatus("ready");
         }
 
-        restoreSession();
+        init();
+
+        return () => {
+            if (timer) clearTimeout(timer);
+            try {
+                subscription?.unsubscribe?.();
+            } catch (e) {
+                // ignore unsubscribe errors
+            }
+        };
     }, []);
 
     async function handleUpdatePassword() {
