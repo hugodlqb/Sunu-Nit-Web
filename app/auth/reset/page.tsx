@@ -1,8 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import {
+    Eye,
+    EyeSlash
+} from "@phosphor-icons/react/dist/ssr";
 
 export default function ResetPasswordPage() {
     const router = useRouter();
@@ -12,6 +16,12 @@ export default function ResetPasswordPage() {
     const [message, setMessage] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [passwordFocused, setPasswordFocused] = useState(false);
+    const [confirmPasswordFocused, setConfirmPasswordFocused] = useState(false);
+    const passwordRef = useRef<HTMLInputElement | null>(null);
+    const confirmRef = useRef<HTMLInputElement | null>(null);
 
     useEffect(() => {
         let timer: ReturnType<typeof setTimeout> | null = null;
@@ -32,6 +42,10 @@ export default function ResetPasswordPage() {
                 const res: any = supabase.auth.onAuthStateChange((event: string, session: any) => {
                     if (session) {
                         setStatus("ready");
+                    } else {
+                        // Handle sign-out or missing session so UI doesn't stay on the reset form
+                        setStatus("error");
+                        setError("Sesión cerrada. Vuelve a solicitar el enlace de recuperación.");
                     }
                 });
 
@@ -63,32 +77,72 @@ export default function ResetPasswordPage() {
     }, []);
 
     async function handleUpdatePassword() {
+        console.log("========== RESET PASSWORD ==========");
+        console.log("[RESET] password state:", JSON.stringify(password));
+        console.log("[RESET] confirmPassword state:", JSON.stringify(confirmPassword));
+        console.log("[RESET] password DOM:", JSON.stringify(passwordRef.current?.value));
+        console.log("[RESET] confirmPassword DOM:", JSON.stringify(confirmRef.current?.value));
+
         setError("");
         setMessage("");
 
-        if (!password || !confirmPassword) {
+        if (!password.trim() || !confirmPassword.trim()) {
+            console.log("[RESET] ❌ VALIDATION FAILED: empty password");
+            console.log("[RESET] password state length:", password.length);
+            console.log("[RESET] confirmPassword state length:", confirmPassword.length);
+            console.log("[RESET] password DOM length:", passwordRef.current?.value.length);
+            console.log("[RESET] confirm DOM length:", confirmRef.current?.value.length);
+
             setError("Introduce la nueva contraseña y confírmala.");
             return;
         }
 
         if (password !== confirmPassword) {
+            console.log("[RESET] ❌ VALIDATION FAILED: passwords don't match");
+            console.log("[RESET] password length:", password.length);
+            console.log("[RESET] confirmPassword length:", confirmPassword.length);
+
             setError("Las contraseñas no coinciden.");
+            return;
+        }
+
+        console.log("[RESET] ✅ Validation passed");
+        console.log("[RESET] Checking Supabase session...");
+
+        const { data: sessionData, error: sessionError } =
+            await supabase.auth.getSession();
+
+        console.log("[RESET] Session:", sessionData.session);
+        console.log("[RESET] Session error:", sessionError);
+
+        if (!sessionData.session) {
+            console.log("[RESET] ❌ No active session");
+            setError("La sesión de recuperación no es válida. Solicita un nuevo enlace.");
             return;
         }
 
         setLoading(true);
 
-        const { error } = await supabase.auth.updateUser({ password });
+        console.log("[RESET] 🚀 Calling updateUser()...");
+
+        const { data, error } = await supabase.auth.updateUser({
+            password
+        });
+
+        console.log("[RESET] updateUser data:", data);
+        console.log("[RESET] updateUser error:", error);
 
         setLoading(false);
 
         if (error) {
-            console.error("Password update error:", error);
+            console.error("[RESET] ❌ Password update error:", error);
             setError(error.message);
             return;
         }
 
-        setMessage("Contraseña actualizada correctamente. Ya puedes iniciar sesión.");
+        console.log("[RESET] ✅ PASSWORD UPDATED SUCCESSFULLY");
+
+        setMessage("Contraseña actualizada correctamente.");
         setStatus("success");
     }
 
@@ -115,21 +169,82 @@ export default function ResetPasswordPage() {
                 <>
                     <p>Introduce la nueva contraseña para completar el restablecimiento.</p>
 
-                    <input
-                        type="password"
-                        className="form-input"
-                        placeholder="Nueva contraseña"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
+                    <div className="password-container reset-password-field">
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            className="form-input"
+                            name="new-password"
+                            autoComplete="new-password"
+                            placeholder="Nueva contraseña"
+                            ref={passwordRef}
+                            value={password}
+                            onFocus={() => setPasswordFocused(true)}
+                            onBlur={() => setPasswordFocused(false)}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
 
-                    <input
-                        type="password"
-                        className="form-input"
-                        placeholder="Confirmar contraseña"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                    />
+                        <button
+                            type="button"
+                            tabIndex={-1}
+                            className="password-eye"
+                            onMouseDown={(e) => e.preventDefault()}
+                            onClick={() => setShowPassword(!showPassword)}
+                        >
+                            {showPassword ? <EyeSlash size={20} /> : <Eye size={20} />}
+                        </button>
+
+                        {passwordFocused && password && (
+                            <div className="password-help">
+                                <p className={password.length >= 8 ? "valid" : "invalid"}>
+                                    {password.length >= 8 ? "✓" : "✗"} Mínimo 8 caracteres
+                                </p>
+
+                                <p className={/[A-Z]/.test(password) ? "valid" : "invalid"}>
+                                    {/[A-Z]/.test(password) ? "✓" : "✗"} Una letra mayúscula
+                                </p>
+
+                                <p className={/[a-z]/.test(password) ? "valid" : "invalid"}>
+                                    {/[a-z]/.test(password) ? "✓" : "✗"} Una letra minúscula
+                                </p>
+
+                                <p className={/[0-9]/.test(password) ? "valid" : "invalid"}>
+                                    {/[0-9]/.test(password) ? "✓" : "✗"} Un número
+                                </p>
+
+                                <p className={/[^A-Za-z0-9]/.test(password) ? "valid" : "invalid"}>
+                                    {/[^A-Za-z0-9]/.test(password) ? "✓" : "✗"} Un carácter especial
+                                </p>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="password-container reset-password-field">
+                        <input
+                            type={showConfirmPassword ? "text" : "password"}
+                            className="form-input"
+                            name="confirm-password"
+                            autoComplete="new-password"
+                            placeholder="Confirmar contraseña"
+                            ref={confirmRef}
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            onFocus={() => setConfirmPasswordFocused(true)}
+                            onBlur={() => setConfirmPasswordFocused(false)}
+                        />
+
+                        <button
+                            type="button"
+                            tabIndex={-1}
+                            className="password-eye"
+                            onMouseDown={(e) => e.preventDefault()}
+                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        >
+                            {showConfirmPassword
+                                ? <EyeSlash size={20} />
+                                : <Eye size={20} />
+                            }
+                        </button>
+                    </div>
 
                     {error && <div className="auth-message error">{error}</div>}
 
@@ -142,7 +257,7 @@ export default function ResetPasswordPage() {
                         {loading ? "Actualizando..." : "Actualizar contraseña"}
                     </button>
 
-                    <button type="button" className="link-button" onClick={goHome}>
+                    <button type="button" className="btn btn-secondary" onClick={goHome}>
                         Volver al inicio
                     </button>
                 </>

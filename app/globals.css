@@ -278,6 +278,213 @@ a {
 
 }
 
+/* =========================
+RESET PASSWORD
+========================= */
+
+.reset-password-page {
+    min-height: calc(100vh - 0px);
+
+    padding: 10rem 1.5rem 4rem;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    box-sizing: border-box;
+}
+
+.reset-password-page h1 {
+    margin: 0 0 1.5rem;
+    text-align: center;
+}
+
+.reset-password-page > p {
+    width: 100%;
+    max-width: 400px;
+
+    margin: 0 0 2rem;
+
+    text-align: center;
+    line-height: 1.5;
+}
+
+
+/* =========================
+PASSWORD FIELDS
+========================= */
+
+.reset-password-field {
+    position: relative;
+
+    width: 100%;
+    max-width: 400px;
+
+    margin: 0 0 1rem;
+}
+
+.reset-password-field .form-input {
+    width: 100%;
+    max-width: none;
+
+    margin: 0;
+
+    padding: .75rem 3rem .75rem 1rem;
+}
+
+
+/* =========================
+PASSWORD EYE
+========================= */
+
+.reset-password-field .password-eye {
+    position: absolute;
+
+    top: 50%;
+    right: 1rem;
+
+    transform: translateY(-50%);
+
+    width: auto;
+    height: auto;
+
+    border: none;
+    background: transparent;
+
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--color-text-muted);
+
+    cursor: pointer;
+
+    z-index: 2;
+}
+
+.reset-password-field .password-eye:hover {
+    color: var(--color-primary);
+}
+
+
+/* =========================
+PASSWORD HELP
+========================= */
+
+.reset-password-field .password-help {
+    position: absolute;
+
+    top: calc(100% + .5rem);
+    left: 0;
+
+    width: 100%;
+
+    background: white;
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+
+    padding: .8rem 1rem;
+
+    box-shadow: var(--shadow-sm);
+
+    z-index: 20;
+}
+
+.reset-password-field .password-help p {
+    margin: .2rem 0;
+
+    font-size: .9rem;
+    line-height: 1.4;
+
+    text-align: left;
+}
+
+.reset-password-field .password-help .valid {
+    color: #2e7d32;
+}
+
+.reset-password-field .password-help .invalid {
+    color: var(--color-secondary);
+}
+
+
+/* =========================
+ERROR
+========================= */
+
+.reset-password-page .auth-message.error {
+    width: 100%;
+    max-width: 400px;
+
+    margin: 0 0 1rem;
+
+    padding: .6rem 1rem;
+
+    line-height: 1.4;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================
+BUTTONS
+========================= */
+
+.reset-password-page .btn {
+    width: 100%;
+    max-width: 400px;
+
+    box-sizing: border-box;
+}
+
+.reset-password-page .btn + .btn {
+    margin-top: 1rem;
+}
+
+/* =========================
+SITE LAYOUT
+========================= */
+
+html,
+body {
+    min-height: 100%;
+}
+
+.site-layout {
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.site-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+
+@media(max-width:768px) {
+
+    .floating-collab-btn {
+        right: 1rem;
+        bottom: 1rem;
+
+        padding: 1rem 1.8rem;
+        font-size: 1.1rem;
+    }
+
+    .floating-collab-btn svg {
+        width: 26px;
+        height: 26px;
+    }
+
+}
+
+
 
 @media(max-width:768px) {
 
