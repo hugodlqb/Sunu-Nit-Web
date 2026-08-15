@@ -70,25 +70,18 @@ export function AuthProvider({
 
         async function loadUser() {
 
-            const { data, error } = await supabase.auth.getUser();
+            const {
+                data: { session }
+            } = await supabase.auth.getSession();
 
-            if (error) {
-
-                console.error("Error fetching authenticated user:", error);
-                setUser(null);
-                setProfile(null);
-                return;
-
-            }
-
-            const user = data?.user ?? null;
+            const user = session?.user ?? null;
 
             setUser(user);
 
             if (user) {
-
                 await loadProfile(user.id);
-
+            } else {
+                setProfile(null);
             }
         }
 

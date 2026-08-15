@@ -55,10 +55,7 @@ export default function LoginForm({
         if (error) {
 
             console.error(error);
-
-            setError(
-                "Correo o contraseña incorrectos"
-            );
+            setError(t.login_error);
 
             return;
 
@@ -77,7 +74,7 @@ export default function LoginForm({
         setResetMessage("");
 
         if (!resetEmail) {
-            setResetError("Introduce tu correo para recibir el enlace de recuperación.");
+            setResetError(t.reset_password_instruction);
             return;
         }
 
@@ -103,9 +100,7 @@ export default function LoginForm({
             return;
         }
 
-        setResetMessage(
-            "Si el correo existe, te hemos enviado un enlace para restablecer la contraseña."
-        );
+        setResetMessage(t.reset_password_success);
 
     }
 
@@ -114,76 +109,79 @@ export default function LoginForm({
 
         <>
 
+            {!showResetForm && (
+                <>
 
-            <input
-                type="email"
-                placeholder={t.register_email}
-                className="form-input"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-            />
+                    <input
+                        type="email"
+                        placeholder={t.register_email}
+                        className="form-input"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
 
+                    <div className="password-container">
 
-            <div className="password-container">
+                        <input
+                            type={
+                                showPassword
+                                    ? "text"
+                                    : "password"
+                            }
+                            placeholder={t.register_password}
+                            className="form-input"
+                            value={password}
+                            onChange={(e) =>
+                                setPassword(e.target.value)
+                            }
+                        />
 
+                        <button
+                            type="button"
+                            className="password-eye"
+                            onClick={() =>
+                                setShowPassword(!showPassword)
+                            }
+                        >
+                            {
+                                showPassword
+                                    ? <EyeSlash size={20} />
+                                    : <Eye size={20} />
+                            }
+                        </button>
 
-                <input
-
-                    type={
-                        showPassword
-                            ? "text"
-                            : "password"
-                    }
-
-                    placeholder={t.register_password}
-
-                    className="form-input"
-
-                    value={password}
-
-                    onChange={(e) =>
-                        setPassword(e.target.value)
-                    }
-
-                />
-
-
-                <button
-                    type="button"
-                    className="password-eye"
-                    onClick={() =>
-                        setShowPassword(!showPassword)
-                    }
-                >
-
-                    {
-                        showPassword
-                            ?
-                            <EyeSlash size={20} />
-                            :
-                            <Eye size={20} />
-                    }
-
-
-                </button>
-
-
-            </div>
-
-
-            {
-                error && (
-
-                    <div className="auth-message error">
-                        {error}
                     </div>
 
-                )
-            }
+                    {
+                        error && (
+                            <div className="auth-message error">
+                                {error}
+                            </div>
+                        )
+                    }
+
+                </>
+            )}
+
+            {!showResetForm && (
+                <button
+                    className="btn btn-primary w-100"
+                    onClick={handleLogin}
+                    disabled={loading}
+                >
+                    {
+                        loading
+                            ?
+                            t.login_loading
+                            :
+                            t.login_button
+                    }
+                </button>
+            )}
 
             {showResetForm ? (
                 <div className="reset-password-panel">
-                    <p>Introduce tu correo para recibir un enlace de recuperación.</p>
+                    <p>{t.reset_password_instruction}</p>
 
                     <input
                         type="email"
@@ -194,13 +192,13 @@ export default function LoginForm({
                     />
 
                     {resetError && (
-                        <div className="auth-message error">
+                        <div className="auth-message error reset-auth-message">
                             {resetError}
                         </div>
                     )}
 
                     {resetMessage && (
-                        <div className="auth-message success">
+                        <div className="auth-message success reset-auth-message">
                             {resetMessage}
                         </div>
                     )}
@@ -211,45 +209,32 @@ export default function LoginForm({
                         onClick={handleResetPassword}
                         disabled={resetLoading}
                     >
-                        {resetLoading ? "Enviando..." : "Enviar enlace de recuperación"}
+                        {resetLoading
+                            ? t.reset_password_loading
+                            : t.reset_password_button}
                     </button>
 
                     <button
                         type="button"
-                        className="link-button"
+                        className="btn btn-secondary reset-back-button"
                         onClick={() => setShowResetForm(false)}
                     >
-                        Volver al login
+                        {t.reset_password_back}
                     </button>
                 </div>
             ) : (
                 <button
                     type="button"
-                    className="link-button forgot-password"
+                    className="btn btn-secondary forgot-password"
                     onClick={() => {
                         setShowResetForm(true);
                         setResetError("");
                         setResetMessage("");
                     }}
                 >
-                    ¿Has olvidado tu contraseña?
+                    {t.forgot_password}
                 </button>
             )}
-
-            <button
-                className="btn btn-primary w-100"
-                onClick={handleLogin}
-                disabled={loading}
-            >
-                {
-                    loading
-                        ?
-                        t.login_loading
-                        :
-                        t.login_button
-                }
-
-            </button>
 
 
         </>

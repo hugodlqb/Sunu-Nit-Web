@@ -112,14 +112,6 @@
 
 }
 
-
-.password-help p {
-
-    margin: 4px 0;
-
-}
-
-
 .password-help .valid {
     color: #16a34a;
 }
@@ -131,10 +123,6 @@
 
 .password-help p {
   margin: 3px 0;
-}
-
-.password-help .valid {
-  color: #16a34a;
 }
 
 .password-help .invalid {
@@ -332,11 +320,6 @@
     font-size: 14px;
 }
 
-.auth-message.error {
-    background: #ffecec;
-    color: #c0392b;
-}
-
 .register-button-row {
     display: flex;
     align-items: center;
@@ -352,7 +335,7 @@
 
 
 .auth-message.error {
-    flex: 1;
+    flex: 0 0 auto;
     background: #ffe8e8;
     color: #c0392b;
     padding: 10px 14px;
@@ -361,14 +344,13 @@
     white-space: nowrap;
 }
 
-
-.auth-message.error {
-    background: #ffe8e8;
-    color: #c0392b;
-    padding: 10px 14px;
-    border-radius: 10px;
-    font-size: 13px;
-    white-space: nowrap;
+.reset-auth-message.error {
+    flex: none;
+    height: auto;
+    min-height: 0;
+    width: 100%;
+    white-space: normal;
+    box-sizing: border-box;
 }
 
 .privacy-row {
@@ -412,13 +394,24 @@
     color: #d32f2f;
 }
 
-.auth-message.success {
-    color: #2e7d32;
+.auth-message.error.reset-auth-message {
+    display: block;
+    flex: none;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    margin: .5rem 0;
+    padding: .6rem .8rem;
+    line-height: 1.4;
+    box-sizing: border-box;
+    white-space: normal;
 }
 
-.auth-message.error {
-    color: #d32f2f;
+.reset-password-panel {
+    width: 100%;
 }
+
 
 
 @media (max-width: 700px) {

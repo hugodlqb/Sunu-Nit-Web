@@ -38,6 +38,13 @@ export const translations = {
         register_success_title: "Cuenta creada correctamente",
         register_success_message: "Tu cuenta ha sido creada correctamente. Ya puedes acceder.",
         accept: "Aceptar",
+        login_error: "Correo o contraseña incorrectos",
+        forgot_password: "¿Has olvidado tu contraseña?",
+        reset_password_instruction: "Introduce tu correo para recibir el enlace de recuperación.",
+        reset_password_loading: "Enviando...",
+        reset_password_button: "Enviar enlace de recuperación",
+        reset_password_back: "Volver al login",
+        reset_password_success: "Si el correo existe, te hemos enviado un enlace para restablecer la contraseña.",
 
         /*ACOUNT PANEL*/
         account_title: "Mi cuenta",
@@ -198,6 +205,13 @@ export const translations = {
         register_success_title: "Account created successfully",
         register_success_message: "Your account has been created successfully. You can now log in.",
         accept: "Accept",
+        login_error: "Incorrect email or password",
+        forgot_password: "Forgot your password?",
+        reset_password_instruction: "Enter your email to receive a recovery link.",
+        reset_password_loading: "Sending...",
+        reset_password_button: "Send recovery link",
+        reset_password_back: "Back to login",
+        reset_password_success: "If the email exists, we have sent you a link to reset your password.",
 
         /*ACOUNT PANEL*/
         account_title: "My account",
@@ -366,6 +380,14 @@ export const translations = {
         register_success_title: "Compte créé avec succès",
         register_success_message: "Votre compte a été créé avec succès. Vous pouvez maintenant vous connecter.",
         accept: "Accepter",
+        login_error: "Adresse e-mail ou mot de passe incorrect",
+        forgot_password: "Vous avez oublié votre mot de passe ?",
+        reset_password_instruction: "Entrez votre adresse e-mail pour recevoir le lien de récupération.",
+
+        reset_password_loading: "Envoi...",
+        reset_password_button: "Envoyer le lien de récupération",
+        reset_password_back: "Retour à la connexion",
+        reset_password_success: "Si cette adresse e-mail existe, nous vous avons envoyé un lien pour réinitialiser votre mot de passe.",
 
         /* ACCOUNT PANEL */
         account_title: "Mon compte",

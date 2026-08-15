@@ -444,6 +444,10 @@ BUTTONS
     margin-top: 1rem;
 }
 
+.reset-back-button {
+    margin-top: 10px;
+}
+
 /* =========================
 SITE LAYOUT
 ========================= */

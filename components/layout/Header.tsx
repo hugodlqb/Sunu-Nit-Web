@@ -65,41 +65,35 @@ export default function Header() {
 
   };
 
- const goToCollaborate = (
-  e: React.MouseEvent<HTMLAnchorElement>
-) => {
-
-  e.preventDefault();
-
-  // cerrar menú usuario
-  setUserOpen(false);
-
-  // cerrar panel cuenta si estuviera abierto
-  setAccountOpen(false);
-
-  // cerrar idiomas por seguridad
-  setLangOpen(false);
-
-
-  setTimeout(() => {
-
-    document
-      .getElementById("collaborate")
-      ?.scrollIntoView({
-        behavior: "smooth"
-      });
-
-  }, 50);
-
-};
-  const closeAccount = (
-    callback?: () => void
+  const goToCollaborate = (
+    e: React.MouseEvent<HTMLAnchorElement>
   ) => {
 
+    e.preventDefault();
+
+    // cerrar menú usuario
+    setUserOpen(false);
+
+    // cerrar panel cuenta si estuviera abierto
     setAccountOpen(false);
 
-    callback?.();
+    // cerrar idiomas por seguridad
+    setLangOpen(false);
 
+
+    setTimeout(() => {
+
+      document
+        .getElementById("collaborate")
+        ?.scrollIntoView({
+          behavior: "smooth"
+        });
+
+    }, 50);
+
+  };
+  const closeAccount = () => {
+    setAccountOpen(false);
   };
 
   useLockBodyScroll(

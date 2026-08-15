@@ -322,7 +322,12 @@
 
 }
 
-
+.forgot-password {
+    margin-top: 8px;
+    color: var(--color-primary);
+    font-size: 11px;
+    padding: 4px;
+}
 
 .form-input {
 
