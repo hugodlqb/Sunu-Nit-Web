@@ -14,6 +14,8 @@ interface AuthContextType {
 
     user: User | null;
     profile: any | null;
+    roles: string[];
+    hasRole: (role: string) => boolean;
 
     login: (
         email: string,
@@ -34,6 +36,31 @@ export function AuthProvider({
 
     const [user, setUser] = useState<User | null>(null);
     const [profile, setProfile] = useState<any | null>(null);
+    const [roles, setRoles] = useState<string[]>([]);
+
+    async function loadRoles(personId: string) {
+
+        const { data, error } = await supabase
+            .from("person_roles")
+            .select(`
+            roles (
+                key
+            )
+        `)
+            .eq("person_id", personId);
+
+        if (error) {
+            console.error("Error cargando roles:", error);
+            setRoles([]);
+            return;
+        }
+
+        const userRoles = data
+            ?.map((item: any) => item.roles?.key)
+            .filter(Boolean) ?? [];
+
+        setRoles(userRoles);
+    }
 
     async function loadProfile(userId: string) {
 
@@ -48,6 +75,7 @@ export function AuthProvider({
             console.error("Error cargando perfil:", error);
 
             setProfile(null);
+            setRoles([]);
 
             return;
 
@@ -57,12 +85,13 @@ export function AuthProvider({
 
             console.warn("Perfil no encontrado para usuario:", userId);
             setProfile(null);
+            setRoles([]);
             return;
 
         }
 
         setProfile(data);
-
+        await loadRoles(data.id);
     }
 
     useEffect(() => {
@@ -82,6 +111,7 @@ export function AuthProvider({
                 await loadProfile(user.id);
             } else {
                 setProfile(null);
+                setRoles([]);
             }
         }
 
@@ -108,6 +138,7 @@ export function AuthProvider({
 
                     setUser(null);
                     setProfile(null);
+                    setRoles([]);
 
                 }
 
@@ -157,12 +188,18 @@ export function AuthProvider({
 
     }
 
+    function hasRole(role: string) {
+        return roles.includes(role);
+    }
+
     return (
 
         <AuthContext.Provider
             value={{
                 user,
                 profile,
+                roles,
+                hasRole,
                 login,
                 logout
             }}

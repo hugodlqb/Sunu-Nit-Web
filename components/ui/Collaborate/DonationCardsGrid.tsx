@@ -21,18 +21,23 @@ interface Props {
         value: number
     ) => void;
 
+    onDonateNow: (
+        type: keyof typeof donations,
+        value: number
+    ) => void;
+
     animateHelpButton: (
         button: HTMLElement
     ) => void;
 
 }
 
-
 export default function DonationCardsGrid({
 
     confirmedAmounts,
     updateConfirmedAmount,
     onAddToHelp,
+    onDonateNow,
     animateHelpButton
 
 }: Props) {
@@ -52,13 +57,11 @@ export default function DonationCardsGrid({
                         key as keyof typeof donations
                     }
 
-
                     amount={
                         confirmedAmounts[
-                            key as keyof typeof confirmedAmounts
+                        key as keyof typeof confirmedAmounts
                         ]
                     }
-
 
                     onAmountChange={(value) => {
 
@@ -69,9 +72,9 @@ export default function DonationCardsGrid({
 
                     }}
 
-
                     onAddToHelp={onAddToHelp}
 
+                    onDonateNow={onDonateNow}
 
                     animateHelpButton={animateHelpButton}
 

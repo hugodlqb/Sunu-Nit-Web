@@ -77,60 +77,36 @@ export default function ResetPasswordPage() {
     }, []);
 
     async function handleUpdatePassword() {
-        console.log("========== RESET PASSWORD ==========");
-        console.log("[RESET] password state:", JSON.stringify(password));
-        console.log("[RESET] confirmPassword state:", JSON.stringify(confirmPassword));
-        console.log("[RESET] password DOM:", JSON.stringify(passwordRef.current?.value));
-        console.log("[RESET] confirmPassword DOM:", JSON.stringify(confirmRef.current?.value));
 
         setError("");
         setMessage("");
 
         if (!password.trim() || !confirmPassword.trim()) {
-            console.log("[RESET] ❌ VALIDATION FAILED: empty password");
-            console.log("[RESET] password state length:", password.length);
-            console.log("[RESET] confirmPassword state length:", confirmPassword.length);
-            console.log("[RESET] password DOM length:", passwordRef.current?.value.length);
-            console.log("[RESET] confirm DOM length:", confirmRef.current?.value.length);
 
             setError("Introduce la nueva contraseña y confírmala.");
             return;
         }
 
         if (password !== confirmPassword) {
-            console.log("[RESET] ❌ VALIDATION FAILED: passwords don't match");
-            console.log("[RESET] password length:", password.length);
-            console.log("[RESET] confirmPassword length:", confirmPassword.length);
 
             setError("Las contraseñas no coinciden.");
             return;
         }
 
-        console.log("[RESET] ✅ Validation passed");
-        console.log("[RESET] Checking Supabase session...");
-
         const { data: sessionData, error: sessionError } =
             await supabase.auth.getSession();
 
-        console.log("[RESET] Session:", sessionData.session);
-        console.log("[RESET] Session error:", sessionError);
-
         if (!sessionData.session) {
-            console.log("[RESET] ❌ No active session");
             setError("La sesión de recuperación no es válida. Solicita un nuevo enlace.");
             return;
         }
 
         setLoading(true);
 
-        console.log("[RESET] 🚀 Calling updateUser()...");
 
         const { data, error } = await supabase.auth.updateUser({
             password
         });
-
-        console.log("[RESET] updateUser data:", data);
-        console.log("[RESET] updateUser error:", error);
 
         setLoading(false);
 
@@ -139,8 +115,6 @@ export default function ResetPasswordPage() {
             setError(error.message);
             return;
         }
-
-        console.log("[RESET] ✅ PASSWORD UPDATED SUCCESSFULLY");
 
         setMessage("Contraseña actualizada correctamente.");
         setStatus("success");

@@ -9,6 +9,7 @@ import AccountDonations from "@/components/ui/Account/AccountDonations";
 import AccountSettings from "@/components/ui/Account/AccountSettings";
 import { AccountSection } from "./AccountTypes";
 import "@/styles/account.css";
+import AccountAdmin from "@/components/ui/Account/AccountAdmin";
 
 interface Props {
 
@@ -59,6 +60,21 @@ export default function AccountPanel({
 
                 return <AccountSettings />;
 
+            case "volunteer":
+
+                return <div>Voluntariado - Próximamente</div>;
+
+            case "volunteer_manager":
+
+                return <div>Gestión de voluntarios - Próximamente</div>;
+
+            case "editor":
+
+                return <div>Editor - Próximamente</div>;
+
+            case "admin":
+
+                return <AccountAdmin />;
 
             default:
 
