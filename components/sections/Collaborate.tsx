@@ -1,24 +1,25 @@
 "use client";
 
 import "@/styles/collaborate.css";
-import { donations } from "@/data/donations";
 import { useLanguage } from "@/context/LanguageContext";
 import DonationCardsGrid from "@/components/ui/Collaborate/DonationCardsGrid";
 import HelpButton from "@/components/ui/Collaborate/HelpButton";
 import HelpPanel from "@/components/ui/Collaborate/HelpPanel";
-import DonationModal from "@/components/ui/Collaborate/DonationModal";
 import { animateHelpButton } from "@/components/ui/Collaborate/HelpAnimation";
 import PaymentMethods from "@/components/ui/Collaborate/PaymentMethods";
 import TransparencyAlert from "@/components/ui/Collaborate/TransparencyAlert";
 import { useCollaborate } from "@/components/hooks/useCollaborate";
 import { useDonationHelp } from "@/components/hooks/useDonationHelp";
 import useLockBodyScroll from "@/components/hooks/useLockBodyScroll";
+import ProjectDonationCards from "@/components/ui/Collaborate/ProjectDonationCards";
+import DonationFlow from "@/components/ui/Collaborate/DonationFlow";
 
 export default function Collaborate() {
 
   const { t } = useLanguage();
 
   const {
+
     selectedDonation,
     amount,
     setAmount,
@@ -30,7 +31,12 @@ export default function Collaborate() {
     updateConfirmedAmount,
     closeDonation,
     currentDonation,
-    calculatedUnits
+    calculatedUnits,
+
+    donationOrigin,
+    openThematicDonation,
+    openProjectDonation,
+    openFreeDonation
 
   } = useCollaborate();
 
@@ -126,8 +132,14 @@ export default function Collaborate() {
 
           onAddToHelp={addToHelp}
 
+          onDonateNow={openThematicDonation}
+
           animateHelpButton={animateHelpButton}
 
+        />
+
+        <ProjectDonationCards
+          onDonate={openProjectDonation}
         />
 
         <PaymentMethods />
@@ -135,23 +147,30 @@ export default function Collaborate() {
         <TransparencyAlert />
 
         {
-          selectedDonation && currentDonation && (
+          donationOrigin && (
 
-            <DonationModal
+            <DonationFlow
 
-              selectedDonation={selectedDonation}
-
-              currentDonation={currentDonation}
+              origin={donationOrigin}
 
               amount={amount}
 
               setAmount={setAmount}
 
-              closeDonation={closeDonation}
+              isMonthly={isMonthly}
 
-              addToHelp={addToHelp}
+              setIsMonthly={setIsMonthly}
 
-              animateHelpButton={animateHelpButton}
+              close={closeDonation}
+
+              onContinue={() => {
+
+                console.log(
+                  "Continuar donación:",
+                  donationOrigin
+                );
+
+              }}
 
             />
 

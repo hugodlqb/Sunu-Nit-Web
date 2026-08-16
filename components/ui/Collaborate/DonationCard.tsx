@@ -20,6 +20,11 @@ interface Props {
         value: number
     ) => void;
 
+    onDonateNow: (
+        type: keyof typeof donations,
+        value: number
+    ) => void;
+
     animateHelpButton: (
         button: HTMLElement
     ) => void;
@@ -32,6 +37,7 @@ export default function DonationCard({
     amount,
     onAmountChange,
     onAddToHelp,
+    onDonateNow,
     animateHelpButton
 
 }: Props) {
@@ -140,9 +146,11 @@ export default function DonationCard({
 
                     <div className="thematic-actions">
 
-
                         <button
                             className="btn btn-primary action-btn"
+                            onClick={() => {
+                                onDonateNow(type, amount);
+                            }}
                         >
 
                             <Heart

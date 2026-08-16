@@ -3,113 +3,168 @@
 import { useState } from "react";
 import { donations } from "@/data/donations";
 
+export type DonationOrigin =
+    | {
+        type: "thematic";
+        donationType: keyof typeof donations;
+    }
+    | {
+        type: "project";
+        projectId: string;
+    }
+    | {
+        type: "free";
+    };
 
 export function useCollaborate() {
 
+    const [selectedDonation, setSelectedDonation] =
+        useState<keyof typeof donations | null>(null);
 
-  const [selectedDonation, setSelectedDonation] =
-    useState<keyof typeof donations | null>(null);
+    const [amount, setAmount] = useState(25);
 
+    const [isMonthly, setIsMonthly] = useState(true);
 
-  const [amount, setAmount] =
-    useState(25);
+    const [showHelpPanel, setShowHelpPanel] =
+        useState(false);
 
+    const [confirmedAmounts, setConfirmedAmounts] = useState({
 
+        food: donations.food.defaultAmount,
 
-  const [isMonthly, setIsMonthly] =
-    useState(true);
+        hygiene: donations.hygiene.defaultAmount,
 
-
-
-  const [showHelpPanel, setShowHelpPanel] =
-    useState(false);
-
-
-
-  const [confirmedAmounts, setConfirmedAmounts] =
-    useState({
-
-      food: donations.food.defaultAmount,
-
-      hygiene: donations.hygiene.defaultAmount,
-
-      health: donations.health.defaultAmount
+        health: donations.health.defaultAmount
 
     });
 
+    const [donationOrigin, setDonationOrigin] =
+        useState<DonationOrigin | null>(null);
 
+    function closeDonation() {
 
-  function closeDonation() {
+        setSelectedDonation(null);
 
-    setSelectedDonation(null);
+        setDonationOrigin(null);
 
-  }
+    }
 
+    function updateConfirmedAmount(
+        type: keyof typeof donations,
+        value: number
+    ) {
 
+        setConfirmedAmounts(prev => ({
 
-  function updateConfirmedAmount(
-    type: keyof typeof donations,
-    value:number
-  ){
+            ...prev,
 
-    setConfirmedAmounts(prev => ({
+            [type]: value
 
-      ...prev,
+        }));
 
-      [type]: value
+    }
 
-    }));
+    function openThematicDonation(
+        type: keyof typeof donations,
+        value: number
+    ) {
 
-  }
+        setSelectedDonation(type);
 
+        setAmount(value);
 
+        setDonationOrigin({
 
-  const currentDonation =
-    selectedDonation
-      ? donations[selectedDonation]
-      : null;
+            type: "thematic",
 
+            donationType: type
 
+        });
 
-  const calculatedUnits =
-    currentDonation
-      ? Math.floor(
-          amount /
-          currentDonation.price *
-          currentDonation.units
-        )
-      : 0;
+    }
 
+    function openProjectDonation(
+        projectId: string
+    ) {
 
+        setSelectedDonation(null);
 
-  return {
+        setDonationOrigin({
 
-    selectedDonation,
+            type: "project",
 
-    setSelectedDonation,
+            projectId
 
-    amount,
+        });
 
-    setAmount,
+        setAmount(25);
 
-    isMonthly,
+    }
 
-    setIsMonthly,
+    function openFreeDonation() {
 
-    showHelpPanel,
+        setSelectedDonation(null);
 
-    setShowHelpPanel,
+        setDonationOrigin({
 
-    confirmedAmounts,
+            type: "free"
 
-    updateConfirmedAmount,
+        });
 
-    closeDonation,
+        setAmount(25);
 
-    currentDonation,
+    }
 
-    calculatedUnits
+    const currentDonation =
+        selectedDonation
+            ? donations[selectedDonation]
+            : null;
 
-  };
+    const calculatedUnits =
+        currentDonation
+            ? Math.floor(
+                amount /
+                currentDonation.price *
+                currentDonation.units
+            )
+            : 0;
+
+    return {
+
+        selectedDonation,
+
+        setSelectedDonation,
+
+        amount,
+
+        setAmount,
+
+        isMonthly,
+
+        setIsMonthly,
+
+        showHelpPanel,
+
+        setShowHelpPanel,
+
+        confirmedAmounts,
+
+        updateConfirmedAmount,
+
+        closeDonation,
+
+        currentDonation,
+
+        calculatedUnits,
+
+        donationOrigin,
+
+        openThematicDonation,
+
+        openProjectDonation,
+
+        openFreeDonation
+
+    };
 
 }

@@ -9,6 +9,7 @@ import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import PasswordFields from "@/components/ui/Auth/PasswordFields";
 import { useLanguage } from "@/context/LanguageContext";
+import { useRef } from "react";
 
 type RegisterFormData = {
 
@@ -120,6 +121,7 @@ export default function RegisterForm({
 
 
     const { t } = useLanguage();
+    const phoneInputRef = useRef<HTMLInputElement | null>(null);
 
     return (
 
@@ -165,8 +167,8 @@ export default function RegisterForm({
 
                     <input
                         className={`form-input ${errors.email || emailExistsError
-                                ? "input-error"
-                                : ""
+                            ? "input-error"
+                            : ""
                             }`}
                         type="email"
                         placeholder={t.register_email}
@@ -177,6 +179,23 @@ export default function RegisterForm({
                                 e.target.value
                             )
                         }
+                        onKeyDown={(e) => {
+                            if (e.key === "Tab" && !e.shiftKey) {
+                                setTimeout(() => {
+                                    const phoneInput = document.querySelector(
+                                        ".phone-wrapper input[type='tel']"
+                                    ) as HTMLInputElement | null;
+
+                                    if (phoneInput) {
+                                        phoneInput.focus();
+
+                                        const length = phoneInput.value.length;
+
+                                        phoneInput.setSelectionRange(length, length);
+                                    }
+                                }, 0);
+                            }
+                        }}
                     />
 
 
@@ -200,29 +219,29 @@ export default function RegisterForm({
 
                 <div className="phone-wrapper">
 
-
                     <PhoneInput
-
                         international
-
                         defaultCountry="ES"
 
                         countrySelectProps={{
-                            tabIndex: -1
+                            tabIndex: -1,
+                            "aria-hidden": true
+                        }}
+
+                        numberInputProps={{
+                            tabIndex: 0,
+                            autoComplete: "tel",
+                            ref: phoneInputRef
                         }}
 
                         value={form.phone}
 
-
                         onChange={(value) => {
-
                             updateField(
                                 "phone",
                                 value || ""
                             );
-
                         }}
-
                     />
 
 
@@ -275,8 +294,8 @@ export default function RegisterForm({
 
                 <label
                     className={`privacy-check ${errors.acceptedPrivacy
-                            ? "check-error"
-                            : ""
+                        ? "check-error"
+                        : ""
                         }`}
                 >
 

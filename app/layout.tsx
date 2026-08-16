@@ -18,23 +18,29 @@ export default function RootLayout({
     <html lang="es">
       <body>
 
-        <AuthProvider>
+    <AuthProvider>
 
-          <LanguageProvider>
+        <LanguageProvider>
 
-            <Header />
+            <div className="site-layout">
 
-            <FloatingDonate />
+                <Header />
 
-            {children}
+                <FloatingDonate />
 
-            <Footer />
+                <main className="site-main">
+                    {children}
+                </main>
 
-          </LanguageProvider>
+                <Footer />
 
-        </AuthProvider>
+            </div>
 
-      </body>
+        </LanguageProvider>
+
+    </AuthProvider>
+
+</body>
     </html>
   );
 }

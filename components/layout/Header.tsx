@@ -32,6 +32,8 @@ export default function Header() {
   const {
     user,
     profile,
+    roles,
+    hasRole,
     logout
   } = useAuth();
   const {
@@ -46,7 +48,11 @@ export default function Header() {
       "profile" |
       "statistics" |
       "donations" |
-      "settings"
+      "settings" |
+      "volunteer" |
+      "volunteer_manager" |
+      "editor" |
+      "admin"
     >("profile");
 
   const openAccount = (
@@ -55,6 +61,10 @@ export default function Header() {
       | "statistics"
       | "donations"
       | "settings"
+      | "volunteer"
+      | "volunteer_manager"
+      | "editor"
+      | "admin"
   ) => {
 
     setAccountSection(section);
@@ -65,41 +75,35 @@ export default function Header() {
 
   };
 
- const goToCollaborate = (
-  e: React.MouseEvent<HTMLAnchorElement>
-) => {
-
-  e.preventDefault();
-
-  // cerrar menú usuario
-  setUserOpen(false);
-
-  // cerrar panel cuenta si estuviera abierto
-  setAccountOpen(false);
-
-  // cerrar idiomas por seguridad
-  setLangOpen(false);
-
-
-  setTimeout(() => {
-
-    document
-      .getElementById("collaborate")
-      ?.scrollIntoView({
-        behavior: "smooth"
-      });
-
-  }, 50);
-
-};
-  const closeAccount = (
-    callback?: () => void
+  const goToCollaborate = (
+    e: React.MouseEvent<HTMLAnchorElement>
   ) => {
 
+    e.preventDefault();
+
+    // cerrar menú usuario
+    setUserOpen(false);
+
+    // cerrar panel cuenta si estuviera abierto
     setAccountOpen(false);
 
-    callback?.();
+    // cerrar idiomas por seguridad
+    setLangOpen(false);
 
+
+    setTimeout(() => {
+
+      document
+        .getElementById("collaborate")
+        ?.scrollIntoView({
+          behavior: "smooth"
+        });
+
+    }, 50);
+
+  };
+  const closeAccount = () => {
+    setAccountOpen(false);
   };
 
   useLockBodyScroll(
@@ -336,6 +340,65 @@ export default function Header() {
                           <Gear size={20} />
                           <span>{t.account_settings}</span>
                         </button>
+
+                        {
+                          hasRole("admin") && (
+                            <button
+                              className="user-menu-option"
+                              onClick={() => {
+                                openAccount("admin");
+                              }}
+                            >
+                              <Gear size={20} />
+                              <span>Administración</span>
+                            </button>
+                          )
+                        }
+
+                        {
+                          hasRole("volunteer") && (
+                            <button
+                              className="user-menu-option"
+                              onClick={() => {
+                                openAccount("volunteer");
+                              }}
+                            >
+                              <HandHeart size={20} />
+                              <span>Voluntariado</span>
+                            </button>
+                          )
+                        }
+
+                        {
+                          hasRole("volunteer_manager") && (
+                            <button
+                              className="user-menu-option"
+                              onClick={() => {
+                                openAccount("volunteer_manager");
+                              }}
+                            >
+                              <User size={20} />
+                              <span>Gestión de voluntarios</span>
+                            </button>
+                          )
+                        }
+
+                        {
+                          hasRole("editor") && (
+                            <button
+                              className="user-menu-option"
+                              onClick={() => {
+                                openAccount("editor");
+                              }}
+                            >
+                              <ChartBar size={20} />
+                              <span>Editor</span>
+                            </button>
+                          )
+                        }
+
+                        <hr />
+
                         <hr />
 
                         <button
