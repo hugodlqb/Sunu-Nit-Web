@@ -90,7 +90,7 @@ console.log("PROYECTOS CARGADOS:", projects);
                     Apoya un proyecto
                 </h3>
 
-                <p>
+                <p> 
                     Elige un proyecto y decide cuánto quieres aportar.
                 </p>
 
