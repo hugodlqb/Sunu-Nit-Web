@@ -6,7 +6,10 @@ import { useLanguage } from "@/context/LanguageContext";
 
 export function useRegister() {
 
-    const { t } = useLanguage();
+    const {
+    t,
+    language
+} = useLanguage();
     const [showPasswordHelp, setShowPasswordHelp] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -158,7 +161,7 @@ export function useRegister() {
                     surname: form.surname,
                     phone: form.phone,
                     country: form.country || "ES",
-                    preferred_language: "es",
+                    preferred_language: language,
                     accepted_communications: form.acceptedCommunications
 
                 }

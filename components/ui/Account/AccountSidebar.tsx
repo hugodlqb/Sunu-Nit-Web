@@ -46,14 +46,8 @@ export default function AccountSidebar({
             },
 
             {
-                id: "statistics",
-                label: t.account_statistics,
-                icon: <ChartBar size={22} />
-            },
-
-            {
-                id: "donations",
-                label: t.account_donations,
+                id: "activity",
+                label: "Mi actividad",
                 icon: <HandHeart size={22} />
             },
 

@@ -1,11 +1,9 @@
 "use client";
 
 import { useState } from "react";
-
+import AccountActivity from "@/components/ui/Account/AccountActivity";
 import AccountSidebar from "@/components/ui/Account/AccountSidebar";
-import AccountProfile from "@/components/ui/Account/AccountProfile";
-import AccountStatistics from "@/components/ui/Account/AccountStatistics";
-import AccountDonations from "@/components/ui/Account/AccountDonations";
+import AccountProfile from "@/components/ui/Account/AccountProfile"; 
 import AccountSettings from "@/components/ui/Account/AccountSettings";
 import { AccountSection } from "./AccountTypes";
 import "@/styles/account.css";
@@ -45,16 +43,9 @@ export default function AccountPanel({
 
                 return <AccountProfile />;
 
+            case "activity":
 
-            case "statistics":
-
-                return <AccountStatistics />;
-
-
-            case "donations":
-
-                return <AccountDonations />;
-
+                return <AccountActivity />;
 
             case "settings":
 

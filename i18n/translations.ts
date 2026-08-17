@@ -46,12 +46,27 @@ export const translations = {
         reset_password_back: "Volver al login",
         reset_password_success: "Si el correo existe, te hemos enviado un enlace para restablecer la contraseña.",
 
+        profile_phone: "Teléfono",
+        profile_country: "País",
+        profile_language: "Idioma",
+        profile_communications: "Comunicaciones",
+        profile_communications_yes: "Aceptas recibir noticias y novedades",
+        profile_communications_no: "No aceptas recibir noticias y novedades",
+        profile_created_at: "Miembro desde",
+
+        account_profile_edit: "Editar perfil",
+        account_profile_saved: "Perfil actualizado correctamente",
+        account_profile_not_found: "No se ha encontrado tu perfil.",
+        profile_save: "Guardar cambios",
+        profile_saving: "Guardando...",
+
         /*ACOUNT PANEL*/
         account_title: "Mi cuenta",
         account_profile: "Tu perfil",
         account_statistics: "Tus estadísticas",
         account_donations: "Tus donaciones",
         account_settings: "Configuración",
+        language_preference: "Idioma preferido",
 
         /* HERO */
         hero_badge: "Impacto real: +120 niños ayudados este mes",
@@ -60,6 +75,7 @@ export const translations = {
         hero_trust: "Donación 100% directa y transparente",
         btn_collaborate_now: "Colabora ahora",
         hero_image_alt: "Niños beneficiarios de Asociación Sunu Nit",
+        hero_impact_badge: "Impacto real: +120 niños ayudados este mes",
 
         /*ABOUT*/
         about_title: "Quiénes Somos", about_subtitle: "Un equipo comprometido que decidió no mirar hacia otro lado. Conócenos.",
@@ -111,6 +127,10 @@ export const translations = {
         impact_label: "Impacto:",
         permonth: "mes",
 
+        projects_loading: "Cargando proyectos...",
+        no_donations: "No tienes donaciones registradas.",
+        project_collaborate: "Colabora",
+
         don_food_title: "Desayunos diarios",
         don_food_desc: "Tu aportación permite ofrecer desayunos diarios con alimentos básicos y nutritivos para los niños del centro.",
         detalle_don_food: "Cada desayuno asegura que un niño empiece el día con energía suficiente para estudiar y jugar. Compramos alimentos frescos en comercios locales para ayudar también a la economía de Rufisque.",
@@ -149,10 +169,7 @@ export const translations = {
         login_title: "Acceder o Registrarse", ph_name: "Nombre completo", ph_email: "Correo electrónico", btn_login_submit: "ACEPTAR",
         hello: "Hola, ", btn_my_profile: "Mi Perfil / Impacto", btn_logout: "Cerrar sesión",
         btn_donate_mobile: "Colaborar ahora",
-        hero_impact_badge: "Impacto real: +120 niños ayudados este mes",
 
-        gallery_title: "Galería de Impacto",
-        gallery_subtitle: "Imágenes directas sobre el terreno. Sin filtros.",
         btn_donate_now: "Colaborar",
 
         other_ways: "Vías bancarias directas",
@@ -213,9 +230,26 @@ export const translations = {
         reset_password_back: "Back to login",
         reset_password_success: "If the email exists, we have sent you a link to reset your password.",
 
+        /* ACCOUNT PROFILE */
+
+        profile_phone: "Phone",
+        profile_country: "Country",
+        profile_language: "Preferred language",
+        profile_communications: "Communications",
+        profile_communications_yes: "Yes",
+        profile_communications_no: "No",
+        profile_created_at: "Member since",
+
+        account_profile_saved: "Profile saved successfully.",
+        account_profile_not_found: "Profile not found.",
+        account_profile_edit: "Edit profile",
+
+        profile_saving: "Saving...",
+        profile_save: "Save changes",
+
         /*ACOUNT PANEL*/
         account_title: "My account",
-
+        language_preference: "Preferred language",
         account_profile: "Your profile",
 
         account_statistics: "Your statistics",
@@ -231,6 +265,7 @@ export const translations = {
         hero_trust: "100% direct and transparent donations",
         btn_collaborate_now: "Collaborate now",
         hero_image_alt: "Children supported by Asociación Sunu Nit",
+        hero_impact_badge: "Our impact",
 
         /*ABOUT*/
         about_title: "About Us",
@@ -292,6 +327,10 @@ export const translations = {
         add_to_help: "Add to my help",
         impact_label: "Impact:",
         permonth: "month",
+
+        projects_loading: "Loading projects...",
+        no_donations: "You have no recorded donations.",
+        project_collaborate: "Collaborate",
 
         don_food_title: "Daily breakfasts",
         don_food_desc: "You guarantee they start the day with energy and basic nutrients continuously.",
@@ -389,9 +428,26 @@ export const translations = {
         reset_password_back: "Retour à la connexion",
         reset_password_success: "Si cette adresse e-mail existe, nous vous avons envoyé un lien pour réinitialiser votre mot de passe.",
 
+        /* ACCOUNT PROFILE */
+
+        profile_phone: "Téléphone",
+        profile_country: "Pays",
+        profile_language: "Langue préférée",
+        profile_communications: "Communications",
+        profile_communications_yes: "Oui",
+        profile_communications_no: "Non",
+        profile_created_at: "Membre depuis",
+
+        account_profile_saved: "Profil enregistré avec succès.",
+        account_profile_not_found: "Profil introuvable.",
+        account_profile_edit: "Modifier le profil",
+
+        profile_saving: "Enregistrement...",
+        profile_save: "Enregistrer les modifications",
+
         /* ACCOUNT PANEL */
         account_title: "Mon compte",
-
+        language_preference: "Langue préférée",
         account_profile: "Votre profil",
 
         account_statistics: "Vos statistiques",
@@ -407,6 +463,7 @@ export const translations = {
         hero_trust: "Dons 100% directs et transparents",
         btn_collaborate_now: "Collaborer maintenant",
         hero_image_alt: "Enfants bénéficiaires de l’Association Sunu Nit",
+        hero_impact_badge: "Impact réel : +120 enfants aidés ce mois-ci",
 
         /*ABOUT*/
         about_title: "Qui sommes-nous",
@@ -450,6 +507,7 @@ export const translations = {
 
         /*COLLABORATE*/
         collab_title: "Aider les enfants",
+        collab_subtitle: "Rejoignez-nous et contribuez à faire la différence",
         collab_badge_fast: "Rapide",
         collab_bizum_title: "Bizum Solidaire",
         collab_bizum_desc: "Sans commissions, votre aide arrive immédiatement sur le terrain.",
@@ -481,6 +539,10 @@ export const translations = {
         detalle_don_food: "Chaque petit-déjeuner permet à un enfant de commencer la journée avec suffisamment d'énergie pour étudier et jouer. Nous achetons des aliments frais auprès de commerces locaux, contribuant également à l'économie de Rufisque.",
         don_food_unit: "petits-déjeuners quotidiens",
         don_food_impact_unit: "enfants aidés",
+
+        projects_loading: "Chargement des projets...",
+        no_donations: "Vous n'avez aucune donation enregistrée.",
+        project_collaborate: "Collaborer",
 
         don_hygiene_title: "Kits d'hygiène",
         don_hygiene_desc: "La dignité par la propreté : savon, brosses à dents, dentifrice et vêtements propres.",
@@ -519,12 +581,6 @@ export const translations = {
 
 
         btn_donate_mobile: "Collaborer maintenant",
-
-        hero_impact_badge: "Impact réel : +120 enfants aidés ce mois-ci",
-
-        gallery_title: "Galerie d'Impact",
-        gallery_subtitle: "Des images directes du terrain. Sans filtres.",
-
 
         btn_donate_now: "Collaborer",
 
