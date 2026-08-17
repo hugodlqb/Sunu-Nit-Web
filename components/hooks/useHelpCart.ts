@@ -70,7 +70,19 @@ export function useHelpCart() {
 
   }
 
+  function updateHelpAmount(
+    type: keyof typeof donations,
+    value: number
+  ) {
+    setHelpCart(prev => ({
+      ...prev,
+      [type]: Math.max(0, value),
+    }));
 
+    if (value > 0) {
+      setShowHelpButton(true);
+    }
+  }
 
   function confirmDeleteHelp() {
 
@@ -107,24 +119,15 @@ export function useHelpCart() {
 
   }
 
-
-
   return {
-
     helpCart,
-
     showHelpButton,
-
     deleteConfirmation,
-
     setDeleteConfirmation,
-
     addToHelp,
-
     removeFromHelp,
-
-    confirmDeleteHelp
-
+    updateHelpAmount,
+    confirmDeleteHelp,
   };
 
 }

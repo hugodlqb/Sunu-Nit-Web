@@ -1049,6 +1049,31 @@
   margin-bottom: 1rem;
 }
 
+.help-impact-content {
+    flex: 1;
+    text-align: center;
+}
+
+.help-impact-main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+}
+
+.help-impact-icon {
+    font-size: 1.2rem;
+}
+
+.help-impact-equivalent {
+    margin-top: .25rem;
+    font-size: .9rem;
+    color: var(--color-text-muted);
+}
+
+.help-impact-equivalent strong {
+    color: var(--color-primary);
+}
 
 
 @keyframes helpAttention {

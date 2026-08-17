@@ -92,10 +92,7 @@ export default function AccountDonations() {
                 setDonations([]);
 
             } else {
-                console.log(
-                    "DONACIONES RAW JSON:",
-                    JSON.stringify(data, null, 2)
-                );
+                // donations data loaded; no debug logging in production
 
                 const normalized: Donation[] = (data ?? []).map((d: any) => ({
                     id: d.id,

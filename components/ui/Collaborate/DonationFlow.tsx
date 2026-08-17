@@ -36,7 +36,7 @@ export default function DonationFlow({
 }: Props) {
 
     const { t } = useLanguage();
-    
+
     let title = "Tu donación";
 
     let description = "";
@@ -44,13 +44,13 @@ export default function DonationFlow({
     if (origin.type === "thematic") {
 
         const donation =
-    origin.donationType;
+            origin.donationType;
 
-title =
-    t[`don_${donation}_title`];
+        title =
+            t[`don_${donation}_title`];
 
-description =
-    t[`don_${donation}_desc`];
+        description =
+            t[`don_${donation}_desc`];
 
     }
 
@@ -134,48 +134,35 @@ description =
 
                 </div>
 
-
                 <div className="donation-flow-frequency">
 
                     <button
-                        className={
-                            !isMonthly
-                                ? "active"
-                                : ""
-                        }
-                        onClick={() =>
-                            setIsMonthly(false)
-                        }
+                        type="button"
+                        className={`donation-frequency-btn ${!isMonthly ? "active" : ""
+                            }`}
+                        onClick={() => setIsMonthly(false)}
                     >
                         Una vez
                     </button>
 
-
                     <button
-                        className={
-                            isMonthly
-                                ? "active"
-                                : ""
-                        }
-                        onClick={() =>
-                            setIsMonthly(true)
-                        }
+                        type="button"
+                        className={`donation-frequency-btn ${isMonthly ? "active" : ""
+                            }`}
+                        onClick={() => setIsMonthly(true)}
                     >
                         Mensualmente
                     </button>
 
                 </div>
 
-
                 <button
-                    className="btn btn-primary action-btn"
+                    type="button"
+                    className="btn btn-primary donation-flow-continue"
                     onClick={onContinue}
                 >
-
                     Continuar
-
                     <ArrowRight size={22} />
-
                 </button>
 
             </div>

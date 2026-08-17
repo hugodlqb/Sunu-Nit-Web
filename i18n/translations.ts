@@ -149,6 +149,9 @@ export const translations = {
         don_health_unit: "lotes médicos",
         don_health_impact_unit: "lote médico",
 
+        help_continue_error: "Error iniciando el pago",
+        processing_payment: "Procesando el pago...",
+
         /*FOOTER*/
         footer_desc: "ONG directa y comprometida en Rufisque, Senegal. Devolviendo la dignidad a la infancia más vulnerable",
         footer_contact_title: "Contacto Oficial",
@@ -349,6 +352,9 @@ export const translations = {
         detalle_don_health: "With this support, we fund basic medicines, first aid materials, and small medical treatments to address wounds and common infections among Talibé children.",
         don_health_unit: "medical supplies",
         don_health_impact_unit: "medical supply kit",
+
+        help_continue_error: "Error starting payment",
+        processing_payment: "Processing payment...",
 
         /*FOOTER*/
         footer_desc: "A direct and committed NGO in Rufisque, Senegal. Restoring dignity to the most vulnerable children",
@@ -555,6 +561,9 @@ export const translations = {
         detalle_don_health: "Grâce à cette aide, nous finançons des médicaments de base, du matériel de soins et de petites interventions médicales pour traiter les blessures et infections fréquentes chez les enfants talibés.",
         don_health_unit: "lots médicaux",
         don_health_impact_unit: "lot médical",
+
+        help_continue_error: "Erreur au lancement du paiement",
+        processing_payment: "Traitement du paiement...",
 
         /*FOOTER*/
         footer_desc: "Une ONG directe et engagée à Rufisque, au Sénégal. Redonner la dignité aux enfants les plus vulnérables",

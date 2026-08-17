@@ -18,6 +18,7 @@ import {
   SignOut
 } from "@phosphor-icons/react/dist/ssr";
 import "@/styles/header.css";
+import { usePathname } from "next/navigation";
 import LoginForm from "@/components/ui/Auth/LoginForm";
 import useLockBodyScroll from "@/components/hooks/useLockBodyScroll";
 
@@ -28,6 +29,9 @@ export default function Header() {
   const userRef = useRef<HTMLDivElement>(null);
   const [activeSection, setActiveSection] = useState("hero");
   const [loginError, setLoginError] = useState("");
+  const pathname = usePathname();
+  const sectionHref = (section: string) =>
+    pathname === "/" ? `#${section}` : `/#${section}`;
   const {
     user,
     profile,
@@ -37,7 +41,29 @@ export default function Header() {
   } = useAuth();
   const {
     t
+
   } = useLanguage();
+  const goToSection = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    section: string
+  ) => {
+    e.preventDefault();
+
+    setUserOpen(false);
+    setAccountOpen(false);
+
+    if (pathname === "/") {
+      document
+        .getElementById(section)
+        ?.scrollIntoView({
+          behavior: "smooth",
+        });
+
+      return;
+    }
+
+    window.location.href = `/#${section}`;
+  };
   const [accountOpen, setAccountOpen] = useState(false);
   const [closingAccount, setClosingAccount] = useState(false);
   const [accountSection, setAccountSection] =
@@ -70,30 +96,6 @@ export default function Header() {
 
   };
 
-  const goToCollaborate = (
-    e: React.MouseEvent<HTMLAnchorElement>
-  ) => {
-
-    e.preventDefault();
-
-    // cerrar menú usuario
-    setUserOpen(false);
-
-    // cerrar panel cuenta si estuviera abierto
-    setAccountOpen(false);
-
-
-    setTimeout(() => {
-
-      document
-        .getElementById("collaborate")
-        ?.scrollIntoView({
-          behavior: "smooth"
-        });
-
-    }, 50);
-
-  };
   const closeAccount = () => {
     setAccountOpen(false);
   };
@@ -178,6 +180,26 @@ export default function Header() {
 
 
   }, []);
+
+  useEffect(() => {
+    const handleCloseOverlays = () => {
+      setUserOpen(false);
+      setAccountOpen(false);
+    };
+
+    window.addEventListener(
+      "close-navigation-overlays",
+      handleCloseOverlays
+    );
+
+    return () => {
+      window.removeEventListener(
+        "close-navigation-overlays",
+        handleCloseOverlays
+      );
+    };
+  }, []);
+
   return (
     <header className="header">
 
@@ -190,51 +212,53 @@ export default function Header() {
 
         <nav className="nav">
 
-
           <a
-            href="#hero"
+            href={sectionHref("hero")}
             className={activeSection === "hero" ? "active" : ""}
           >
             {t.nav_home}
           </a>
 
-
-          <a href="#about"
-            className={activeSection === "about" ? "active" : ""}>
+          <a
+            href={sectionHref("about")}
+            className={activeSection === "about" ? "active" : ""}
+          >
             {t.nav_about}
           </a>
 
-
-          <a href="#impact"
-            className={activeSection === "impact" ? "active" : ""}>
+          <a
+            href={sectionHref("impact")}
+            className={activeSection === "impact" ? "active" : ""}
+          >
             {t.nav_transparency}
           </a>
 
           <a
-            href="#activities"
+            href={sectionHref("activities")}
             className={activeSection === "activities" ? "active" : ""}
           >
             {t.nav_activities}
           </a>
 
-          <a href="#news"
-            className={activeSection === "news" ? "active" : ""}>
+          <a
+            href={sectionHref("news")}
+            className={activeSection === "news" ? "active" : ""}
+          >
             {t.nav_news}
           </a>
 
           <a
-            href="#collaborate"
-            onClick={goToCollaborate}
+            href={sectionHref("collaborate")}
           >
             {t.btn_donate_main}
           </a>
 
-          <a href="#contact"
-            className={activeSection === "contact" ? "active" : ""}>
+          <a
+            href={sectionHref("contact")}
+            className={activeSection === "contact" ? "active" : ""}
+          >
             {t.nav_contact}
           </a>
-
-
         </nav>
 
         <div className="header-actions">

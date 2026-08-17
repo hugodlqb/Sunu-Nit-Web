@@ -42,7 +42,12 @@ export default function FloatingDonate() {
 
     return (
         <a
-            href="#collaborate"
+            href="/#collaborate"
+            onClick={() => {
+                window.dispatchEvent(
+                    new Event("close-navigation-overlays")
+                );
+            }}
             className={`btn btn-primary floating-collab-btn ${hidden ? "hidden" : ""
                 }`}
         >

@@ -14,6 +14,9 @@ export type DonationOrigin =
     }
     | {
         type: "free";
+    }
+    | {
+        type: "cart";
     };
 
 export function useCollaborate() {
@@ -29,13 +32,9 @@ export function useCollaborate() {
         useState(false);
 
     const [confirmedAmounts, setConfirmedAmounts] = useState({
-
         food: donations.food.defaultAmount,
-
         hygiene: donations.hygiene.defaultAmount,
-
-        health: donations.health.defaultAmount
-
+        health: donations.health.defaultAmount,
     });
 
     const [donationOrigin, setDonationOrigin] =
@@ -129,12 +128,38 @@ export function useCollaborate() {
             )
             : 0;
 
+    const cartItems = Object.entries(confirmedAmounts)
+        .map(([type, amount]) => {
+            const donation =
+                donations[type as keyof typeof donations];
+
+            const numericAmount = Number(amount);
+
+            return {
+                type: type as keyof typeof donations,
+                amount: numericAmount,
+                quantity: Math.floor(
+                    numericAmount / donation.price
+                ),
+                unitPrice: donation.price,
+                icon: donation.icon,
+                color: donation.color,
+            };
+        })
+        .filter(item => item.amount > 0);
+
+    const cartTotal = cartItems.reduce(
+        (total, item) => total + item.amount,
+        0
+    );
+
     return {
 
         selectedDonation,
 
         setSelectedDonation,
-
+        cartItems,
+        cartTotal,
         amount,
 
         setAmount,
