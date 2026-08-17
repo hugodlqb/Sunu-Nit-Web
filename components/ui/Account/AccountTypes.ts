@@ -1,7 +1,6 @@
 export type AccountSection =
     | "profile"
-    | "statistics"
-    | "donations"
+    | "activity"
     | "settings"
     | "admin"
     | "volunteer"

@@ -13,34 +13,27 @@ interface RootLayoutProps {
 export default function RootLayout({
   children,
 }: RootLayoutProps) {
-
   return (
     <html lang="es">
       <body>
-
-    <AuthProvider>
-
         <LanguageProvider>
-
+          <AuthProvider>
             <div className="site-layout">
 
-                <Header />
+              <Header />
 
-                <FloatingDonate />
+              <FloatingDonate />
 
-                <main className="site-main">
-                    {children}
-                </main>
+              <main className="site-main">
+                {children}
+              </main>
 
-                <Footer />
+              <Footer />
 
             </div>
-
+          </AuthProvider>
         </LanguageProvider>
-
-    </AuthProvider>
-
-</body>
+      </body>
     </html>
   );
 }

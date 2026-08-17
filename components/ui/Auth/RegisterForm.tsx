@@ -1,15 +1,11 @@
 "use client";
 
-import {
-    Eye,
-    EyeSlash
-} from "@phosphor-icons/react/dist/ssr";
-
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import PasswordFields from "@/components/ui/Auth/PasswordFields";
 import { useLanguage } from "@/context/LanguageContext";
 import { useRef } from "react";
+import LanguageSelector from "@/components/ui/LanguageSelector";
 
 type RegisterFormData = {
 
@@ -124,9 +120,15 @@ export default function RegisterForm({
     const phoneInputRef = useRef<HTMLInputElement | null>(null);
 
     return (
-
         <div className="register-form">
 
+            <div className="register-language-row">
+                <span className="register-language-label">
+                    {t.language_preference}
+                </span>
+
+                <LanguageSelector />
+            </div>
 
             <div className="form-row">
 

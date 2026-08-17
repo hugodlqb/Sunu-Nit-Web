@@ -7,6 +7,7 @@ import AppImage from "@/components/ui/AppImage";
 import RegisterModal from "@/components/ui/Auth/RegisterModal";
 import { useAuth } from "@/context/AuthContext";
 import AccountPanel from "@/components/ui/Account/AccountPanel";
+import LanguageSelector from "@/components/ui/LanguageSelector";
 import {
   UserCircle,
   List,
@@ -22,8 +23,6 @@ import useLockBodyScroll from "@/components/hooks/useLockBodyScroll";
 
 export default function Header() {
 
-  const [langOpen, setLangOpen] = useState(false);
-  const langRef = useRef<HTMLDivElement>(null);
   const [userOpen, setUserOpen] = useState(false);
   const [registerOpen, setRegisterOpen] = useState(false);
   const userRef = useRef<HTMLDivElement>(null);
@@ -37,8 +36,6 @@ export default function Header() {
     logout
   } = useAuth();
   const {
-    language,
-    setLanguage,
     t
   } = useLanguage();
   const [accountOpen, setAccountOpen] = useState(false);
@@ -46,8 +43,7 @@ export default function Header() {
   const [accountSection, setAccountSection] =
     useState<
       "profile" |
-      "statistics" |
-      "donations" |
+      "activity" |
       "settings" |
       "volunteer" |
       "volunteer_manager" |
@@ -58,8 +54,7 @@ export default function Header() {
   const openAccount = (
     section:
       | "profile"
-      | "statistics"
-      | "donations"
+      | "activity"
       | "settings"
       | "volunteer"
       | "volunteer_manager"
@@ -87,9 +82,6 @@ export default function Header() {
     // cerrar panel cuenta si estuviera abierto
     setAccountOpen(false);
 
-    // cerrar idiomas por seguridad
-    setLangOpen(false);
-
 
     setTimeout(() => {
 
@@ -108,23 +100,12 @@ export default function Header() {
 
   useLockBodyScroll(
     userOpen ||
-    langOpen ||
     accountOpen
   );
 
   useEffect(() => {
-
     function handleClickOutside(event: MouseEvent) {
-
       const target = event.target as Node;
-
-      if (
-        langRef.current &&
-        !langRef.current.contains(target)
-      ) {
-        setLangOpen(false);
-      }
-
 
       if (
         userRef.current &&
@@ -132,15 +113,12 @@ export default function Header() {
       ) {
         setUserOpen(false);
       }
-
     }
-
 
     document.addEventListener(
       "mousedown",
       handleClickOutside
     );
-
 
     return () => {
       document.removeEventListener(
@@ -148,8 +126,8 @@ export default function Header() {
         handleClickOutside
       );
     };
-
   }, []);
+
   useEffect(() => {
 
     const sections = [
@@ -314,21 +292,11 @@ export default function Header() {
                         <button
                           className="user-menu-option"
                           onClick={() =>
-                            openAccount("statistics")
+                            openAccount("activity")
                           }
                         >
-                          <User size={20} />
-                          <span>{t.account_statistics}</span>
-                        </button>
-
-                        <button
-                          className="user-menu-option"
-                          onClick={() =>
-                            openAccount("donations")
-                          }
-                        >
-                          <User size={20} />
-                          <span>{t.account_donations}</span>
+                          <HandHeart size={20} />
+                          <span>Mi actividad</span>
                         </button>
 
                         <button
@@ -461,69 +429,7 @@ export default function Header() {
 
           </div>
 
-          {/* IDIOMAS */}
-
-          <div
-            className="lang-selector"
-            ref={langRef}
-          >
-
-            <button
-              className="lang-btn"
-              onClick={() => setLangOpen(!langOpen)}
-            >
-
-              {language.toUpperCase()} ▾
-
-            </button>
-
-            {langOpen && (
-
-              <div className="lang-menu">
-
-
-                <button
-                  className="lang-option"
-                  onClick={() => {
-                    setLanguage("es");
-                    setLangOpen(false);
-                  }}
-                >
-                  Español
-                </button>
-
-
-
-                <button
-                  className="lang-option"
-                  onClick={() => {
-                    setLanguage("en");
-                    setLangOpen(false);
-                  }}
-                >
-                  English
-                </button>
-
-
-
-                <button
-                  className="lang-option"
-                  onClick={() => {
-                    setLanguage("fr");
-                    setLangOpen(false);
-                  }}
-                >
-                  Français
-                </button>
-
-
-              </div>
-
-            )}
-
-          </div>
-
-
+          <LanguageSelector />
           <button className="mobile-toggle">
 
             <List size={28} />

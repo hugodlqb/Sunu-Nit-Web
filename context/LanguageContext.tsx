@@ -8,36 +8,31 @@ import {
 
 import { translations } from "@/i18n/translations";
 
-
 type Language = "es" | "en" | "fr";
-
 
 interface LanguageContextType {
   language: Language;
-  setLanguage: React.Dispatch<React.SetStateAction<Language>>;
+  setLanguage: (lang: Language) => void;
   t: typeof translations.es;
 }
 
-
-const LanguageContext = createContext<{
-  language: Language;
-  setLanguage: (lang: Language) => void;
-  t: any;
-} | null>(null);
-
+const LanguageContext =
+  createContext<LanguageContextType | null>(null);
 
 export function LanguageProvider({
   children
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
 
+  const [language, setLanguageState] =
+    useState<Language>("es");
 
-  const [language, setLanguage] = useState<Language>("es");
-
+  function setLanguage(lang: Language) {
+    setLanguageState(lang);
+  }
 
   return (
-
     <LanguageContext.Provider
       value={{
         language,
@@ -45,24 +40,21 @@ export function LanguageProvider({
         t: translations[language]
       }}
     >
-
       {children}
-
     </LanguageContext.Provider>
-
   );
-
 }
 
+export function useLanguage() {
 
-export function useLanguage(){
-
-  const context = useContext(LanguageContext);
+  const context =
+    useContext(LanguageContext);
 
   if (!context) {
-    throw new Error("useLanguage debe usarse dentro de LanguageProvider");
+    throw new Error(
+      "useLanguage debe usarse dentro de LanguageProvider"
+    );
   }
 
   return context;
-
 }

@@ -9,11 +9,32 @@ import {
 
 import { User } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
+import { useLanguage } from "@/context/LanguageContext";
+
+export interface PersonProfile {
+    id: string;
+    auth_user_id: string;
+    name: string | null;
+    surname: string | null;
+    phone: string | null;
+    country: string | null;
+    preferred_language: string | null;
+    created_at: string;
+    accepted_communications: boolean | null;
+}
+
+interface ProfileUpdate {
+    name: string;
+    surname: string;
+    phone: string;
+    country: string;
+    preferred_language: string;
+    accepted_communications: boolean;
+}
 
 interface AuthContextType {
-
     user: User | null;
-    profile: any | null;
+    profile: PersonProfile | null;
     roles: string[];
     hasRole: (role: string) => boolean;
 
@@ -24,9 +45,13 @@ interface AuthContextType {
 
     logout: () => Promise<void>;
 
+    updateProfile: (
+        updates: ProfileUpdate
+    ) => Promise<string | null>;
 }
 
-const AuthContext = createContext<AuthContextType | null>(null);
+const AuthContext =
+    createContext<AuthContextType | null>(null);
 
 export function AuthProvider({
     children
@@ -34,85 +59,266 @@ export function AuthProvider({
     children: React.ReactNode;
 }) {
 
-    const [user, setUser] = useState<User | null>(null);
-    const [profile, setProfile] = useState<any | null>(null);
-    const [roles, setRoles] = useState<string[]>([]);
+    const [user, setUser] =
+        useState<User | null>(null);
 
-    async function loadRoles(personId: string) {
+    const [profile, setProfile] =
+        useState<PersonProfile | null>(null);
 
-        const { data, error } = await supabase
-            .from("person_roles")
-            .select(`
-            roles (
-                key
-            )
-        `)
-            .eq("person_id", personId);
+    const [roles, setRoles] =
+        useState<string[]>([]);
+
+    const { setLanguage } =
+        useLanguage();
+
+
+    async function loadRoles(
+        personId: string
+    ) {
+
+        const { data, error } =
+            await supabase
+                .from("person_roles")
+                .select(`
+                    roles (
+                        key
+                    )
+                `)
+                .eq(
+                    "person_id",
+                    personId
+                );
 
         if (error) {
-            console.error("Error cargando roles:", error);
+
+            console.error(
+                "Error cargando roles:",
+                error
+            );
+
             setRoles([]);
+
             return;
         }
 
-        const userRoles = data
-            ?.map((item: any) => item.roles?.key)
-            .filter(Boolean) ?? [];
+        const userRoles =
+            data
+                ?.map(
+                    (item: any) =>
+                        item.roles?.key
+                )
+                .filter(Boolean) ?? [];
 
         setRoles(userRoles);
     }
 
-    async function loadProfile(userId: string) {
 
-        const { data, error } = await supabase
-            .from("persons")
-            .select("*")
-            .eq("auth_user_id", userId)
-            .maybeSingle();
+    async function loadProfile(
+        userId: string
+    ) {
+
+        const { data, error } =
+            await supabase
+                .from("persons")
+                .select("*")
+                .eq(
+                    "auth_user_id",
+                    userId
+                )
+                .maybeSingle();
+
 
         if (error) {
 
-            console.error("Error cargando perfil:", error);
+            console.error(
+                "Error cargando perfil:",
+                error
+            );
 
             setProfile(null);
             setRoles([]);
 
             return;
-
         }
+
 
         if (!data) {
 
-            console.warn("Perfil no encontrado para usuario:", userId);
+            console.warn(
+                "Perfil no encontrado para usuario:",
+                userId
+            );
+
             setProfile(null);
             setRoles([]);
+
             return;
+        }
+
+
+        // ==========================
+        // PERFIL
+        // ==========================
+
+        setProfile(
+            data as PersonProfile
+        );
+
+
+        // ==========================
+        // IDIOMA PREFERIDO
+        // ==========================
+
+        const preferredLanguage =
+            data.preferred_language;
+
+        if (
+            preferredLanguage === "es" ||
+            preferredLanguage === "en" ||
+            preferredLanguage === "fr"
+        ) {
+
+            setLanguage(
+                preferredLanguage
+            );
 
         }
 
-        setProfile(data);
-        await loadRoles(data.id);
+
+        // ==========================
+        // ROLES
+        // ==========================
+
+        await loadRoles(
+            data.id
+        );
+
     }
 
-    useEffect(() => {
 
+    async function updateProfile(
+        updates: ProfileUpdate
+    ): Promise<string | null> {
+
+        if (!user || !profile) {
+
+            return (
+                "No hay ningún usuario autenticado."
+            );
+
+        }
+
+
+        const { data, error } =
+            await supabase
+                .from("persons")
+                .update({
+
+                    name:
+                        updates.name,
+
+                    surname:
+                        updates.surname,
+
+                    phone:
+                        updates.phone,
+
+                    country:
+                        updates.country,
+
+                    preferred_language:
+                        updates.preferred_language,
+
+                    accepted_communications:
+                        updates.accepted_communications
+
+                })
+                .eq(
+                    "id",
+                    profile.id
+                )
+                .eq(
+                    "auth_user_id",
+                    user.id
+                )
+                .select()
+                .single();
+
+
+        if (error) {
+
+            console.error(
+                "Error actualizando perfil:",
+                error
+            );
+
+            return error.message;
+        }
+
+
+        setProfile(
+            data as PersonProfile
+        );
+
+
+        // Si el usuario cambia el idioma
+        // desde Perfil, también actualizamos
+        // inmediatamente la interfaz.
+
+        const preferredLanguage =
+            data.preferred_language;
+
+        if (
+            preferredLanguage === "es" ||
+            preferredLanguage === "en" ||
+            preferredLanguage === "fr"
+        ) {
+
+            setLanguage(
+                preferredLanguage
+            );
+
+        }
+
+
+        return null;
+    }
+
+
+    useEffect(() => {
 
         async function loadUser() {
 
             const {
-                data: { session }
-            } = await supabase.auth.getSession();
+                data: {
+                    session
+                }
+            } =
+                await supabase.auth.getSession();
 
-            const user = session?.user ?? null;
 
-            setUser(user);
+            const currentUser =
+                session?.user ?? null;
 
-            if (user) {
-                await loadProfile(user.id);
+
+            setUser(
+                currentUser
+            );
+
+
+            if (currentUser) {
+
+                await loadProfile(
+                    currentUser.id
+                );
+
             } else {
+
                 setProfile(null);
                 setRoles([]);
+
             }
+
         }
 
 
@@ -123,28 +329,39 @@ export function AuthProvider({
             data: {
                 subscription
             }
+        } =
+            supabase.auth.onAuthStateChange(
+                async (
+                    _event,
+                    session
+                ) => {
 
-        } = supabase.auth.onAuthStateChange(
+                    if (session?.user) {
 
-            async (_event, session) => {
+                        setUser(
+                            session.user
+                        );
 
-                if (session?.user) {
+                        await loadProfile(
+                            session.user.id
+                        );
 
-                    setUser(session.user);
+                    } else {
 
-                    await loadProfile(session.user.id);
+                        setUser(null);
+                        setProfile(null);
+                        setRoles([]);
 
-                } else {
+                        // Volvemos al idioma
+                        // predeterminado al cerrar sesión.
 
-                    setUser(null);
-                    setProfile(null);
-                    setRoles([]);
+                        setLanguage("es");
+
+                    }
 
                 }
+            );
 
-            }
-
-        );
 
         return () => {
 
@@ -152,22 +369,22 @@ export function AuthProvider({
 
         };
 
-
     }, []);
+
 
     async function login(
         email: string,
         password: string
     ) {
 
-        const {
-            error
-        } = await supabase.auth.signInWithPassword({
+        const { error } =
+            await supabase.auth
+                .signInWithPassword({
 
-            email,
-            password
+                    email,
+                    password
 
-        });
+                });
 
 
         if (error) {
@@ -178,7 +395,6 @@ export function AuthProvider({
 
 
         return null;
-
     }
 
 
@@ -188,20 +404,34 @@ export function AuthProvider({
 
     }
 
-    function hasRole(role: string) {
-        return roles.includes(role);
+
+    function hasRole(
+        role: string
+    ) {
+
+        return roles.includes(
+            role
+        );
+
     }
+
 
     return (
 
         <AuthContext.Provider
             value={{
+
                 user,
                 profile,
                 roles,
+
                 hasRole,
+
                 login,
-                logout
+                logout,
+
+                updateProfile
+
             }}
         >
 
@@ -213,9 +443,14 @@ export function AuthProvider({
 
 }
 
+
 export function useAuth() {
 
-    const context = useContext(AuthContext);
+    const context =
+        useContext(
+            AuthContext
+        );
+
 
     if (!context) {
 
@@ -224,6 +459,7 @@ export function useAuth() {
         );
 
     }
+
 
     return context;
 

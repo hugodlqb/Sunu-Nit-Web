@@ -220,3 +220,105 @@
 .account-content h2 {
   color: var(--color-primary);
 }
+
+.account-profile {
+    width: 100%;
+}
+
+.account-profile-header {
+    margin-bottom: 24px;
+}
+
+.account-profile-fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 32px;
+    row-gap: 18px;
+}
+
+.account-profile-row {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    min-width: 0;
+}
+
+.account-profile-row strong {
+    font-size: 0.9rem;
+}
+
+.account-profile-row span {
+    min-height: 24px;
+}
+
+.account-profile-row input,
+.account-profile-row select {
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+}
+
+.account-profile-row label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.account-profile-row label input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+    flex-shrink: 0;
+}
+
+.account-profile-row label span {
+    min-height: auto;
+}
+
+/* Email */
+.account-profile-row:nth-child(3) span {
+    opacity: 0.75;
+}
+
+.account-profile-full {
+    grid-column: 1 / -1;
+}
+
+.account-profile-full label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Botones */
+.account-actions {
+    display: flex;
+    justify-content: flex-start;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+.account-profile-message {
+    margin-bottom: 18px;
+}
+
+@media (max-width: 700px) {
+    .account-profile-fields {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .account-profile-row:nth-child(7),
+    .account-profile-row:nth-child(8) {
+        grid-column: auto;
+    }
+
+    .account-actions {
+        justify-content: stretch;
+    }
+
+    .account-actions .btn {
+        flex: 1;
+    }
+}

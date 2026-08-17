@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import ProjectDonationCard from "./ProjectDonationCard";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface Project {
     id: string;
@@ -68,14 +69,15 @@ export default function ProjectDonationCards({
 
     }, []);
 
+    const { t } = useLanguage();
+
     if (loading) {
         return (
             <div className="projects-loading">
-                Cargando proyectos...
+                {t.projects_loading}
             </div>
         );
     }
-console.log("PROYECTOS CARGADOS:", projects);
     if (projects.length === 0) {
         return null;
     }
