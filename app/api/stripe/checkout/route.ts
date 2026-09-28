@@ -13,20 +13,6 @@ export async function POST(req: Request) {
 
         // Validate payload
         const { origin, amount, isMonthly, currency = 'EUR', confirmedAmounts } = body
-        console.log(
-            "CHECKOUT REQUEST:",
-            JSON.stringify(
-                {
-                    origin,
-                    amount,
-                    isMonthly,
-                    currency,
-                    confirmedAmounts,
-                },
-                null,
-                2
-            )
-        );
         if (!origin) {
             return NextResponse.json(
                 { error: "Invalid payload" },
@@ -44,27 +30,68 @@ export async function POST(req: Request) {
             );
         }
 
-        // Determine authenticated user if provided
-        let personId: string | null = null
+        /// Determine authenticated user if provided
+        let personId: string | null = null;
 
         try {
-            const authHeader = req.headers.get('authorization')
-            if (authHeader?.startsWith('Bearer ')) {
-                const token = authHeader.split(' ')[1]
-                const { data: userData, error: userErr } = await supabaseAdmin.auth.getUser(token)
-                if (!userErr && userData?.user?.id) {
-                    // lookup persons by auth_user_id
-                    const { data: personRows } = await supabaseAdmin
-                        .from('persons')
-                        .select('id')
-                        .eq('auth_user_id', userData.user.id)
-                        .limit(1)
-                        .maybeSingle()
-                    if (personRows && (personRows as any).id) personId = (personRows as any).id
+            const authHeader = req.headers.get("authorization");
+
+            if (authHeader?.startsWith("Bearer ")) {
+                const token = authHeader.slice(7);
+
+                const { data: userData, error: userErr } =
+                    await supabaseAdmin.auth.getUser(token);
+
+                if (!userErr && userData?.user) {
+                    const user = userData.user;
+
+                    // 1. Primero buscamos por auth_user_id
+                    const { data: personByAuthId, error: authPersonError } =
+                        await supabaseAdmin
+                            .from("persons")
+                            .select("id")
+                            .eq("auth_user_id", user.id)
+                            .maybeSingle();
+
+                    if (authPersonError) {
+                        console.error(
+                            "Error buscando persona por auth_user_id:",
+                            authPersonError
+                        );
+                    }
+
+                    if (personByAuthId?.id) {
+                        personId = personByAuthId.id;
+                    } else if (user.email) {
+                        // 2. Fallback: buscamos por email
+                        const { data: personByEmail, error: emailPersonError } =
+                            await supabaseAdmin
+                                .from("persons")
+                                .select("id")
+                                .eq("email", user.email)
+                                .maybeSingle();
+
+                        if (emailPersonError) {
+                            console.error(
+                                "Error buscando persona por email:",
+                                emailPersonError
+                            );
+                        }
+
+                        if (personByEmail?.id) {
+                            personId = personByEmail.id;
+
+                            // Aprovechamos para reparar el vínculo
+                            await supabaseAdmin
+                                .from("persons")
+                                .update({ auth_user_id: user.id })
+                                .eq("id", personId);
+                        }
+                    }
                 }
             }
-        } catch (e) {
-            // ignore auth resolution errors
+        } catch (error) {
+            console.error("Error resolving authenticated person:", error);
         }
 
         // SERVER-SIDE VALIDATION & MAPPING
@@ -310,7 +337,13 @@ export async function POST(req: Request) {
                 amount: Number((computedTotalCents / 100).toFixed(2))
             }
             const { error: projErr } = await supabaseAdmin.from('donation_projects').insert(proj)
-            if (projErr) console.error('Failed inserting donation_projects', projErr)
+            if (projErr) {
+                console.error("Failed inserting donation_projects", projErr)
+                return NextResponse.json(
+                    { error: "Failed creating project donation" },
+                    { status: 500 }
+                )
+            }
         }
 
         // Create Stripe Checkout Session

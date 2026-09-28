@@ -1,12 +1,12 @@
 "use client";
 
 import "@/styles/activities.css";
-
+import ProjectDonationCards from "@/components/ui/Collaborate/ProjectDonationCards";
 import Section from "@/components/ui/Section";
 import ActivityModal from "@/components/ui/ActivityModal";
 import useLockBodyScroll from "@/components/hooks/useLockBodyScroll";
 import { activities } from "@/data/activities";
-
+import ProjectModal from "@/components/ui/ProjectModal";
 import {
   activityTranslations,
   type ActivityLanguage
@@ -48,7 +48,13 @@ export default function Activities() {
   const [selectedActivity, setSelectedActivity] =
     useState<(typeof currentActivities)[number] | null>(null);
 
-  useLockBodyScroll(!!selectedActivity);
+  const [selectedProjectId, setSelectedProjectId] =
+    useState<string | null>(null);
+
+    useLockBodyScroll(
+    !!selectedActivity ||
+    !!selectedProjectId
+);
 
   return (
 
@@ -196,7 +202,25 @@ export default function Activities() {
 
 
         </Swiper>
+        <div className="projects-main-section">
 
+          <div className="section-header">
+            <h2>
+              Proyectos
+            </h2>
+
+            <p className="section-subtitle">
+              Conoce los proyectos que estamos impulsando.
+            </p>
+          </div>
+
+          <ProjectDonationCards
+            onDetails={(projectId) =>
+              setSelectedProjectId(projectId)
+            }
+          />
+
+        </div>
 
 
       </div>
@@ -247,7 +271,14 @@ export default function Activities() {
 
       )}
 
-
+      {selectedProjectId && (
+        <ProjectModal
+          projectId={selectedProjectId}
+          onClose={() =>
+            setSelectedProjectId(null)
+          }
+        />
+      )}
 
     </Section>
 

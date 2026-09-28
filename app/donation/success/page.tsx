@@ -1,7 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { CheckCircle, WarningCircle } from "@phosphor-icons/react/dist/ssr";
+import {
+    CheckCircle,
+    WarningCircle
+} from "@phosphor-icons/react/dist/ssr";
 
 type DonationStatus =
     | "pending"
@@ -11,9 +14,14 @@ type DonationStatus =
     | string;
 
 export default function SuccessPage() {
-    const [donationId, setDonationId] = useState<string | null>(null);
-    const [status, setStatus] = useState<DonationStatus | null>(null);
-    const [error, setError] = useState<string | null>(null);
+    const [donationId, setDonationId] =
+        useState<string | null>(null);
+
+    const [status, setStatus] =
+        useState<DonationStatus | null>(null);
+
+    const [error, setError] =
+        useState<string | null>(null);
 
     useEffect(() => {
         const params = new URLSearchParams(
@@ -23,7 +31,9 @@ export default function SuccessPage() {
         const id = params.get("donation_id");
 
         if (!id) {
-            setError("No se ha encontrado la donación.");
+            setError(
+                "No se ha encontrado la donación."
+            );
             return;
         }
 
@@ -58,7 +68,8 @@ export default function SuccessPage() {
                     );
                 }
 
-                const data = await response.json();
+                const data =
+                    await response.json();
 
                 if (cancelled) {
                     return;
@@ -80,11 +91,14 @@ export default function SuccessPage() {
                     setError(
                         "La confirmación está tardando más de lo esperado."
                     );
-
                     return;
                 }
 
-                setTimeout(checkDonation, intervalMs);
+                setTimeout(
+                    checkDonation,
+                    intervalMs
+                );
+
             } catch (err) {
                 if (cancelled) {
                     return;
@@ -98,11 +112,13 @@ export default function SuccessPage() {
                     setError(
                         "No hemos podido comprobar el estado de la donación."
                     );
-
                     return;
                 }
 
-                setTimeout(checkDonation, intervalMs);
+                setTimeout(
+                    checkDonation,
+                    intervalMs
+                );
             }
         }
 
@@ -111,12 +127,14 @@ export default function SuccessPage() {
         return () => {
             cancelled = true;
         };
+
     }, [donationId]);
 
     if (error) {
         return (
             <div className="container section donation-success-page">
                 <div className="donation-success-card">
+
                     <WarningCircle
                         size={64}
                         weight="fill"
@@ -126,14 +144,13 @@ export default function SuccessPage() {
                         Estamos teniendo un problema
                     </h1>
 
-                    <p>
-                        {error}
-                    </p>
+                    <p>{error}</p>
 
                     <p>
                         Si el pago se ha realizado correctamente,
                         no es necesario volver a pagar.
                     </p>
+
                 </div>
             </div>
         );
@@ -143,6 +160,7 @@ export default function SuccessPage() {
         return (
             <div className="container section donation-success-page">
                 <div className="donation-success-card">
+
                     <CheckCircle
                         size={72}
                         weight="fill"
@@ -159,6 +177,7 @@ export default function SuccessPage() {
                     <p>
                         Gracias por ayudar a hacer posible nuestro trabajo.
                     </p>
+
                 </div>
             </div>
         );
@@ -168,6 +187,7 @@ export default function SuccessPage() {
         return (
             <div className="container section donation-success-page">
                 <div className="donation-success-card">
+
                     <WarningCircle
                         size={64}
                         weight="fill"
@@ -180,6 +200,7 @@ export default function SuccessPage() {
                     <p>
                         El pago no se ha podido completar correctamente.
                     </p>
+
                 </div>
             </div>
         );
@@ -189,6 +210,7 @@ export default function SuccessPage() {
         return (
             <div className="container section donation-success-page">
                 <div className="donation-success-card">
+
                     <WarningCircle
                         size={64}
                         weight="fill"
@@ -201,6 +223,7 @@ export default function SuccessPage() {
                     <p>
                         Esta donación ha sido reembolsada.
                     </p>
+
                 </div>
             </div>
         );
@@ -209,11 +232,10 @@ export default function SuccessPage() {
     return (
         <div className="container section donation-success-page">
             <div className="donation-success-card">
+
                 <div className="donation-success-spinner" />
 
-                <h1>
-                    Gracias
-                </h1>
+                <h1>Gracias</h1>
 
                 <p>
                     Estamos confirmando tu donación...
@@ -222,6 +244,7 @@ export default function SuccessPage() {
                 <p className="donation-success-small">
                     Esto puede tardar unos segundos.
                 </p>
+
             </div>
         </div>
     );

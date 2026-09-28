@@ -3,6 +3,7 @@
 import {
   createContext,
   useContext,
+  useEffect,
   useState
 } from "react";
 
@@ -28,8 +29,30 @@ export function LanguageProvider({
   const [language, setLanguageState] =
     useState<Language>("es");
 
+  useEffect(() => {
+
+    const savedLanguage =
+      localStorage.getItem("preferred_language");
+
+    if (
+      savedLanguage === "es" ||
+      savedLanguage === "en" ||
+      savedLanguage === "fr"
+    ) {
+      setLanguageState(savedLanguage);
+    }
+
+  }, []);
+
   function setLanguage(lang: Language) {
+
     setLanguageState(lang);
+
+    localStorage.setItem(
+      "preferred_language",
+      lang
+    );
+
   }
 
   return (

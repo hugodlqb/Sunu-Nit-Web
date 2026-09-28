@@ -242,6 +242,29 @@
     margin-top: 2rem;
 }
 
+.about-read-more {
+    margin-top: 1rem;
+    padding: 0;
+    background: none;
+    border: none;
+    color: var(--color-primary);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.about-read-more:hover {
+    opacity: 0.75;
+}
+
+.about-intro {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
 
 /* =========================
    RESPONSIVE

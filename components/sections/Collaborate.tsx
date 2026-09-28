@@ -116,8 +116,8 @@ export default function Collaborate() {
                 currency: "EUR",
                 confirmedAmounts: helpCart,
               };
-
               const res = await fetch('/api/stripe/checkout', {
+
                 method: 'POST',
                 headers: {
                   'content-type': 'application/json',
@@ -127,6 +127,7 @@ export default function Collaborate() {
               })
 
               const json = await res.json()
+
               if (json?.url) window.location.href = json.url
               else {
                 console.error('Checkout creation failed', json)
@@ -165,10 +166,6 @@ export default function Collaborate() {
           animateHelpButton={animateHelpButton}
         />
 
-        <ProjectDonationCards
-          onDonate={openProjectDonation}
-        />
-
         <PaymentMethods />
 
         <TransparencyAlert />
@@ -201,7 +198,6 @@ export default function Collaborate() {
                     isMonthly,
                     currency: "EUR",
                   };
-
                   const res = await fetch('/api/stripe/checkout', {
                     method: 'POST',
                     headers: {

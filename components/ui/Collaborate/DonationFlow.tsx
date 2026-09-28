@@ -159,7 +159,9 @@ export default function DonationFlow({
                 <button
                     type="button"
                     className="btn btn-primary donation-flow-continue"
-                    onClick={onContinue}
+                    onClick={() => {
+                        onContinue();
+                    }}
                 >
                     Continuar
                     <ArrowRight size={22} />

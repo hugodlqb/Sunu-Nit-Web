@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import AccountActivity from "@/components/ui/Account/AccountActivity";
+import AccountActivity from "@/components/ui/Account/My Activity/AccountActivity";
 import AccountSidebar from "@/components/ui/Account/AccountSidebar";
-import AccountProfile from "@/components/ui/Account/AccountProfile"; 
+import AccountProfile from "@/components/ui/Account/AccountProfile";
 import AccountSettings from "@/components/ui/Account/AccountSettings";
+import ProjectManager from "@/components/ui/Account/Editor/ProjectManager";
 import { AccountSection } from "./AccountTypes";
 import "@/styles/account.css";
 import AccountAdmin from "@/components/ui/Account/AccountAdmin";
@@ -60,8 +61,7 @@ export default function AccountPanel({
                 return <div>Gestión de voluntarios - Próximamente</div>;
 
             case "editor":
-
-                return <div>Editor - Próximamente</div>;
+                return <ProjectManager />;
 
             case "admin":
 

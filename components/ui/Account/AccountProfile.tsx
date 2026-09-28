@@ -33,6 +33,7 @@ export default function AccountProfile() {
         surname: "",
         phone: "",
         country: "",
+        birth_date: "",
         preferred_language: "es",
         accepted_communications: false
     });
@@ -46,6 +47,7 @@ export default function AccountProfile() {
             surname: profile.surname ?? "",
             phone: profile.phone ?? "",
             country: profile.country ?? "",
+            birth_date: profile.birth_date ?? "",
             preferred_language:
                 profile.preferred_language ?? "es",
             accepted_communications:
@@ -77,6 +79,7 @@ export default function AccountProfile() {
             surname: profile.surname ?? "",
             phone: profile.phone ?? "",
             country: profile.country ?? "",
+            birth_date: profile.birth_date ?? "",
             preferred_language:
                 profile.preferred_language ?? "es",
             accepted_communications:
@@ -97,6 +100,7 @@ export default function AccountProfile() {
             surname: profile.surname ?? "",
             phone: profile.phone ?? "",
             country: profile.country ?? "",
+            birth_date: profile.birth_date ?? "",
             preferred_language:
                 profile.preferred_language ?? "es",
             accepted_communications:
@@ -260,7 +264,7 @@ export default function AccountProfile() {
                 <div className="account-profile-row">
 
                     <strong>
-                        {t.profile_country}:
+                        {t.register_country}:
                     </strong>
 
                     {editing ? (
@@ -278,6 +282,39 @@ export default function AccountProfile() {
                         <span>
                             {profile.country || "—"}
                         </span>
+                    )}
+
+                </div>
+
+                <div className="account-profile-row">
+
+                    <strong>
+                        {t.birth_date}:
+                    </strong>
+
+                    {editing ? (
+
+                        <input
+                            type="date"
+                            value={form.birth_date}
+                            onChange={e =>
+                                handleChange(
+                                    "birth_date",
+                                    e.target.value
+                                )
+                            }
+                        />
+
+                    ) : (
+
+                        <span>
+                            {profile.birth_date
+                                ? new Date(
+                                    profile.birth_date + "T00:00:00"
+                                ).toLocaleDateString()
+                                : "—"}
+                        </span>
+
                     )}
 
                 </div>

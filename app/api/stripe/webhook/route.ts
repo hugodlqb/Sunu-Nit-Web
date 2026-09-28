@@ -224,8 +224,29 @@ async function handleCheckoutSessionCompleted(
         stripe_checkout_session_id: session.id,
     };
 
-    if (session.customer_details?.email) {
-        update.donor_email = session.customer_details.email;
+    const donorEmail =
+        session.customer_details?.email?.trim().toLowerCase() ?? null;
+
+    if (donorEmail) {
+        update.donor_email = donorEmail;
+
+        // Buscar al usuario por email
+        const { data: person, error: personError } =
+            await supabaseAdmin
+                .from("persons")
+                .select("id")
+                .ilike("email", donorEmail)
+                .maybeSingle();
+
+        if (personError) {
+            throw new Error(
+                `Failed finding person by email: ${personError.message}`
+            );
+        }
+
+        if (person?.id) {
+            update.person_id = person.id;
+        }
     }
 
     if (session.customer) {

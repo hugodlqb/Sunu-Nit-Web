@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import ProjectDonationCard from "./ProjectDonationCard";
+import ProjectMainCard from "@/components/ui/ProjectMainCard";
 import { useLanguage } from "@/context/LanguageContext";
 
 interface Project {
@@ -13,54 +13,106 @@ interface Project {
     target_amount: number;
     current_amount: number;
     currency: string;
+    show_in_projects: boolean;
 }
 
 interface Props {
-    onDonate: (projectId: string) => void;
+    onDonate?: (projectId: string) => void;
+    onDetails?: (projectId: string) => void;
 }
 
 export default function ProjectDonationCards({
-    onDonate
+    onDonate,
+    onDetails,
 }: Props) {
 
-    const [projects, setProjects] = useState<Project[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [projects, setProjects] =
+        useState<Project[]>([]);
+
+    const [loading, setLoading] =
+        useState(true);
+
+    const { t } =
+        useLanguage();
 
     useEffect(() => {
 
         async function loadProjects() {
 
-            const { data, error } = await supabase
+            setLoading(true);
+
+            const {
+                data,
+                error,
+            } = await supabase
                 .from("projects")
-                .select(`
+                .select(
+                    `
                     id,
                     name,
                     description,
                     image,
                     target_amount,
                     current_amount,
-                    currency
-                `)
+                    currency,
+                    show_in_projects
+                `
+                )
                 .eq("active", true)
                 .eq("status", "active")
+                .eq("show_in_projects", true)
                 .order("created_at", {
-                    ascending: false
+                    ascending: false,
                 });
 
             if (error) {
 
                 console.error(
-                    "Error cargando proyectos:",
-                    error
+                    "========== ERROR PROJECTS =========="
+                );
+
+                console.error(
+                    "message:",
+                    error.message
+                );
+
+                console.error(
+                    "details:",
+                    error.details
+                );
+
+                console.error(
+                    "hint:",
+                    error.hint
+                );
+
+                console.error(
+                    "code:",
+                    error.code
+                );
+
+                console.error(
+                    "error completo:",
+                    JSON.stringify(
+                        error,
+                        Object.getOwnPropertyNames(error),
+                        2
+                    )
+                );
+
+                console.error(
+                    "===================================="
                 );
 
                 setProjects([]);
+                setLoading(false);
 
-            } else {
-
-                setProjects(data ?? []);
-
+                return;
             }
+
+            setProjects(
+                data ?? []
+            );
 
             setLoading(false);
         }
@@ -69,75 +121,35 @@ export default function ProjectDonationCards({
 
     }, []);
 
-    const { t } = useLanguage();
-
     if (loading) {
+
         return (
             <div className="projects-loading">
                 {t.projects_loading}
             </div>
         );
     }
+
     if (projects.length === 0) {
         return null;
     }
 
     return (
-
         <div className="project-donation-section">
 
-            <div className="project-donation-header">
+            {projects.map((project) => (
 
-                <h3>
-                    Apoya un proyecto
-                </h3>
+                <ProjectMainCard
+                    key={project.id}
+                    id={project.id}
+                    name={project.name}
+                    image={project.image}
+                    onDetails={onDetails}
+                    onDonate={onDonate}
+                />
 
-                <p> 
-                    Elige un proyecto y decide cuánto quieres aportar.
-                </p>
-
-            </div>
-
-
-            <div className="project-donation-grid">
-
-                {projects.map(project => (
-
-                    <ProjectDonationCard
-
-                        key={project.id}
-
-                        id={project.id}
-
-                        name={project.name}
-
-                        description={
-                            project.description ?? ""
-                        }
-
-                        image={project.image}
-
-                        targetAmount={
-                            Number(project.target_amount)
-                        }
-
-                        currentAmount={
-                            Number(project.current_amount)
-                        }
-
-                        currency={
-                            project.currency
-                        }
-
-                        onDonate={onDonate}
-
-                    />
-
-                ))}
-
-            </div>
+            ))}
 
         </div>
-
     );
 }

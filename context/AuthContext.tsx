@@ -18,9 +18,11 @@ export interface PersonProfile {
     surname: string | null;
     phone: string | null;
     country: string | null;
+    birth_date: string | null;
     preferred_language: string | null;
     created_at: string;
     accepted_communications: boolean | null;
+
 }
 
 interface ProfileUpdate {
@@ -28,6 +30,7 @@ interface ProfileUpdate {
     surname: string;
     phone: string;
     country: string;
+    birth_date: string;
     preferred_language: string;
     accepted_communications: boolean;
 }
@@ -47,6 +50,10 @@ interface AuthContextType {
 
     updateProfile: (
         updates: ProfileUpdate
+    ) => Promise<string | null>;
+
+    updatePreferredLanguage: (
+        language: "es" | "en" | "fr"
     ) => Promise<string | null>;
 }
 
@@ -213,25 +220,14 @@ export function AuthProvider({
             await supabase
                 .from("persons")
                 .update({
-
-                    name:
-                        updates.name,
-
-                    surname:
-                        updates.surname,
-
-                    phone:
-                        updates.phone,
-
-                    country:
-                        updates.country,
-
-                    preferred_language:
-                        updates.preferred_language,
-
+                    name: updates.name,
+                    surname: updates.surname,
+                    phone: updates.phone,
+                    country: updates.country,
+                    birth_date: updates.birth_date,
+                    preferred_language: updates.preferred_language,
                     accepted_communications:
                         updates.accepted_communications
-
                 })
                 .eq(
                     "id",
@@ -284,6 +280,51 @@ export function AuthProvider({
         return null;
     }
 
+    async function updatePreferredLanguage(
+        language: "es" | "en" | "fr"
+    ): Promise<string | null> {
+
+        if (!user || !profile) {
+            return "No hay ningún usuario autenticado.";
+        }
+
+        const { data, error } =
+            await supabase
+                .from("persons")
+                .update({
+                    preferred_language: language
+                })
+                .eq(
+                    "id",
+                    profile.id
+                )
+                .eq(
+                    "auth_user_id",
+                    user.id
+                )
+                .select()
+                .single();
+
+        if (error) {
+
+            console.error(
+                "Error actualizando idioma:",
+                error
+            );
+
+            return error.message;
+        }
+
+        setProfile(
+            data as PersonProfile
+        );
+
+        setLanguage(
+            language
+        );
+
+        return null;
+    }
 
     useEffect(() => {
 
@@ -420,7 +461,6 @@ export function AuthProvider({
 
         <AuthContext.Provider
             value={{
-
                 user,
                 profile,
                 roles,
@@ -430,8 +470,8 @@ export function AuthProvider({
                 login,
                 logout,
 
-                updateProfile
-
+                updateProfile,
+                updatePreferredLanguage
             }}
         >
 

@@ -220,7 +220,21 @@
     background:#EEE8F5;
 
 }
+/* ===========================================
+   PROJECT CARD ACTIONS
+=========================================== */
 
+.project-main-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.project-main-donate-btn {
+    margin-left: auto;
+}
 
 /* ===========================================
    RESPONSIVE
@@ -254,6 +268,22 @@
 
         font-size:1.15rem;
 
+    }
+
+}
+
+@media(max-width:768px) {
+
+    .project-main-card {
+        height: 360px;
+    }
+
+    .project-main-info {
+        padding: 1.2rem;
+    }
+
+    .project-main-info h3 {
+        font-size: 1.15rem;
     }
 
 }

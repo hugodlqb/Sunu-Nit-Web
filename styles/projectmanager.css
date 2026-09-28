@@ -1,0 +1,604 @@
+/* ===========================================
+   PROJECT MANAGER
+=========================================== */
+
+.project-manager {
+    width: 100%;
+}
+
+.project-manager-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.project-manager-header h2 {
+    margin: 0;
+    color: var(--color-primary);
+}
+
+.project-manager-subtitle {
+    margin: 0.5rem 0 0;
+    color: var(--color-text-muted);
+}
+
+.project-manager-search {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.project-manager-search input {
+    flex: 1;
+    min-width: 0;
+}
+
+.project-manager-message {
+    padding: 0.9rem 1rem;
+    margin-bottom: 1rem;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+}
+
+.project-manager-message.success {
+    background: #e7f4eb;
+    color: #23623a;
+}
+
+.project-manager-message.error {
+    background: #fae8e8;
+    color: #9b2c2c;
+}
+
+
+/* ===========================================
+   PROJECT FORM
+=========================================== */
+
+.project-manager-form,
+.project-manager-inline-form {
+    padding: 1.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: #fff;
+    box-shadow: var(--shadow-sm);
+}
+
+.project-manager-form {
+    margin-bottom: 2rem;
+}
+
+.project-manager-inline-form {
+    margin-top: 0;
+    border-top: none;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    box-shadow: none;
+}
+
+.project-manager-form-header {
+    margin-bottom: 1.5rem;
+}
+
+.project-manager-form-header h3 {
+    margin: 0;
+    color: var(--color-primary);
+}
+
+.project-manager-form-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.project-manager-form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.2rem;
+}
+
+.project-manager-form-field label {
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
+.project-manager-form-field input,
+.project-manager-form-field textarea,
+.project-manager-search input {
+    width: 100%;
+    padding: 0.8rem 0.9rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: white;
+    font: inherit;
+    box-sizing: border-box;
+}
+
+.project-manager-form-field textarea {
+    resize: vertical;
+}
+
+.project-manager-form-field textarea {
+    min-height: 70px;
+}
+
+.project-manager-articles-active {
+    background: var(--color-primary);
+    border: 1px solid var(--color-primary);
+    color: white;
+}
+
+.project-manager-articles-active:hover {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+}
+
+
+/* ===========================================
+   CHECKBOXES
+=========================================== */
+
+.project-manager-checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.project-manager-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    cursor: pointer;
+}
+
+.project-manager-checkbox input {
+    width: 18px;
+    height: 18px;
+}
+
+
+/* ===========================================
+   PROJECT LIST
+=========================================== */
+
+.project-manager-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.project-manager-year {
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: white;
+}
+
+.project-manager-year summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.2rem;
+    cursor: pointer;
+    list-style: none;
+    color: var(--color-primary);
+    font-size: 1.1rem;
+    font-weight: 800;
+}
+
+.project-manager-year summary::-webkit-details-marker {
+    display: none;
+}
+
+.project-manager-year summary::after {
+    content: "⌄";
+    font-size: 1.2rem;
+    transition: transform 0.2s ease;
+}
+
+.project-manager-year[open] summary::after {
+    transform: rotate(180deg);
+}
+
+.project-manager-year-count {
+    margin-left: auto;
+    margin-right: 0.8rem;
+    min-width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #f1f1f1;
+    color: var(--color-primary);
+    font-size: 0.85rem;
+}
+
+.project-manager-year-list {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--color-border);
+}
+
+
+/* ===========================================
+   PROJECT ITEM
+=========================================== */
+
+.project-manager-item-wrapper {
+    border-bottom: 1px solid var(--color-border);
+}
+
+.project-manager-item-wrapper:last-child {
+    border-bottom: none;
+}
+
+.project-manager-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.1rem 1.2rem;
+}
+
+.project-manager-item-info {
+    min-width: 0;
+    flex: 1;
+}
+
+.project-manager-item-info h3 {
+    margin: 0 0 0.35rem;
+    color: var(--color-primary);
+    font-size: 1rem;
+}
+
+.project-manager-item-info p {
+    margin: 0 0 0.7rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.project-manager-item-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.project-manager-item-meta span {
+    padding: 0.3rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.project-manager-item-meta .is-active,
+.project-manager-item-meta .is-visible {
+    background: #e7f4eb;
+    color: #23623a;
+}
+
+.project-manager-item-meta .is-inactive,
+.project-manager-item-meta .is-hidden {
+    background: #f1f1f1;
+    color: #666;
+}
+
+
+/* ===========================================
+   PROJECT ACTIONS
+=========================================== */
+
+.project-manager-item-actions {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    gap: 0.6rem;
+}
+
+.project-manager-delete-btn {
+    background: transparent;
+    border: 1px solid var(--color-secondary);
+    color: var(--color-secondary);
+}
+
+.project-manager-delete-btn:hover {
+    background: var(--color-secondary);
+    color: white;
+}
+
+
+/* ===========================================
+   INLINE PANELS
+=========================================== */
+
+.project-manager-inline-panel {
+    padding: 0 1.2rem 1.2rem;
+    border-top: 1px solid var(--color-border);
+    background: #fafafa;
+}
+
+.project-manager-inline-form {
+    border-top: 1px solid var(--color-border);
+}
+
+
+/* ===========================================
+   PROJECT ARTICLES
+=========================================== */
+
+.project-articles {
+    width: 100%;
+    padding-top: 1.2rem;
+}
+
+.project-articles-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.project-articles-header h3 {
+    margin: 0;
+    color: var(--color-primary);
+    font-size: 1.1rem;
+}
+
+.project-articles-list {
+    display: flex;
+    flex-direction: column;
+    max-height: 500px;
+    overflow-y: auto;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: white;
+}
+
+.project-articles-empty {
+    margin: 0;
+    padding: 1.5rem;
+    text-align: center;
+    color: var(--color-text-muted);
+}
+
+
+/* ===========================================
+   ARTICLE ITEM
+=========================================== */
+
+.project-article-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
+    padding: 1rem 1.1rem;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.project-article-item:last-child {
+    border-bottom: none;
+}
+
+.project-article-info {
+    min-width: 0;
+    flex: 1;
+}
+
+.project-article-date {
+    display: block;
+    margin-bottom: 0.25rem;
+    color: var(--color-text-muted);
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.project-article-info h4 {
+    margin: 0 0 0.35rem;
+    color: var(--color-primary);
+    font-size: 0.98rem;
+}
+
+.project-article-info p {
+    margin: 0;
+    color: var(--color-text-muted);
+    line-height: 1.45;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.project-article-actions {
+    display: flex;
+    flex-shrink: 0;
+    gap: 0.6rem;
+}
+
+
+/* ===========================================
+   ARTICLE FORM
+=========================================== */
+
+.project-articles-form {
+    margin-bottom: 1rem;
+    padding: 1.2rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: white;
+}
+
+.project-articles-form-header {
+    margin-bottom: 1rem;
+}
+
+.project-articles-form-header h4 {
+    margin: 0;
+    color: var(--color-primary);
+}
+
+.project-articles-form-row {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(180px, 1fr);
+    gap: 1rem;
+}
+
+.project-articles-form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    margin-bottom: 1rem;
+}
+
+.project-articles-form-field label {
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
+.project-articles-form-field input,
+.project-articles-form-field textarea {
+    width: 100%;
+    padding: 0.75rem 0.85rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: white;
+    font: inherit;
+    box-sizing: border-box;
+}
+
+.project-articles-form-field textarea {
+    resize: vertical;
+}
+
+
+/* ===========================================
+   ARTICLE IMAGES
+=========================================== */
+
+.project-articles-images {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-bottom: 0.75rem;
+}
+
+.project-articles-image-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.project-articles-image-row input {
+    flex: 1;
+    min-width: 0;
+}
+
+.project-articles-image-row .btn {
+    flex-shrink: 0;
+    min-width: 42px;
+}
+
+
+/* ===========================================
+   EMPTY
+=========================================== */
+
+.project-manager-empty {
+    padding: 2rem;
+    text-align: center;
+    color: var(--color-text-muted);
+}
+
+
+/* ===========================================
+   RESPONSIVE
+=========================================== */
+
+@media (max-width: 768px) {
+
+    .project-manager-header {
+        flex-direction: column;
+    }
+
+    .project-manager-header button {
+        width: 100%;
+    }
+
+    .project-manager-search {
+        flex-direction: column;
+    }
+
+    .project-manager-form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .project-manager-item {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .project-manager-item-actions {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .project-manager-item-actions .btn {
+        flex: 1;
+    }
+
+    .project-manager-checkboxes {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+
+    .project-manager-inline-panel {
+        padding: 0 0.8rem 0.8rem;
+    }
+
+    .project-articles-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .project-articles-header button {
+        width: 100%;
+    }
+
+    .project-article-item {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .project-article-actions {
+        width: 100%;
+    }
+
+    .project-article-actions .btn {
+        flex: 1;
+    }
+
+    .project-articles-form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .project-articles-image-row {
+        align-items: stretch;
+    }
+
+    .project-articles-image-row .btn {
+        min-width: 40px;
+    }
+}

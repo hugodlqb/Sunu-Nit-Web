@@ -1,6 +1,7 @@
 "use client";
 
 import ProjectCard from "@/components/ui/ProjectCard";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface Props {
   id: string;
@@ -10,7 +11,7 @@ interface Props {
   targetAmount: number;
   currentAmount: number;
   currency: string;
-  onDonate: (projectId: string) => void;
+  onDonate?: (projectId: string) => void;
 }
 
 export default function ProjectDonationCard({
@@ -23,6 +24,9 @@ export default function ProjectDonationCard({
   currency,
   onDonate,
 }: Props) {
+
+  const { t } = useLanguage();
+
   return (
     <ProjectCard
       id={id}
@@ -32,7 +36,7 @@ export default function ProjectDonationCard({
       targetAmount={targetAmount}
       currentAmount={currentAmount}
       currency={currency}
-      actionLabel="Donar a este proyecto"
+      actionLabel={t.project_donate}
       onAction={onDonate}
     />
   );

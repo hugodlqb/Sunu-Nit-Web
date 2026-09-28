@@ -5,10 +5,12 @@ import {
     User,
     ChartBar,
     HandHeart,
-    Gear
+    Gear,
+    Folder
 } from "@phosphor-icons/react/dist/ssr";
 import { useLanguage } from "@/context/LanguageContext";
 import { AccountSection } from "./AccountTypes";
+
 
 interface Props {
 

@@ -4,31 +4,21 @@ import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import PasswordFields from "@/components/ui/Auth/PasswordFields";
 import { useLanguage } from "@/context/LanguageContext";
-import { useRef } from "react";
 import LanguageSelector from "@/components/ui/LanguageSelector";
 
 type RegisterFormData = {
-
     name: string;
-
     surname: string;
-
     phone: string;
-
     country: string;
-
+    birth_date: string;
 
     email: string;
-
     password: string;
-
     confirmPassword: string;
 
-
     acceptedPrivacy: boolean;
-
     acceptedCommunications: boolean;
-
 };
 
 interface Props {
@@ -117,7 +107,6 @@ export default function RegisterForm({
 
 
     const { t } = useLanguage();
-    const phoneInputRef = useRef<HTMLInputElement | null>(null);
 
     return (
         <div className="register-form">
@@ -232,8 +221,7 @@ export default function RegisterForm({
 
                         numberInputProps={{
                             tabIndex: 0,
-                            autoComplete: "tel",
-                            ref: phoneInputRef
+                            autoComplete: "tel"
                         }}
 
                         value={form.phone}
@@ -245,10 +233,37 @@ export default function RegisterForm({
                             );
                         }}
                     />
-
-
                 </div>
 
+
+            </div>
+
+            <div className="form-row">
+
+                <input
+                    className="form-input"
+                    type="text"
+                    placeholder={t.register_country}
+                    value={form.country}
+                    onChange={(e) =>
+                        updateField(
+                            "country",
+                            e.target.value
+                        )
+                    }
+                />
+
+                <input
+                    className="form-input"
+                    type="date"
+                    value={form.birth_date}
+                    onChange={(e) =>
+                        updateField(
+                            "birth_date",
+                            e.target.value
+                        )
+                    }
+                />
 
             </div>
 

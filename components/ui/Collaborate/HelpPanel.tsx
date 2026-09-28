@@ -41,6 +41,7 @@ export default function HelpPanel({
     const [loading, setLoading] = useState(false);
 
     async function handleContinue() {
+
         if (loading) return;
         setLoading(true);
         try {

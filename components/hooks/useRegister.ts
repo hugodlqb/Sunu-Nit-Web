@@ -7,9 +7,9 @@ import { useLanguage } from "@/context/LanguageContext";
 export function useRegister() {
 
     const {
-    t,
-    language
-} = useLanguage();
+        t,
+        language
+    } = useLanguage();
     const [showPasswordHelp, setShowPasswordHelp] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -18,12 +18,11 @@ export function useRegister() {
     const [emailExistsError, setEmailExistsError] = useState(false);
     const [emailErrorMessage, setEmailErrorMessage] = useState("");
     const [form, setForm] = useState({
-
         name: "",
         surname: "",
         phone: "",
         country: "",
-
+        birth_date: "",
         email: "",
         password: "",
         confirmPassword: "",
@@ -154,16 +153,14 @@ export function useRegister() {
             options: {
 
                 emailRedirectTo: redirectTo,
-
                 data: {
-
                     name: form.name,
                     surname: form.surname,
                     phone: form.phone,
-                    country: form.country || "ES",
+                    country: form.country,
+                    birth_date: form.birth_date,
                     preferred_language: language,
                     accepted_communications: form.acceptedCommunications
-
                 }
 
             }

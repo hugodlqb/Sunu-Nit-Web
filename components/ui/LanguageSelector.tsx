@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/context/LanguageContext";
+import { useAuth } from "@/context/AuthContext";
 
 export default function LanguageSelector() {
   const [langOpen, setLangOpen] = useState(false);
@@ -11,6 +12,12 @@ export default function LanguageSelector() {
     language,
     setLanguage
   } = useLanguage();
+
+  const {
+    user,
+    profile,
+    updatePreferredLanguage
+  } = useAuth();
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -37,11 +44,35 @@ export default function LanguageSelector() {
     };
   }, []);
 
-  function handleLanguageChange(
+  async function handleLanguageChange(
     newLanguage: "es" | "en" | "fr"
   ) {
-    setLanguage(newLanguage);
+
     setLangOpen(false);
+
+    if (!user || !profile) {
+
+      setLanguage(
+        newLanguage
+      );
+
+      return;
+    }
+
+    const error =
+      await updatePreferredLanguage(
+        newLanguage
+      );
+
+    if (error) {
+
+      console.error(
+        "No se pudo guardar el idioma preferido:",
+        error
+      );
+
+    }
+
   }
 
   return (
