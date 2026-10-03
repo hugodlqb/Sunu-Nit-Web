@@ -4,7 +4,7 @@ export const translations = {
         /*HEADER*/
         nav_home: "Inicio", nav_about: "Quiénes somos", nav_transparency: "Transparencia",
         nav_news: "Noticias", nav_contact: "Contacto", btn_login: "Acceder", btn_donate_main: "Colaborar",
-        nav_activities: "Actividades",
+        nav_activities: "Proyectos",
         register_title: "Crear cuenta",
         register_subtitle: "Regístrate para colaborar con Sunu Nit",
 
@@ -140,6 +140,8 @@ export const translations = {
         impact_label: "Impacto:",
         permonth: "mes",
         project_donate: "Donar a\neste proyecto",
+        project_donation_title: "Donación al proyecto",
+        project_donation_description: "Tu aportación irá destinada a este proyecto.",
 
         projects_loading: "Cargando proyectos...",
         no_donations: "No tienes donaciones registradas.",
@@ -259,7 +261,7 @@ export const translations = {
         /*HEADER*/ donate_main: "Colaborar",
         nav_home: "Home", nav_about: "About Us", nav_transparency: "Transparency",
         nav_news: "News", nav_contact: "Contact",
-        btn_login: "Login", btn_donate_main: "Donate", nav_activities: "Activities",
+        btn_login: "Login", btn_donate_main: "Donate", nav_activities: "Projects",
         register_title: "Create account",
         register_subtitle: "Register to collaborate with Sunu Nit",
 
@@ -409,6 +411,8 @@ export const translations = {
         impact_label: "Impact:",
         permonth: "month",
         project_donate: "Donate to this project",
+        project_donation_title: "Project donation",
+        project_donation_description: "Your contribution will go to this project.",
 
         projects_loading: "Loading projects...",
         no_donations: "You have no recorded donations.",
@@ -527,7 +531,7 @@ export const translations = {
         nav_transparency: "Transparence",
         nav_news: "Actualités",
         nav_contact: "Contact",
-        btn_login: "Se connecter", btn_donate_main: "Collaborer", nav_activities: "Activités",
+        btn_login: "Se connecter", btn_donate_main: "Collaborer", nav_activities: "Projets",
         register_title: "Créer un compte",
         register_subtitle: "Inscrivez-vous pour collaborer avec Sunu Nit",
 
@@ -683,6 +687,8 @@ export const translations = {
         impact_label: "Impact :",
         permonth: "mois",
         project_donate: "Faire un don à ce projet",
+        project_donation_title: "Don au projet",
+        project_donation_description: "Votre contribution sera destinée à ce projet.",
 
         don_food_title: "Petits-déjeuners quotidiens",
         don_food_desc: "Vous leur garantissez un début de journée avec de l'énergie et des nutriments essentiels.",

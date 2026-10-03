@@ -2,7 +2,6 @@
 
 import { XCircle, ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import { DonationOrigin } from "@/components/hooks/useCollaborate";
-import { donations } from "@/data/donations";
 import { useLanguage } from "@/context/LanguageContext";
 
 interface Props {
@@ -56,10 +55,10 @@ export default function DonationFlow({
 
     if (origin.type === "project") {
 
-        title = "Donación al proyecto";
+        title = `${t.project_donation_title}: ${origin.projectName}`;
 
         description =
-            "Tu aportación irá destinada a este proyecto.";
+            t.project_donation_description;
 
     }
 
@@ -163,7 +162,9 @@ export default function DonationFlow({
                         onContinue();
                     }}
                 >
-                    Continuar
+                    {origin.type === "project"
+                        ? t.project_donate
+                        : "Continuar"}
                     <ArrowRight size={22} />
                 </button>
 

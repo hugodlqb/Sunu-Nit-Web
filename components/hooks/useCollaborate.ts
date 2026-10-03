@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { donations } from "@/data/donations";
+import { supabase } from "@/lib/supabase";
+import { useAuth } from "@/context/AuthContext";
 
 export type DonationOrigin =
     | {
@@ -11,6 +13,7 @@ export type DonationOrigin =
     | {
         type: "project";
         projectId: string;
+        projectName: string;
     }
     | {
         type: "free";
@@ -23,7 +26,7 @@ export function useCollaborate() {
 
     const [selectedDonation, setSelectedDonation] =
         useState<keyof typeof donations | null>(null);
-
+    const { user } = useAuth();
     const [amount, setAmount] = useState(25);
 
     const [isMonthly, setIsMonthly] = useState(true);
@@ -83,7 +86,8 @@ export function useCollaborate() {
     }
 
     function openProjectDonation(
-        projectId: string
+        projectId: string,
+        projectName: string
     ) {
 
         setSelectedDonation(null);
@@ -92,7 +96,9 @@ export function useCollaborate() {
 
             type: "project",
 
-            projectId
+            projectId,
+
+            projectName
 
         });
 
@@ -154,42 +160,99 @@ export function useCollaborate() {
     );
 
     return {
-
         selectedDonation,
-
         setSelectedDonation,
         cartItems,
         cartTotal,
         amount,
-
         setAmount,
-
         isMonthly,
-
         setIsMonthly,
-
         showHelpPanel,
-
         setShowHelpPanel,
-
         confirmedAmounts,
-
         updateConfirmedAmount,
-
         closeDonation,
-
         currentDonation,
-
         calculatedUnits,
-
         donationOrigin,
-
         openThematicDonation,
-
         openProjectDonation,
-
-        openFreeDonation
-
+        openFreeDonation,
+        continueDonation,
     };
+    
+    async function continueDonation() {
+        if (!donationOrigin) return;
+
+        try {
+            const { data, error: sessionError } =
+                await supabase.auth.getSession();
+
+            const token = data?.session?.access_token;
+
+            if (sessionError || (user && !token)) {
+                alert(
+                    "No se ha podido validar tu sesión. Recarga la página e inténtalo de nuevo."
+                );
+                return;
+            }
+
+            const payload = {
+                origin: donationOrigin,
+                amount,
+                isMonthly,
+                currency: "EUR",
+            };
+
+            const res = await fetch(
+                "/api/stripe/checkout",
+                {
+                    method: "POST",
+                    headers: {
+                        "content-type": "application/json",
+                        ...(token
+                            ? {
+                                authorization:
+                                    `Bearer ${token}`,
+                            }
+                            : {}),
+                    },
+                    body: JSON.stringify(payload),
+                }
+            );
+
+            const json = await res.json();
+
+            console.info("[checkout response]", {
+                status: res.status,
+                statusText: res.statusText,
+                contentType:
+                    res.headers.get("content-type"),
+                hasSession: Boolean(data?.session),
+                hasAccessToken: Boolean(token),
+                hasAuthorizationHeader:
+                    Boolean(token),
+                json,
+            });
+
+            if (json?.url) {
+                window.location.href = json.url;
+                return;
+            }
+
+            console.error(
+                "Checkout creation failed",
+                json
+            );
+
+            alert(
+                "No se pudo iniciar el pago. Inténtalo de nuevo."
+            );
+        } catch (error) {
+            console.error(error);
+            alert("Error iniciando el pago");
+        }
+    }
 
 }

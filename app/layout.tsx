@@ -5,6 +5,7 @@ import { LanguageProvider } from "@/context/LanguageContext";
 import "@/app/globals.css";
 import FloatingDonate from "@/components/ui/FloatingDonate";
 import { AuthProvider } from "@/context/AuthContext";
+import "@/styles/collaborate.css";
 
 interface RootLayoutProps {
   children: ReactNode;

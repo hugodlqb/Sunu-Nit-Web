@@ -61,109 +61,132 @@ export async function POST(req: Request) {
 
         let personId: string | null = null;
 
-        try {
-            const authHeader =
-                req.headers.get("authorization");
+        const authHeader =
+            req.headers.get("authorization");
 
-            if (
-                authHeader?.startsWith("Bearer ")
-            ) {
-                const token =
-                    authHeader.slice(7);
+        console.info("[checkout auth]", {
+            hasAuthorizationHeader: Boolean(authHeader),
+            hasBearerToken: Boolean(
+                authHeader?.startsWith("Bearer ") &&
+                authHeader.slice(7).trim()
+            ),
+        });
 
+        if (authHeader) {
+            if (!authHeader.startsWith("Bearer ")) {
+                return NextResponse.json(
+                    { error: "Invalid authentication header" },
+                    { status: 401 }
+                );
+            }
+
+            const token = authHeader.slice(7).trim();
+
+            if (!token) {
+                return NextResponse.json(
+                    { error: "Missing authentication token" },
+                    { status: 401 }
+                );
+            }
+
+            const {
+                data: userData,
+                error: userErr,
+            } = await supabaseAdmin.auth.getUser(token);
+
+            if (userErr || !userData?.user) {
+                return NextResponse.json(
+                    { error: "Invalid authentication token" },
+                    { status: 401 }
+                );
+            }
+
+            const user = userData.user;
+
+            console.info("[checkout auth]", {
+                authUserId: user.id,
+            });
+
+            const {
+                data: personByAuthId,
+                error: authPersonError,
+            } = await supabaseAdmin
+                .from("persons")
+                .select("id")
+                .eq("auth_user_id", user.id)
+                .maybeSingle();
+
+            if (authPersonError) {
+                console.error(
+                    "Error buscando persona por auth_user_id:",
+                    authPersonError
+                );
+
+                return NextResponse.json(
+                    { error: "Unable to resolve authenticated person" },
+                    { status: 500 }
+                );
+            }
+
+            if (personByAuthId?.id) {
+                personId = personByAuthId.id;
+            } else if (user.email) {
                 const {
-                    data: userData,
-                    error: userErr,
-                } =
-                    await supabaseAdmin.auth.getUser(
-                        token
+                    data: personByEmail,
+                    error: emailPersonError,
+                } = await supabaseAdmin
+                    .from("persons")
+                    .select("id")
+                    .eq("email", user.email)
+                    .maybeSingle();
+
+                if (emailPersonError) {
+                    console.error(
+                        "Error buscando persona por email:",
+                        emailPersonError
                     );
 
-                if (
-                    !userErr &&
-                    userData?.user
-                ) {
-                    const user =
-                        userData.user;
+                    return NextResponse.json(
+                        { error: "Unable to resolve authenticated person" },
+                        { status: 500 }
+                    );
+                }
 
-                    // 1. Buscamos por auth_user_id
-                    const {
-                        data: personByAuthId,
-                        error: authPersonError,
-                    } =
-                        await supabaseAdmin
-                            .from("persons")
-                            .select("id")
-                            .eq(
-                                "auth_user_id",
-                                user.id
-                            )
-                            .maybeSingle();
+                if (personByEmail?.id) {
+                    personId = personByEmail.id;
 
-                    if (authPersonError) {
+                    const { error: linkError } = await supabaseAdmin
+                        .from("persons")
+                        .update({
+                            auth_user_id: user.id,
+                        })
+                        .eq("id", personId);
+
+                    if (linkError) {
                         console.error(
-                            "Error buscando persona por auth_user_id:",
-                            authPersonError
+                            "Error vinculando persona autenticada:",
+                            linkError
                         );
-                    }
 
-                    if (
-                        personByAuthId?.id
-                    ) {
-                        personId =
-                            personByAuthId.id;
-                    } else if (
-                        user.email
-                    ) {
-                        // 2. Fallback por email
-                        const {
-                            data: personByEmail,
-                            error: emailPersonError,
-                        } =
-                            await supabaseAdmin
-                                .from("persons")
-                                .select("id")
-                                .eq(
-                                    "email",
-                                    user.email
-                                )
-                                .maybeSingle();
-
-                        if (
-                            emailPersonError
-                        ) {
-                            console.error(
-                                "Error buscando persona por email:",
-                                emailPersonError
-                            );
-                        }
-
-                        if (
-                            personByEmail?.id
-                        ) {
-                            personId =
-                                personByEmail.id;
-
-                            // Reparar vínculo
-                            await supabaseAdmin
-                                .from("persons")
-                                .update({
-                                    auth_user_id:
-                                        user.id,
-                                })
-                                .eq(
-                                    "id",
-                                    personId
-                                );
-                        }
+                        return NextResponse.json(
+                            { error: "Unable to link authenticated person" },
+                            { status: 500 }
+                        );
                     }
                 }
             }
-        } catch (error) {
-            console.error(
-                "Error resolving authenticated person:",
-                error
-            );
+
+            console.info("[checkout auth]", {
+                personFound: Boolean(personId),
+                personId,
+            });
+
+            if (!personId) {
+                return NextResponse.json(
+                    { error: "Authenticated user has no person profile" },
+                    { status: 409 }
+                );
+            }
         }
 
         // =========================================================

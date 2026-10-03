@@ -9,7 +9,14 @@ import ProjectModal from "@/components/ui/ProjectModal";
 
 import { useState } from "react";
 
-export default function Activities() {
+interface Props {
+    onDonate: (
+        projectId: string,
+        projectName: string
+    ) => void;
+}
+
+export default function Activities({ onDonate }: Props) {
     const [selectedProjectId, setSelectedProjectId] =
         useState<string | null>(null);
 
@@ -37,6 +44,7 @@ export default function Activities() {
                     </div>
 
                     <ProjectDonationCards
+                        onDonate={onDonate}
                         onDetails={(projectId) =>
                             setSelectedProjectId(projectId)
                         }

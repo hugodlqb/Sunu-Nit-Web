@@ -8,7 +8,10 @@ interface Props {
     name: string;
     image: string | null;
     onDetails?: (projectId: string) => void;
-    onDonate?: (projectId: string) => void;
+    onDonate?: (
+        projectId: string,
+        projectName: string
+    ) => void;
 }
 
 export default function ProjectMainCard({
@@ -64,7 +67,7 @@ export default function ProjectMainCard({
                         type="button"
                         className="btn btn-primary project-main-donate-btn"
                         onClick={() =>
-                            onDonate?.(id)
+                            onDonate?.(id, name)
                         }
                     >
                         {t.project_donate}

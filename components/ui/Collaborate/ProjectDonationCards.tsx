@@ -21,7 +21,10 @@ interface Project {
 }
 
 interface Props {
-    onDonate?: (projectId: string) => void;
+    onDonate?: (
+        projectId: string,
+        projectName: string
+    ) => void;
     onDetails?: (projectId: string) => void;
 }
 

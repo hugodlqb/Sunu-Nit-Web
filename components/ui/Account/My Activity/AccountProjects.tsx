@@ -33,7 +33,16 @@ interface ProjectStatistic {
     currency: string;
 }
 
-export default function AccountProjects() {
+interface Props {
+    onDonate: (
+        projectId: string,
+        projectName: string
+    ) => void;
+}
+
+export default function AccountProjects({
+    onDonate,
+}: Props) {
     const { profile } = useAuth();
     const { t } = useLanguage();
 
@@ -214,6 +223,12 @@ export default function AccountProjects() {
                                         style={{
                                             flexShrink: 0,
                                         }}
+                                        onClick={() =>
+                                            onDonate(
+                                                project.id,
+                                                project.name
+                                            )
+                                        }
                                     >
                                         {t.project_donate}
                                     </button>

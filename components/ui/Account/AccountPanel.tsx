@@ -9,6 +9,9 @@ import ProjectManager from "@/components/ui/Account/Editor/ProjectManager";
 import { AccountSection } from "./AccountTypes";
 import "@/styles/account.css";
 import AccountAdmin from "@/components/ui/Account/AccountAdmin";
+import { useCollaborate } from "@/components/hooks/useCollaborate";
+import DonationFlow from "@/components/ui/Collaborate/DonationFlow";
+import useLockBodyScroll from "@/components/hooks/useLockBodyScroll";
 
 interface Props {
 
@@ -27,7 +30,11 @@ export default function AccountPanel({
     closing
 
 }: Props) {
+    const collaborate = useCollaborate();
 
+    useLockBodyScroll(
+        !!collaborate.donationOrigin
+    );
 
     const [activeSection, setActiveSection] =
         useState<AccountSection>(
@@ -46,7 +53,13 @@ export default function AccountPanel({
 
             case "activity":
 
-                return <AccountActivity />;
+                return (
+                    <AccountActivity
+                        onDonate={
+                            collaborate.openProjectDonation
+                        }
+                    />
+                );
 
             case "settings":
 
@@ -136,7 +149,19 @@ export default function AccountPanel({
 
             </div>
 
-
+            {collaborate.donationOrigin && (
+                <DonationFlow
+                    origin={collaborate.donationOrigin}
+                    amount={collaborate.amount}
+                    setAmount={collaborate.setAmount}
+                    isMonthly={collaborate.isMonthly}
+                    setIsMonthly={collaborate.setIsMonthly}
+                    close={collaborate.closeDonation}
+                    onContinue={
+                        collaborate.continueDonation
+                    }
+                />
+            )}
 
         </div>
 

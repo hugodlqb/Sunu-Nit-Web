@@ -1,6 +1,5 @@
 "use client";
 
-import "@/styles/collaborate.css";
 import { useLanguage } from "@/context/LanguageContext";
 import DonationCardsGrid from "@/components/ui/Collaborate/DonationCardsGrid";
 import HelpButton from "@/components/ui/Collaborate/HelpButton";
@@ -11,11 +10,13 @@ import TransparencyAlert from "@/components/ui/Collaborate/TransparencyAlert";
 import { useCollaborate } from "@/components/hooks/useCollaborate";
 import { useDonationHelp } from "@/components/hooks/useDonationHelp";
 import useLockBodyScroll from "@/components/hooks/useLockBodyScroll";
-import ProjectDonationCards from "@/components/ui/Collaborate/ProjectDonationCards";
 import DonationFlow from "@/components/ui/Collaborate/DonationFlow";
-import { supabase } from '@/lib/supabase'
 
-export default function Collaborate() {
+interface Props {
+  collaborate: ReturnType<typeof useCollaborate>;
+}
+
+export default function Collaborate({ collaborate }: Props) {
 
   const { t } = useLanguage();
 
@@ -35,11 +36,8 @@ export default function Collaborate() {
     calculatedUnits,
 
     donationOrigin,
-    openThematicDonation,
-    openProjectDonation,
-    openFreeDonation
-
-  } = useCollaborate();
+    openThematicDonation
+  } = collaborate;
 
   const {
     helpCart,
@@ -105,39 +103,7 @@ export default function Collaborate() {
           setDeleteConfirmation={setDeleteConfirmation}
 
           confirmDeleteHelp={confirmDeleteHelp}
-          onContinue={async () => {
-            try {
-              const { data } = await supabase.auth.getSession()
-              const token = data?.session?.access_token
-
-              const payload = {
-                origin: { type: "cart" },
-                isMonthly,
-                currency: "EUR",
-                confirmedAmounts: helpCart,
-              };
-              const res = await fetch('/api/stripe/checkout', {
-
-                method: 'POST',
-                headers: {
-                  'content-type': 'application/json',
-                  ...(token ? { authorization: `Bearer ${token}` } : {})
-                },
-                body: JSON.stringify(payload)
-              })
-
-              const json = await res.json()
-
-              if (json?.url) window.location.href = json.url
-              else {
-                console.error('Checkout creation failed', json)
-                alert('No se pudo iniciar el pago. Inténtalo de nuevo.')
-              }
-            } catch (e) {
-              console.error(e)
-              alert('Error iniciando el pago')
-            }
-          }}
+          onContinue={collaborate.continueDonation}
 
         />
 
@@ -187,38 +153,7 @@ export default function Collaborate() {
 
               close={closeDonation}
 
-              onContinue={async () => {
-                try {
-                  // get session token if available
-                  const { data } = await supabase.auth.getSession()
-                  const token = data?.session?.access_token
-                  const payload = {
-                    origin: donationOrigin,
-                    amount,
-                    isMonthly,
-                    currency: "EUR",
-                  };
-                  const res = await fetch('/api/stripe/checkout', {
-                    method: 'POST',
-                    headers: {
-                      'content-type': 'application/json',
-                      ...(token ? { authorization: `Bearer ${token}` } : {})
-                    },
-                    body: JSON.stringify(payload)
-                  })
-
-                  const json = await res.json()
-                  if (json?.url) {
-                    window.location.href = json.url
-                  } else {
-                    console.error('Checkout creation failed', json)
-                    alert('No se pudo iniciar el pago. Inténtalo de nuevo.')
-                  }
-                } catch (e) {
-                  console.error(e)
-                  alert('Error iniciando el pago')
-                }
-              }}
+              onContinue={collaborate.continueDonation}
 
             />
 
