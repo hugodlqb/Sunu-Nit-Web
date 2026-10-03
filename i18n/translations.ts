@@ -139,7 +139,7 @@ export const translations = {
         add_to_help: "Añadir a mi ayuda",
         impact_label: "Impacto:",
         permonth: "mes",
-        project_donate: "Donar a este proyecto",
+        project_donate: "Donar a\neste proyecto",
 
         projects_loading: "Cargando proyectos...",
         no_donations: "No tienes donaciones registradas.",

@@ -4,6 +4,10 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import ProjectMainCard from "@/components/ui/ProjectMainCard";
 import { useLanguage } from "@/context/LanguageContext";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
 
 interface Project {
     id: string;
@@ -136,20 +140,37 @@ export default function ProjectDonationCards({
 
     return (
         <div className="project-donation-section">
-
-            {projects.map((project) => (
-
-                <ProjectMainCard
-                    key={project.id}
-                    id={project.id}
-                    name={project.name}
-                    image={project.image}
-                    onDetails={onDetails}
-                    onDonate={onDonate}
-                />
-
-            ))}
-
+            <Swiper
+                className="projects-swiper"
+                modules={[Navigation]}
+                navigation
+                loop={true}
+                spaceBetween={24}
+                slidesPerView={3}
+                breakpoints={{
+                    0: {
+                        slidesPerView: 1,
+                    },
+                    768: {
+                        slidesPerView: 2,
+                    },
+                    1100: {
+                        slidesPerView: 3,
+                    },
+                }}
+            >
+                {projects.map((project) => (
+                    <SwiperSlide key={project.id}>
+                        <ProjectMainCard
+                            id={project.id}
+                            name={project.name}
+                            image={project.image}
+                            onDetails={onDetails}
+                            onDonate={onDonate}
+                        />
+                    </SwiperSlide>
+                ))}
+            </Swiper>
         </div>
     );
 }

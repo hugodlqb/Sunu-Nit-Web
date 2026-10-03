@@ -30,36 +30,50 @@ import "@/styles/detailsmodal.css";
 import { supabase } from "@/lib/supabase";
 import { useLanguage } from "@/context/LanguageContext";
 
+
 interface ProjectUpdateImage {
+
     id: string;
     image_url: string;
     sort_order: number;
+
 }
 
+
 interface ProjectUpdate {
+
     id: string;
     title: string;
     description: string | null;
     update_date: string;
     project_update_images: ProjectUpdateImage[];
+
 }
+
 
 interface ProjectDetail {
+
     id: string;
     name: string;
-    detail_title: string | null;
     detail_description: string | null;
     project_updates: ProjectUpdate[];
+
 }
+
 
 interface Props {
+
     projectId: string;
     onClose: () => void;
+
 }
 
+
 export default function ProjectModal({
+
     projectId,
     onClose
+
 }: Props) {
 
     const { t } = useLanguage();
@@ -76,11 +90,13 @@ export default function ProjectModal({
     const [mounted, setMounted] =
         useState(false);
 
+
     useEffect(() => {
 
         setMounted(true);
 
     }, []);
+
 
     useEffect(() => {
 
@@ -93,31 +109,41 @@ export default function ProjectModal({
                 data,
                 error
             } = await supabase
+
                 .from("projects")
+
                 .select(
                     `
                     id,
                     name,
-                    detail_title,
                     detail_description,
+
                     project_updates (
+
                         id,
                         title,
                         description,
                         update_date,
+
                         project_update_images (
+
                             id,
                             image_url,
                             sort_order
+
                         )
+
                     )
                     `
                 )
+
                 .eq(
                     "id",
                     projectId
                 )
+
                 .maybeSingle();
+
 
             if (error) {
 
@@ -158,6 +184,7 @@ export default function ProjectModal({
                 return;
             }
 
+
             if (!data) {
 
                 setError(
@@ -169,11 +196,14 @@ export default function ProjectModal({
                 return;
             }
 
+
             const projectData =
                 data as ProjectDetail;
 
+
             projectData.project_updates =
                 [...projectData.project_updates]
+
                     .sort(
                         (a, b) =>
                             new Date(
@@ -183,57 +213,72 @@ export default function ProjectModal({
                                 a.update_date
                             ).getTime()
                     )
+
                     .map(update => ({
+
                         ...update,
+
                         project_update_images:
-                            [...update.project_update_images]
+                            [
+                                ...update.project_update_images
+                            ]
+
                                 .sort(
                                     (a, b) =>
                                         a.sort_order -
                                         b.sort_order
                                 )
+
                     }));
+
 
             setProject(
                 projectData
             );
 
             setLoading(false);
+
         }
+
 
         loadProject();
 
     }, [projectId]);
 
+
     if (!mounted) {
+
         return null;
+
     }
+
 
     return createPortal(
 
         <div
-            className="activity-modal-overlay"
+            className="activity-modal-overlay project-modal-overlay"
             onClick={onClose}
         >
 
             <div
-                className="activity-modal"
+                className="activity-modal project-modal"
                 onClick={e =>
                     e.stopPropagation()
                 }
             >
 
-                <div className="activity-content">
+                <button
+                    type="button"
+                    className="activity-close"
+                    onClick={onClose}
+                >
+                    <X size={22} />
+                </button>
 
-                    <button
-                        type="button"
-                        className="activity-close"
-                        onClick={onClose}
-                    >
-                        <X size={22} />
-                    </button>
 
-                    {loading && (
+                {loading && (
+
+                    <div className="activity-content project-modal-content">
 
                         <div className="activity-update">
 
@@ -243,9 +288,14 @@ export default function ProjectModal({
 
                         </div>
 
-                    )}
+                    </div>
 
-                    {!loading && error && (
+                )}
+
+
+                {!loading && error && (
+
+                    <div className="activity-content project-modal-content">
 
                         <div className="activity-update">
 
@@ -255,148 +305,184 @@ export default function ProjectModal({
 
                         </div>
 
-                    )}
+                    </div>
 
-                    {!loading &&
-                        !error &&
-                        project && (
+                )}
+
+
+                {!loading &&
+                    !error &&
+                    project && (
 
                         <>
 
-                            <div className="activity-header">
+                            <div className="activity-header project-modal-header">
 
                                 <h2>
-                                    {project.detail_title ??
-                                        project.name}
+                                    {project.name}
                                 </h2>
+
 
                                 {project.detail_description && (
 
                                     <p className="activity-summary">
+
                                         {
                                             project.detail_description
                                         }
+
                                     </p>
 
                                 )}
 
                             </div>
 
-                            <div className="activity-updates">
 
-                                {project.project_updates.length === 0 ? (
+                            <div className="activity-content project-modal-content">
 
-                                    <div className="activity-update">
+                                <div className="activity-updates">
 
-                                        <p>
-                                            Aún no hay
-                                            actualizaciones
-                                            sobre este proyecto.
-                                        </p>
+                                    {
+                                        project.project_updates.length === 0 ? (
 
-                                    </div>
+                                            <div className="activity-update">
 
-                                ) : (
+                                                <p>
+                                                    Aún no hay
+                                                    actualizaciones
+                                                    sobre este proyecto.
+                                                </p>
 
-                                    project.project_updates.map(
-                                        update => (
+                                            </div>
 
-                                            <article
-                                                key={update.id}
-                                                className="activity-update"
-                                            >
+                                        ) : (
 
-                                                {update.project_update_images.length > 0 && (
+                                            project.project_updates.map(
 
-                                                    <div className="activity-swiper">
+                                                (update, index) => (
 
-                                                        <Swiper
-                                                            modules={[
-                                                                Navigation,
-                                                                Pagination
-                                                            ]}
-                                                            navigation
-                                                            pagination={{
-                                                                clickable: true
-                                                            }}
-                                                            slidesPerView={1}
-                                                        >
+                                                    <article
+                                                        key={update.id}
+                                                        className={`activity-update ${
+                                                            index % 2 === 0
+                                                                ? "update-beige"
+                                                                : "update-light"
+                                                        }`}
+                                                    >
 
-                                                            {update.project_update_images.map(
-                                                                image => (
+                                                        {
+                                                            update.project_update_images.length > 0 && (
 
-                                                                    <SwiperSlide
-                                                                        key={image.id}
+                                                                <div className="activity-swiper">
+
+                                                                    <Swiper
+
+                                                                        modules={[
+                                                                            Navigation,
+                                                                            Pagination
+                                                                        ]}
+
+                                                                        navigation
+
+                                                                        pagination={{
+                                                                            clickable: true
+                                                                        }}
+
+                                                                        slidesPerView={1}
+
                                                                     >
 
-                                                                        <div className="activity-update-image">
+                                                                        {
+                                                                            update.project_update_images.map(
 
-                                                                            <img
-                                                                                src={
-                                                                                    image.image_url
-                                                                                }
-                                                                                alt={
-                                                                                    update.title
-                                                                                }
-                                                                            />
+                                                                                image => (
 
-                                                                        </div>
+                                                                                    <SwiperSlide
+                                                                                        key={image.id}
+                                                                                    >
 
-                                                                    </SwiperSlide>
+                                                                                        <div className="activity-update-image">
 
+                                                                                            <img
+                                                                                                src={
+                                                                                                    image.image_url
+                                                                                                }
+                                                                                                alt={
+                                                                                                    update.title
+                                                                                                }
+                                                                                            />
+
+                                                                                        </div>
+
+                                                                                    </SwiperSlide>
+
+                                                                                )
+
+                                                                            )
+                                                                        }
+
+                                                                    </Swiper>
+
+                                                                </div>
+
+                                                            )
+                                                        }
+
+
+                                                        <span className="activity-date">
+
+                                                            {
+                                                                new Date(
+                                                                    update.update_date +
+                                                                    "T00:00:00"
+                                                                ).toLocaleDateString(
+                                                                    undefined,
+                                                                    {
+                                                                        day: "numeric",
+                                                                        month: "long",
+                                                                        year: "numeric"
+                                                                    }
                                                                 )
-                                                            )}
+                                                            }
 
-                                                        </Swiper>
+                                                        </span>
 
-                                                    </div>
 
-                                                )}
+                                                        <h3>
+                                                            {
+                                                                update.title
+                                                            }
+                                                        </h3>
 
-                                                <span className="activity-date">
 
-                                                    {new Date(
-                                                        update.update_date +
-                                                        "T00:00:00"
-                                                    ).toLocaleDateString(
-                                                        undefined,
                                                         {
-                                                            day: "numeric",
-                                                            month: "long",
-                                                            year: "numeric"
+                                                            update.description && (
+
+                                                                <p>
+                                                                    {
+                                                                        update.description
+                                                                    }
+                                                                </p>
+
+                                                            )
                                                         }
-                                                    )}
 
-                                                </span>
+                                                    </article>
 
-                                                <h3>
-                                                    {update.title}
-                                                </h3>
+                                                )
 
-                                                {update.description && (
-
-                                                    <p>
-                                                        {
-                                                            update.description
-                                                        }
-                                                    </p>
-
-                                                )}
-
-                                            </article>
+                                            )
 
                                         )
-                                    )
+                                    }
 
-                                )}
+                                </div>
 
                             </div>
 
                         </>
 
                     )}
-
-                </div>
 
             </div>
 
@@ -405,4 +491,5 @@ export default function ProjectModal({
         document.body
 
     );
+
 }
