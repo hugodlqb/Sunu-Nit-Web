@@ -28,14 +28,12 @@ export default function Header() {
   const [registerOpen, setRegisterOpen] = useState(false);
   const userRef = useRef<HTMLDivElement>(null);
   const [activeSection, setActiveSection] = useState("hero");
-  const [loginError, setLoginError] = useState("");
   const pathname = usePathname();
   const sectionHref = (section: string) =>
     pathname === "/" ? `#${section}` : `/#${section}`;
   const {
     user,
     profile,
-    roles,
     hasRole,
     logout
   } = useAuth();

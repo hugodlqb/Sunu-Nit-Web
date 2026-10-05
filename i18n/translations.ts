@@ -146,6 +146,7 @@ export const translations = {
         projects_loading: "Cargando proyectos...",
         no_donations: "No tienes donaciones registradas.",
         project_collaborate: "Colabora",
+        project_collaborated: "Colaborar con este proyecto",
 
         don_food_title: "Desayunos diarios",
         don_food_desc: "Tu aportación permite ofrecer desayunos diarios con alimentos básicos y nutritivos para los niños del centro.",
@@ -417,6 +418,7 @@ export const translations = {
         projects_loading: "Loading projects...",
         no_donations: "You have no recorded donations.",
         project_collaborate: "Collaborate",
+        project_collaborated: "Support this project",
 
         don_food_title: "Daily breakfasts",
         don_food_desc: "You guarantee they start the day with energy and basic nutrients continuously.",
@@ -699,6 +701,7 @@ export const translations = {
         projects_loading: "Chargement des projets...",
         no_donations: "Vous n'avez aucune donation enregistrée.",
         project_collaborate: "Collaborer",
+        project_collaborated: "Soutenir ce projet",
 
         don_hygiene_title: "Kits d'hygiène",
         don_hygiene_desc: "La dignité par la propreté : savon, brosses à dents, dentifrice et vêtements propres.",

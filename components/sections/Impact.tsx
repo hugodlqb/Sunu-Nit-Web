@@ -9,7 +9,6 @@ import { useLanguage } from "@/context/LanguageContext";
 import { images } from "@/data/images";
 import { galleries } from "@/data/galleries";
 
-
 const cards = [
   {
     titleKey: "impact_food_title",
@@ -46,6 +45,10 @@ export default function Impact() {
   const [selectedCard, setSelectedCard] = useState<any>(null);
   const { t } = useLanguage();
 
+  const handleSelectCard = (card: typeof cards[number]) => {
+    setSelectedCard(card);
+  };
+
   return (
     <Section id="impact" variant="light">
       <div className="container">
@@ -72,7 +75,9 @@ export default function Impact() {
                 className="cloud-card"
                 style={{
                   backgroundImage: `url(${card.coverImage.url})`,
+                  cursor: "pointer",
                 }}
+                onClick={() => handleSelectCard(card)}
               >
                 <div className="cloud-content">
 
@@ -97,8 +102,12 @@ export default function Impact() {
                   </p>
 
                   <button
+                    type="button"
                     className="btn-ver-mas"
-                    onClick={() => setSelectedCard(card)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleSelectCard(card);
+                    }}
                   >
                     <PlusCircle size={22} />
                     {t.btn_ver_mas}

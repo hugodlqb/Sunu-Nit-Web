@@ -47,6 +47,8 @@ export default function News() {
             <article
               className="news-card"
               key={item.id}
+              onClick={() => setSelectedNews(item)}
+              style={{ cursor: "pointer" }}
             >
               <div className="news-image">
                 <AppImageFill
@@ -54,33 +56,33 @@ export default function News() {
                 />
               </div>
 
-
               <div className="news-content">
 
                 <span className="news-date">
                   {item.date}
                 </span>
 
-
                 <h4>
                   {item.title}
                 </h4>
-
 
                 <p>
                   {item.summary}
                 </p>
 
                 <button
+                  type="button"
                   className="btn-ver-mas"
-                  onClick={() => setSelectedNews(item)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedNews(item);
+                  }}
                 >
                   <PlusCircle size={22} />
                   {t.btn_ver_mas}
                 </button>
 
               </div>
-
             </article>
 
           ))}

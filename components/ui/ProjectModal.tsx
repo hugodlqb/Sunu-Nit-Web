@@ -60,19 +60,22 @@ interface ProjectDetail {
 
 }
 
-
 interface Props {
 
     projectId: string;
     onClose: () => void;
+    onDonate?: (
+        projectId: string,
+        projectName: string
+    ) => void;
 
 }
-
 
 export default function ProjectModal({
 
     projectId,
-    onClose
+    onClose,
+    onDonate
 
 }: Props) {
 
@@ -318,25 +321,34 @@ export default function ProjectModal({
 
                             <div className="activity-header project-modal-header">
 
-                                <h2>
-                                    {project.name}
-                                </h2>
+                                <div className="project-modal-header-info">
 
+                                    <h2>
+                                        {project.name}
+                                    </h2>
 
-                                {project.detail_description && (
+                                    {project.detail_description && (
+                                        <p className="activity-summary">
+                                            {project.detail_description}
+                                        </p>
+                                    )}
 
-                                    <p className="activity-summary">
+                                </div>
 
-                                        {
-                                            project.detail_description
-                                        }
-
-                                    </p>
-
-                                )}
+                                <button
+                                    type="button"
+                                    className="btn btn-primary project-modal-donate-btn"
+                                    onClick={() =>
+                                        onDonate?.(
+                                            project.id,
+                                            project.name
+                                        )
+                                    }
+                                >
+                                    {t.project_collaborated}
+                                </button>
 
                             </div>
-
 
                             <div className="activity-content project-modal-content">
 
@@ -363,11 +375,10 @@ export default function ProjectModal({
 
                                                     <article
                                                         key={update.id}
-                                                        className={`activity-update ${
-                                                            index % 2 === 0
-                                                                ? "update-beige"
-                                                                : "update-light"
-                                                        }`}
+                                                        className={`activity-update ${index % 2 === 0
+                                                            ? "update-beige"
+                                                            : "update-light"
+                                                            }`}
                                                     >
 
                                                         {
