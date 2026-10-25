@@ -1,5 +1,7 @@
 "use client";
 
+import { useLanguage } from "@/context/LanguageContext";
+
 import {
     Eye,
     EyeSlash
@@ -76,6 +78,7 @@ export default function PasswordFields({
 
 
 }: Props) {
+    const { t } = useLanguage();
 
 
     return (
@@ -154,7 +157,7 @@ export default function PasswordFields({
                             <p className={passwordStatus.length ? "valid" : "invalid"}>
 
                                 {passwordStatus.length ? "✓" : "✗"}
-                                {" "}Mínimo 8 caracteres
+                                {" "}{t.reset_password_minimum}
 
                             </p>
 
@@ -162,7 +165,7 @@ export default function PasswordFields({
                             <p className={passwordStatus.uppercase ? "valid" : "invalid"}>
 
                                 {passwordStatus.uppercase ? "✓" : "✗"}
-                                {" "}Una letra mayúscula
+                                {" "}{t.reset_password_uppercase}
 
                             </p>
 
@@ -170,7 +173,7 @@ export default function PasswordFields({
                             <p className={passwordStatus.lowercase ? "valid" : "invalid"}>
 
                                 {passwordStatus.lowercase ? "✓" : "✗"}
-                                {" "}Una letra minúscula
+                                {" "}{t.reset_password_lowercase}
 
                             </p>
 
@@ -178,7 +181,7 @@ export default function PasswordFields({
                             <p className={passwordStatus.number ? "valid" : "invalid"}>
 
                                 {passwordStatus.number ? "✓" : "✗"}
-                                {" "}Un número
+                                {" "}{t.reset_password_number}
 
                             </p>
 
@@ -186,7 +189,7 @@ export default function PasswordFields({
                             <p className={passwordStatus.symbol ? "valid" : "invalid"}>
 
                                 {passwordStatus.symbol ? "✓" : "✗"}
-                                {" "}Un carácter especial
+                                {" "}{t.reset_password_special}
 
                             </p>
 
