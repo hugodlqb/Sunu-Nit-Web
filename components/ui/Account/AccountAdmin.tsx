@@ -231,7 +231,7 @@ export default function AccountAdmin() {
             </div>
 
             {loading && (
-                <p>Buscando...</p>
+                <p>{t.admin_searching}</p>
             )}
 
             {results.map(person => (
@@ -248,11 +248,11 @@ export default function AccountAdmin() {
                     </strong>
 
                     <div>
-                        Teléfono: {person.phone || "—"}
+                        {t.admin_phone}: {person.phone || "—"}
                     </div>
 
                     <div>
-                        País: {person.country || "—"}
+                        {t.admin_country}: {person.country || "—"}
                     </div>
 
                 </button>
