@@ -134,7 +134,7 @@ export default function AccountProfile() {
                 (item) => {
                     const name =
                         item.donation_types?.name ??
-                        "Donación";
+                        t.donation_generic;
 
                     totals[name] =
                         (totals[name] ?? 0) +
@@ -149,7 +149,7 @@ export default function AccountProfile() {
                 value,
             })
         );
-    }, [completedDonations]);
+    }, [completedDonations, t]);
 
     if (!profile) {
         return null;
@@ -162,16 +162,16 @@ export default function AccountProfile() {
             </div>
 
             {loading ? (
-                <p>{t.reset_password_loading}</p>
+                <p>{t.account_loading}</p>
             ) : (
                 <>
                     <p>
-                        <strong>Donaciones:</strong>{" "}
+                        <strong>{t.account_donations_count}</strong>{" "}
                         {completedDonations.length}
                     </p>
 
                     <p>
-                        <strong>Total donado:</strong>{" "}
+                        <strong>{t.account_total_donated}</strong>{" "}
                         {totalDonated.toFixed(2)} €
                     </p>
 
