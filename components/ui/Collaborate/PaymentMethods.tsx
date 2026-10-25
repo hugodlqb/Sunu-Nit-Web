@@ -75,6 +75,7 @@ export default function PaymentMethods() {
 
 
 
+
       <div className="collab-card">
 
 
@@ -84,7 +85,6 @@ export default function PaymentMethods() {
         <h3>
           {t.collab_transfer_title}
         </h3>
-
 
 
         <p className="collab-transfer-desc">
