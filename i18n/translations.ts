@@ -901,7 +901,7 @@ export const translations = {
         editor_news_delete_confirm: "Supprimer cette actualité et son contenu associé ?",
         editor_projects_title: "Gestion des projets",
         editor_projects_subtitle: "Gérez les projets et leur visibilité publique.",
-        project_no_updates: "Il n’y a pas encore de mises à jour pour ce projet.
+        project_no_updates: "Il n’y a pas encore de mises à jour pour ce projet."
         editor_projects_search: "Rechercher des projets...",
         editor_projects_create: "Créer un projet",
         editor_projects_edit: "Modifier",
