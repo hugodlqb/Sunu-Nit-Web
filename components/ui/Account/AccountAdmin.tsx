@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import type { FormEvent } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { supabase } from "@/lib/supabase";
@@ -89,7 +90,7 @@ export default function AccountAdmin() {
 
     useEffect(() => { void loadAnalytics(); }, [loadAnalytics]);
 
-    async function searchUsers(event?: React.FormEvent) {
+    async function searchUsers(event?: FormEvent) {
         event?.preventDefault();
         const value = search.trim();
         if (!value) {
@@ -101,21 +102,27 @@ export default function AccountAdmin() {
         setSearchError("");
         setSelectedPerson(null);
         setSaveMessage("");
-        // Avoid PostgREST filter syntax characters being interpreted as operators.
-        const safeValue = value.replace(/[,%()]/g, " ").replace(/\s+/g, " ").trim();
-        const { data, error } = await supabase
-            .from("persons")
-            .select("id, name, surname, email, phone, country")
-            .or(`name.ilike.%${safeValue}%,surname.ilike.%${safeValue}%,email.ilike.%${safeValue}%`)
-            .order("name", { ascending: true })
-            .limit(30);
+        // Separate column queries keep names and email punctuation from breaking PostgREST's OR syntax.
+        const columns = "id, name, surname, email, phone, country";
+        const [byName, bySurname, byEmail] = await Promise.all([
+            supabase.from("persons").select(columns).ilike("name", `%${value}%`).limit(30),
+            supabase.from("persons").select(columns).ilike("surname", `%${value}%`).limit(30),
+            supabase.from("persons").select(columns).ilike("email", `%${value}%`).limit(30),
+        ]);
+        const error = byName.error || bySurname.error || byEmail.error;
         if (error) {
             console.error("Error buscando usuarios:", error);
             setResults([]);
             setSearchError(t.admin_search_error);
         } else {
-            setResults((data ?? []) as Person[]);
-            if (!data?.length) setSearchError(t.admin_no_users);
+            const unique = new Map<string, Person>();
+            [...(byName.data ?? []), ...(bySurname.data ?? []), ...(byEmail.data ?? [])]
+                .forEach((person) => unique.set(person.id, person as Person));
+            const found = [...unique.values()]
+                .sort((a, b) => `${a.name ?? ""} ${a.surname ?? ""}`.localeCompare(`${b.name ?? ""} ${b.surname ?? ""}`))
+                .slice(0, 30);
+            setResults(found);
+            if (!found.length) setSearchError(t.admin_no_users);
         }
         setLoading(false);
     }
