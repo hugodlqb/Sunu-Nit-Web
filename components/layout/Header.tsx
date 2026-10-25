@@ -392,7 +392,7 @@ export default function Header({
                               }}
                             >
                               <ChartBar size={20} />
-                              <span>Editor</span>
+                              <span>{t.account_editor}</span>
                             </button>
                           )
                         }
