@@ -540,7 +540,7 @@ export default function ProjectManager() {
             );
 
             setError(
-                `No se ha podido eliminar el proyecto: ${deleteError.message}`
+                `${t.editor_projects_delete_error} ${deleteError.message}`
             );
 
             return;
