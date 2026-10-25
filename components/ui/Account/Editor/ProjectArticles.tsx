@@ -228,7 +228,7 @@ export default function ProjectArticles({
             );
 
             setError(
-                "No se han podido cargar las imágenes del artículo."
+                t.editor_project_article_images_load_error
             );
 
             return;
