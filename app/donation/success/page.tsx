@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useLanguage } from "@/context/LanguageContext";
 import {
     CheckCircle,
     WarningCircle
@@ -14,6 +15,7 @@ type DonationStatus =
     | string;
 
 export default function SuccessPage() {
+    const { t } = useLanguage();
     const [donationId, setDonationId] =
         useState<string | null>(null);
 
@@ -32,7 +34,7 @@ export default function SuccessPage() {
 
         if (!id) {
             setError(
-                "No se ha encontrado la donación."
+                t.donation_not_found
             );
             return;
         }
@@ -64,7 +66,7 @@ export default function SuccessPage() {
 
                 if (!response.ok) {
                     throw new Error(
-                        "No se pudo consultar el estado de la donación."
+                        t.donation_status_check_error
                     );
                 }
 
@@ -89,7 +91,7 @@ export default function SuccessPage() {
 
                 if (attempts >= maxAttempts) {
                     setError(
-                        "La confirmación está tardando más de lo esperado."
+                        t.donation_confirmation_delayed
                     );
                     return;
                 }
@@ -110,7 +112,7 @@ export default function SuccessPage() {
 
                 if (attempts >= maxAttempts) {
                     setError(
-                        "No hemos podido comprobar el estado de la donación."
+                        t.donation_status_unavailable
                     );
                     return;
                 }
