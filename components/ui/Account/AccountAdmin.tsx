@@ -21,6 +21,12 @@ interface Role {
 export default function AccountAdmin() {
 
     const { t } = useLanguage();
+    const roleLabels: Record<string, string> = {
+        admin: t.role_admin,
+        editor: t.role_editor,
+        volunteer: t.role_volunteer,
+        volunteer_manager: t.role_volunteer_manager,
+    };
     const [search, setSearch] = useState("");
     const [results, setResults] = useState<Person[]>([]);
     const [selectedPerson, setSelectedPerson] =
@@ -225,7 +231,7 @@ export default function AccountAdmin() {
                 />
 
                 <button onClick={searchUsers}>
-                    Buscar
+                    {t.admin_search_button}
                 </button>
 
             </div>
@@ -271,7 +277,7 @@ export default function AccountAdmin() {
                     </h3>
 
                     <h4>
-                        Roles
+                        {t.admin_roles}
                     </h4>
 
                     {roles
@@ -293,7 +299,7 @@ export default function AccountAdmin() {
                                     }
                                 />
 
-                                {role.key}
+                                {roleLabels[role.key] ?? role.key}
 
                             </label>
 
