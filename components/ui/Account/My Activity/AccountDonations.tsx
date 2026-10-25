@@ -260,7 +260,7 @@ export default function AccountDonations() {
 
                 alert(
                     json?.error ??
-                    "No se pudo obtener el justificante."
+                    t.donation_receipt_error
                 );
 
                 return;
@@ -314,7 +314,7 @@ export default function AccountDonations() {
         donation.donation_items?.forEach(
             (item) => {
                 result.push(
-                    `${item.donation_types?.name ?? "Donación"} ${item.amount} ${donation.currency}`
+                    `${item.donation_types?.name ?? t.donation_generic} ${item.amount} ${donation.currency}`
                 );
             }
         );
@@ -322,7 +322,7 @@ export default function AccountDonations() {
         donation.donation_projects?.forEach(
             (project) => {
                 result.push(
-                    `${project.projects?.name ?? "Proyecto"} ${project.amount} ${donation.currency}`
+                    `${project.projects?.name ?? t.project_generic} ${project.amount} ${donation.currency}`
                 );
             }
         );
@@ -626,7 +626,7 @@ export default function AccountDonations() {
                                                                 successfulPayments[0]
                                                                     .id
                                                                 ? "Abriendo..."
-                                                                : "Ver justificante"}
+                                                                : t.donation_receipt_view}
                                                         </button>
                                                     ) : (
                                                         <details>
