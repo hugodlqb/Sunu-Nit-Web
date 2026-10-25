@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import supabaseAdmin from "@/lib/supabase-admin";
 
 export const dynamic = "force-dynamic";
-const MONTHS = 12;
 const PAGE_SIZE = 1000;
 
 async function readAllRows<T>(table: string, columns: string): Promise<T[]> {
@@ -50,12 +49,37 @@ export async function GET(request: Request) {
             return NextResponse.json({ error: "Forbidden" }, { status: 403 });
         }
 
-        const now = new Date();
-        const firstMonth = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - MONTHS + 1, 1));
-        const monthKeys = Array.from({ length: MONTHS }, (_, index) => {
-            const date = new Date(Date.UTC(firstMonth.getUTCFullYear(), firstMonth.getUTCMonth() + index, 1));
-            return monthKey(date.toISOString());
-        });
+        const url = new URL(request.url);
+        const startDateParam = url.searchParams.get("startDate");
+        const endDateParam = url.searchParams.get("endDate");
+        const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+        const today = new Date();
+        const defaultEnd = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()));
+        const defaultStart = new Date(defaultEnd);
+        defaultStart.setUTCFullYear(defaultStart.getUTCFullYear() - 1);
+        const startDate = startDateParam && datePattern.test(startDateParam)
+            ? new Date(`${startDateParam}T00:00:00.000Z`) : defaultStart;
+        const endDate = endDateParam && datePattern.test(endDateParam)
+            ? new Date(`${endDateParam}T00:00:00.000Z`) : defaultEnd;
+        if (!Number.isFinite(startDate.getTime()) || !Number.isFinite(endDate.getTime()) ||
+            startDate.toISOString().slice(0, 10) !== (startDateParam || startDate.toISOString().slice(0, 10)) ||
+            endDate.toISOString().slice(0, 10) !== (endDateParam || endDate.toISOString().slice(0, 10)) ||
+            startDate > endDate || endDate > defaultEnd) {
+            return NextResponse.json({ error: "Invalid date range" }, { status: 400 });
+        }
+        const endExclusive = new Date(endDate.getTime() + 24 * 60 * 60 * 1000);
+        const monthKeys: string[] = [];
+        const cursor = new Date(Date.UTC(startDate.getUTCFullYear(), startDate.getUTCMonth(), 1));
+        const lastMonth = new Date(Date.UTC(endDate.getUTCFullYear(), endDate.getUTCMonth(), 1));
+        while (cursor <= lastMonth) {
+            monthKeys.push(monthKey(cursor.toISOString()));
+            cursor.setUTCMonth(cursor.getUTCMonth() + 1);
+        }
+        const isInRange = (value: string | null | undefined) => {
+            if (!value) return false;
+            const time = new Date(value).getTime();
+            return time >= startDate.getTime() && time < endExclusive.getTime();
+        };
         const months = new Map(monthKeys.map((key) => [key, {
             month: key, revenue: 0, newDonors: 0, newUsers: 0, payments: 0,
         }]));
@@ -74,6 +98,7 @@ export async function GET(request: Request) {
 
         for (const user of people) {
             if (!user.created_at) continue;
+            if (!isInRange(user.created_at)) continue;
             const month = months.get(monthKey(user.created_at));
             if (month) month.newUsers += 1;
         }
@@ -99,14 +124,17 @@ export async function GET(request: Request) {
                 }
             }
 
-            const month = months.get(monthKey(payment.created_at));
-            if (month) {
-                month.revenue += Number(payment.amount) || 0;
-                month.payments += 1;
+            if (isInRange(payment.created_at)) {
+                const month = months.get(monthKey(payment.created_at));
+                if (month) {
+                    month.revenue += Number(payment.amount) || 0;
+                    month.payments += 1;
+                }
             }
         }
 
         for (const firstDate of firstPaymentByDonor.values()) {
+            if (!isInRange(firstDate)) continue;
             const month = months.get(monthKey(firstDate));
             if (month) month.newDonors += 1;
         }
@@ -114,7 +142,7 @@ export async function GET(request: Request) {
         const monthly = [...months.values()];
         const currencies = new Set(
             successfulPayments
-                .filter((payment) => months.has(monthKey(payment.created_at)))
+                .filter((payment) => isInRange(payment.created_at))
                 .map((payment) => donationsById.get(payment.donation_id)?.currency || "EUR")
         );
 
