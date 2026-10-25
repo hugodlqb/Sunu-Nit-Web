@@ -757,7 +757,7 @@ export default function ProjectManager() {
                             <input type="number" min="0" step="0.01" value={form.target_amount} onChange={e=>updateForm("target_amount",e.target.value)} />
                         </div>
                         <div className="project-manager-form-field">
-                            <label>Año</label>
+                            <label>{t.editor_projects_year}</label>
                             <input type="number" min="1900" max="2100" value={form.year} onChange={e=>updateForm("year",e.target.value)} required />
                         </div>
                         <div className="project-manager-form-field">
@@ -1004,7 +1004,7 @@ export default function ProjectManager() {
                                                                     )
                                                                 }
                                                             >
-                                                                Artículos
+                                                                {t.editor_projects_articles}
                                                             </button>
 
                                                             <button
@@ -1086,7 +1086,7 @@ export default function ProjectManager() {
                             <input type="number" min="0" step="0.01" value={form.target_amount} onChange={e=>updateForm("target_amount",e.target.value)} />
                         </div>
                         <div className="project-manager-form-field">
-                            <label>Año</label>
+                            <label>{t.editor_projects_year}</label>
                             <input type="number" min="1900" max="2100" value={form.year} onChange={e=>updateForm("year",e.target.value)} required />
                         </div>
                         <div className="project-manager-form-field">
