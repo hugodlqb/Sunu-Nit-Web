@@ -184,7 +184,7 @@ export default function ProjectModal({
                 );
 
                 setError(
-                    "No se pudo cargar la información del proyecto."
+                    t.project_modal_load_error
                 );
 
                 setLoading(false);
@@ -196,7 +196,7 @@ export default function ProjectModal({
             if (!data) {
 
                 setError(
-                    "No se encontró el proyecto."
+                    t.project_modal_not_found
                 );
 
                 setLoading(false);
