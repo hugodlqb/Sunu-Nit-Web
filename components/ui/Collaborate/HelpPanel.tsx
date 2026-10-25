@@ -48,7 +48,7 @@ export default function HelpPanel({
             await onContinue();
         } catch (e) {
             console.error(e);
-            alert(t.help_continue_error || "Error iniciando el pago");
+            alert(t.help_continue_error || t.collaborate_payment_start_error);
         } finally {
             setLoading(false);
         }
@@ -116,7 +116,7 @@ export default function HelpPanel({
                     <span>
                         {isMonthly
                             ? t.help_total_monthly
-                            : "Total de tu donación"}
+                            : t.help_total_donation}
                     </span>
 
                     <strong>
