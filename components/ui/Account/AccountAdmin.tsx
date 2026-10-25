@@ -7,7 +7,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { supabase } from "@/lib/supabase";
 import {
     MagnifyingGlass, UsersThree, CurrencyEur, UserPlus, ChartLineUp,
-    ShieldCheck, FloppyDisk, X, ArrowClockwise,
+    ShieldCheck, FloppyDisk, X,
 } from "@phosphor-icons/react/dist/ssr";
 import {
     Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip,
@@ -227,13 +227,6 @@ export default function AccountAdmin() {
 
     return (
         <section className="admin-dashboard">
-            <header className="admin-dashboard-header">
-                <button className="admin-refresh-button" onClick={() => void loadAnalytics()} disabled={analyticsLoading} aria-label={t.admin_refresh}>
-                    <ArrowClockwise size={18} className={analyticsLoading ? "admin-spin" : ""} />
-                    <span>{t.admin_refresh}</span>
-                </button>
-            </header>
-
             <nav className="admin-tabs" aria-label={t.admin_sections}>
                 <button type="button" className={tab === "overview" ? "active" : ""} onClick={() => setTab("overview")}><ChartLineUp size={19} />{t.admin_overview}</button>
                 <button type="button" className={tab === "users" ? "active" : ""} onClick={() => setTab("users")}><UsersThree size={19} />{t.admin_users}</button>
