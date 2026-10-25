@@ -2,6 +2,67 @@
    PROJECT MANAGER
 =========================================== */
 
+.editor-manager {
+    width: 100%;
+}
+
+.editor-manager-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.editor-manager-tab {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    min-height: 44px;
+    padding: 0.7rem 1rem;
+    border: 0;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -1px;
+    background: transparent;
+    color: var(--color-text-muted);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.editor-manager-tab:hover {
+    color: var(--color-primary);
+}
+
+.editor-manager-tab.active {
+    border-bottom-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.editor-manager-tab:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.editor-manager-news-placeholder {
+    padding: 2rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: #fff;
+    text-align: center;
+}
+
+.editor-manager-news-placeholder h2 {
+    margin: 0 0 0.6rem;
+    color: var(--color-primary);
+}
+
+.editor-manager-news-placeholder p {
+    margin: 0;
+    color: var(--color-text-muted);
+}
+
 .project-manager {
     width: 100%;
 }
@@ -172,11 +233,260 @@
     gap: 0.8rem;
 }
 
+/* ===========================================
+   NEWS MANAGER
+=========================================== */
+
+.news-manager {
+    width: 100%;
+}
+
+.news-manager-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.news-manager-header h2 {
+    margin: 0;
+    color: var(--color-primary);
+}
+
+.news-manager-header p {
+    margin: 0.5rem 0 0;
+    color: var(--color-text-muted);
+}
+
+.news-manager-search {
+    margin-bottom: 1.25rem;
+}
+
+.news-manager-search input,
+.news-manager-field input,
+.news-manager-field textarea,
+.news-manager-field select {
+    width: 100%;
+    padding: 0.75rem 0.85rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: #fff;
+    color: var(--color-text-main);
+    font: inherit;
+    box-sizing: border-box;
+}
+
+.news-manager-field textarea {
+    resize: vertical;
+}
+
+.news-manager-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 1.25rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: #fff;
+    box-shadow: var(--shadow-sm);
+}
+
+.news-manager-form-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.news-manager-form-header h3,
+.news-manager-locale h4 {
+    margin: 0;
+    color: var(--color-primary);
+}
+
+.news-manager-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    min-width: 0;
+}
+
+.news-manager-field label {
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
+.news-manager-status-field {
+    max-width: 320px;
+}
+
+.news-manager-translations,
+.news-manager-media {
+    min-width: 0;
+    margin: 0;
+    padding: 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+}
+
+.news-manager-translations legend,
+.news-manager-media legend {
+    padding: 0 0.4rem;
+    color: var(--color-primary);
+    font-weight: 800;
+}
+
+.news-manager-locale {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.9rem 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.news-manager-locale:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+}
+
+.news-manager-locale h4,
+.news-manager-locale .news-manager-field:last-child {
+    grid-column: 1 / -1;
+}
+
+.news-manager-gallery-row {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 0.75rem;
+    margin-bottom: 0.8rem;
+}
+
+.news-manager-gallery-actions,
+.news-manager-item-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.news-manager-remove-image {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    border: 1px solid var(--color-secondary);
+    background: transparent;
+    color: var(--color-secondary);
+}
+
+.news-manager-remove-image:hover {
+    background: var(--color-secondary);
+    color: white;
+}
+
+.news-manager-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.news-manager-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.9rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: white;
+}
+
+.news-manager-item > img {
+    width: 88px;
+    height: 68px;
+    flex: 0 0 auto;
+    border-radius: var(--radius-sm);
+    object-fit: cover;
+}
+
+.news-manager-item-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.news-manager-item-info h3 {
+    margin: 0 0 0.35rem;
+    color: var(--color-primary);
+    font-size: 1rem;
+}
+
+.news-manager-item-info p {
+    margin: 0 0 0.45rem;
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+}
+
+.news-manager-status {
+    display: inline-block;
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    background: #f1f1f1;
+    color: #555;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.news-manager-status.status-published {
+    background: #e7f4eb;
+    color: #23623a;
+}
+
+.news-manager-status.status-archived {
+    background: #f5ead7;
+    color: #76551d;
+}
+
 .project-manager-year {
     overflow: hidden;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
     background: white;
+
+    .news-manager-header {
+        flex-direction: column;
+    }
+
+    .news-manager-header > button {
+        width: 100%;
+    }
+
+    .news-manager-locale,
+    .news-manager-gallery-row {
+        grid-template-columns: 1fr;
+    }
+
+    .news-manager-locale h4,
+    .news-manager-locale .news-manager-field:last-child {
+        grid-column: auto;
+    }
+
+    .news-manager-gallery-actions {
+        justify-content: flex-end;
+    }
+
+    .news-manager-item {
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .news-manager-item-actions {
+        width: 100%;
+    }
+
+    .news-manager-item-actions .btn {
+        flex: 1;
+    }
 }
 
 .project-manager-year summary {
@@ -526,6 +836,20 @@
 =========================================== */
 
 @media (max-width: 768px) {
+
+    .editor-manager-tabs {
+        gap: 0.25rem;
+    }
+
+    .editor-manager-tab {
+        flex: 1;
+        padding: 0.65rem 0.5rem;
+        font-size: 0.95rem;
+    }
+
+    .editor-manager-news-placeholder {
+        padding: 1.5rem 1rem;
+    }
 
     .project-manager-header {
         flex-direction: column;

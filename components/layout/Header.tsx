@@ -22,25 +22,52 @@ import { usePathname } from "next/navigation";
 import LoginForm from "@/components/ui/Auth/LoginForm";
 import useLockBodyScroll from "@/components/hooks/useLockBodyScroll";
 
-export default function Header() {
+type AccountSection =
+  | "profile"
+  | "activity"
+  | "settings"
+  | "volunteer"
+  | "volunteer_manager"
+  | "editor"
+  | "admin";
+
+interface Props {
+  accountOpen: boolean;
+  onOpenAccount: () => void;
+  onCloseAccount: () => void;
+}
+
+export default function Header({
+  accountOpen,
+  onOpenAccount,
+  onCloseAccount,
+}: Props) {
 
   const [userOpen, setUserOpen] = useState(false);
   const [registerOpen, setRegisterOpen] = useState(false);
   const userRef = useRef<HTMLDivElement>(null);
   const [activeSection, setActiveSection] = useState("hero");
   const pathname = usePathname();
+
   const sectionHref = (section: string) =>
     pathname === "/" ? `#${section}` : `/#${section}`;
+
   const {
     user,
     profile,
     hasRole,
     logout
   } = useAuth();
+
   const {
     t
-
   } = useLanguage();
+
+  const [closingAccount, setClosingAccount] = useState(false);
+
+  const [accountSection, setAccountSection] =
+    useState<AccountSection>("profile");
+
   const goToSection = (
     e: React.MouseEvent<HTMLAnchorElement>,
     section: string
@@ -48,7 +75,8 @@ export default function Header() {
     e.preventDefault();
 
     setUserOpen(false);
-    setAccountOpen(false);
+
+    onCloseAccount();
 
     if (pathname === "/") {
       document
@@ -62,40 +90,17 @@ export default function Header() {
 
     window.location.href = `/#${section}`;
   };
-  const [accountOpen, setAccountOpen] = useState(false);
-  const [closingAccount, setClosingAccount] = useState(false);
-  const [accountSection, setAccountSection] =
-    useState<
-      "profile" |
-      "activity" |
-      "settings" |
-      "volunteer" |
-      "volunteer_manager" |
-      "editor" |
-      "admin"
-    >("profile");
 
-  const openAccount = (
-    section:
-      | "profile"
-      | "activity"
-      | "settings"
-      | "volunteer"
-      | "volunteer_manager"
-      | "editor"
-      | "admin"
-  ) => {
-
+  const openAccount = (section: AccountSection) => {
     setAccountSection(section);
 
-    setAccountOpen(true);
+    onOpenAccount();
 
     setUserOpen(false);
-
   };
 
   const closeAccount = () => {
-    setAccountOpen(false);
+    onCloseAccount();
   };
 
   useLockBodyScroll(
@@ -162,7 +167,6 @@ export default function Header() {
 
     );
 
-
     sections.forEach(id => {
 
       const section = document.getElementById(id);
@@ -173,16 +177,14 @@ export default function Header() {
 
     });
 
-
     return () => observer.disconnect();
-
 
   }, []);
 
   useEffect(() => {
     const handleCloseOverlays = () => {
       setUserOpen(false);
-      setAccountOpen(false);
+      onCloseAccount();
     };
 
     window.addEventListener(
@@ -196,7 +198,7 @@ export default function Header() {
         handleCloseOverlays
       );
     };
-  }, []);
+  }, [onCloseAccount]);
 
   return (
     <header className="header">
@@ -213,6 +215,7 @@ export default function Header() {
           <a
             href={sectionHref("hero")}
             className={activeSection === "hero" ? "active" : ""}
+            onClick={(e) => goToSection(e, "hero")}
           >
             {t.nav_home}
           </a>
@@ -220,6 +223,7 @@ export default function Header() {
           <a
             href={sectionHref("about")}
             className={activeSection === "about" ? "active" : ""}
+            onClick={(e) => goToSection(e, "about")}
           >
             {t.nav_about}
           </a>
@@ -227,6 +231,7 @@ export default function Header() {
           <a
             href={sectionHref("impact")}
             className={activeSection === "impact" ? "active" : ""}
+            onClick={(e) => goToSection(e, "impact")}
           >
             {t.nav_transparency}
           </a>
@@ -234,6 +239,7 @@ export default function Header() {
           <a
             href={sectionHref("activities")}
             className={activeSection === "activities" ? "active" : ""}
+            onClick={(e) => goToSection(e, "activities")}
           >
             {t.nav_activities}
           </a>
@@ -241,12 +247,14 @@ export default function Header() {
           <a
             href={sectionHref("news")}
             className={activeSection === "news" ? "active" : ""}
+            onClick={(e) => goToSection(e, "news")}
           >
             {t.nav_news}
           </a>
 
           <a
             href={sectionHref("collaborate")}
+            onClick={(e) => goToSection(e, "collaborate")}
           >
             {t.btn_donate_main}
           </a>
@@ -254,9 +262,11 @@ export default function Header() {
           <a
             href={sectionHref("contact")}
             className={activeSection === "contact" ? "active" : ""}
+            onClick={(e) => goToSection(e, "contact")}
           >
             {t.nav_contact}
           </a>
+
         </nav>
 
         <div className="header-actions">
@@ -272,6 +282,7 @@ export default function Header() {
             >
 
               <UserCircle size={28} />
+
               <span>
                 {
                   profile
@@ -288,7 +299,6 @@ export default function Header() {
               userOpen && (
 
                 <div className="user-popover">
-
 
                   {
                     user ? (
@@ -402,9 +412,7 @@ export default function Header() {
                           <SignOut size={20} />
                         </button>
 
-
                       </>
-
 
                     ) : (
 
@@ -414,16 +422,18 @@ export default function Header() {
                           {t.login_title}
                         </h4>
 
-
                         <LoginForm
                           onSuccess={() => {
                             setUserOpen(false);
                           }}
                         />
 
-
                         <div className="user-register">
-                          <span>{t.login_no_account}</span>
+
+                          <span>
+                            {t.login_no_account}
+                          </span>
+
                           <button
                             onClick={() => {
                               setUserOpen(false);
@@ -433,16 +443,12 @@ export default function Header() {
                             {t.login_register}
                           </button>
 
-
                         </div>
-
 
                       </>
 
                     )
-
                   }
-
 
                 </div>
 
@@ -452,17 +458,15 @@ export default function Header() {
           </div>
 
           <LanguageSelector />
+
           <button className="mobile-toggle">
-
             <List size={28} />
-
           </button>
-
 
         </div>
 
-
       </div>
+
       {
         registerOpen && (
 
@@ -496,7 +500,5 @@ export default function Header() {
       }
 
     </header>
-
   );
-
 }

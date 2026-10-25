@@ -4,7 +4,13 @@ import { useEffect, useState } from "react";
 import { useLanguage } from "@/context/LanguageContext";
 import { Heart } from "@phosphor-icons/react/dist/ssr";
 
-export default function FloatingDonate() {
+interface Props {
+    accountOpen: boolean;
+}
+
+export default function FloatingDonate({
+    accountOpen,
+}: Props) {
 
     const { t } = useLanguage();
 
@@ -38,6 +44,9 @@ export default function FloatingDonate() {
 
     }, []);
 
+    const isHidden =
+        accountOpen || hidden;
+
     return (
         <a
             href="/#collaborate"
@@ -49,7 +58,7 @@ export default function FloatingDonate() {
                 );
             }}
             className={`btn btn-primary floating-collab-btn ${
-                hidden ? "hidden" : ""
+                isHidden ? "hidden" : ""
             }`}
         >
             <Heart size={22} />

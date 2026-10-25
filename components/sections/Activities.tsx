@@ -55,14 +55,16 @@ export default function Activities({ onDonate }: Props) {
             </div>
 
             {selectedProjectId && (
-
                 <ProjectModal
                     projectId={selectedProjectId}
                     onClose={() =>
                         setSelectedProjectId(null)
                     }
+                    onDonate={(projectId, projectName) => {
+                        setSelectedProjectId(null);
+                        onDonate(projectId, projectName);
+                    }}
                 />
-
             )}
 
         </Section>

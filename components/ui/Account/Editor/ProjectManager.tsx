@@ -6,6 +6,8 @@ import {
 } from "react";
 
 import ProjectArticles from "./ProjectArticles";
+import NewsManager from "./NewsManager";
+import { Folder, Newspaper } from "@phosphor-icons/react/dist/ssr";
 
 import { supabase } from "@/lib/supabase";
 import { useLanguage } from "@/context/LanguageContext";
@@ -92,6 +94,9 @@ function changeProjectYear(
 export default function ProjectManager() {
 
     const { t } = useLanguage();
+
+    const [activeTab, setActiveTab] =
+        useState<"projects" | "news">("projects");
 
     const [projects, setProjects] =
         useState<Project[]>([]);
@@ -728,6 +733,43 @@ export default function ProjectManager() {
         years[0] ?? null;
 
     return (
+
+        <div className="editor-manager">
+
+            <div className="editor-manager-tabs" role="tablist" aria-label={t.editor_tabs_label}>
+                <button
+                    type="button"
+                    role="tab"
+                    id="editor-tab-projects"
+                    aria-selected={activeTab === "projects"}
+                    aria-controls="editor-panel-projects"
+                    className={`editor-manager-tab ${activeTab === "projects" ? "active" : ""}`}
+                    onClick={() => setActiveTab("projects")}
+                >
+                    <Folder size={20} weight="bold" />
+                    <span>{t.editor_tab_projects}</span>
+                </button>
+
+                <button
+                    type="button"
+                    role="tab"
+                    id="editor-tab-news"
+                    aria-selected={activeTab === "news"}
+                    aria-controls="editor-panel-news"
+                    className={`editor-manager-tab ${activeTab === "news" ? "active" : ""}`}
+                    onClick={() => setActiveTab("news")}
+                >
+                    <Newspaper size={20} weight="bold" />
+                    <span>{t.editor_tab_news}</span>
+                </button>
+            </div>
+
+            <div
+                id="editor-panel-projects"
+                role="tabpanel"
+                aria-labelledby="editor-tab-projects"
+                hidden={activeTab !== "projects"}
+            >
 
         <div className="project-manager">
 
@@ -1527,6 +1569,19 @@ export default function ProjectManager() {
 
                 )}
 
+            </div>
+
+        </div>
+
+            </div>
+
+            <div
+                id="editor-panel-news"
+                role="tabpanel"
+                aria-labelledby="editor-tab-news"
+                hidden={activeTab !== "news"}
+            >
+                <NewsManager />
             </div>
 
         </div>

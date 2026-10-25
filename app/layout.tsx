@@ -1,9 +1,8 @@
 import type { ReactNode } from "react";
-import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import SiteChrome from "@/components/layout/SiteChrome";
 import { LanguageProvider } from "@/context/LanguageContext";
 import "@/app/globals.css";
-import FloatingDonate from "@/components/ui/FloatingDonate";
 import { AuthProvider } from "@/context/AuthContext";
 import "@/styles/collaborate.css";
 
@@ -21,9 +20,7 @@ export default function RootLayout({
           <AuthProvider>
             <div className="site-layout">
 
-              <Header />
-
-              <FloatingDonate />
+              <SiteChrome />
 
               <main className="site-main">
                 {children}
