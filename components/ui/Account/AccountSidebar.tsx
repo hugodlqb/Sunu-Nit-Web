@@ -5,7 +5,6 @@ import {
     User,
     ChartBar,
     HandHeart,
-    Gear,
     Folder
 } from "@phosphor-icons/react/dist/ssr";
 import { useLanguage } from "@/context/LanguageContext";
@@ -51,12 +50,6 @@ export default function AccountSidebar({
                 id: "activity",
                 label: t.account_activity,
                 icon: <HandHeart size={22} />
-            },
-
-            {
-                id: "settings",
-                label: t.account_settings,
-                icon: <Gear size={22} />
             },
 
             ...(hasRole("volunteer")
