@@ -18,37 +18,23 @@ import "@/styles/projectmanager.css";
 type Locale = ContentLocale;
 const locales: Locale[] = ["es", "en", "fr"];
 interface Project {
-    id:string; key:string; name:string; description:string|null; image:string|null;
-    target_amount:number|null; current_amount:number; currency:string; status:string;
-    active:boolean; show_in_projects:boolean; detail_description:string|null; created_at:string;
-    project_translations:ProjectTranslation[]|ProjectTranslation|null;
+ id:string; key:string; name:string; description:string|null; image:string|null;
+ target_amount:number|null; current_amount:number; currency:string; status:string;
+ active:boolean; show_in_projects:boolean; detail_description:string|null; created_at:string;
+ project_translations:ProjectTranslation[]|ProjectTranslation|null;
 }
 interface ProjectTranslationForm {name:string;description:string;detail_description:string;}
-interface ProjectForm {
-    translations:Record<Locale,ProjectTranslationForm>;
-    image:string;target_amount:string;year:string;active:boolean;show_in_projects:boolean;
-}
+interface ProjectForm {translations:Record<Locale,ProjectTranslationForm>;image:string;target_amount:string;year:string;active:boolean;show_in_projects:boolean;}
 const emptyTranslation:ProjectTranslationForm={name:"",description:"",detail_description:""};
-const emptyForm:ProjectForm={
-    translations:{es:{...emptyTranslation},en:{...emptyTranslation},fr:{...emptyTranslation}},
-    image:"",target_amount:"",year:new Date().getFullYear().toString(),active:true,show_in_projects:false,
-};
+const emptyForm:ProjectForm={translations:{es:{...emptyTranslation},en:{...emptyTranslation},fr:{...emptyTranslation}},image:"",target_amount:"",year:new Date().getFullYear().toString(),active:true,show_in_projects:false};
 function createProjectForm(project?:Project):ProjectForm {
-    const rows=normalizeContentTranslations(project?.project_translations);
-    const getLocale=(locale:Locale):ProjectTranslationForm=>{
-        const row=rows.find(item=>item.locale===locale);const es=locale==="es";
-        return {
-            name:row?.name??(es?project?.name??"":""),
-            description:row?.description??(es?project?.description??"":""),
-            detail_description:row?.detail_description??(es?project?.detail_description??"":""),
-        };
-    };
-    return {
-        translations:{es:getLocale("es"),en:getLocale("en"),fr:getLocale("fr")},
-        image:project?.image??"",target_amount:project?.target_amount!=null?String(project.target_amount):"",
-        year:project?getProjectYear(project.created_at):new Date().getFullYear().toString(),
-        active:project?.active??true,show_in_projects:project?.show_in_projects??false,
-    };
+ const rows=normalizeContentTranslations(project?.project_translations);
+ const getLocale=(locale:Locale):ProjectTranslationForm=>{const row=rows.find(item=>item.locale===locale);const es=locale==="es";return {
+  name:row?.name??(es?project?.name??"":""),
+  description:row?.description??(es?project?.description??"":""),
+  detail_description:row?.detail_description??(es?project?.detail_description??"":""),
+ };};
+ return {translations:{es:getLocale("es"),en:getLocale("en"),fr:getLocale("fr")},image:project?.image??"",target_amount:project?.target_amount!=null?String(project.target_amount):"",year:project?getProjectYear(project.created_at):new Date().getFullYear().toString(),active:project?.active??true,show_in_projects:project?.show_in_projects??false};
 }
 
 function createProjectKey(
@@ -246,11 +232,7 @@ export default function ProjectManager() {
 
         const spanish = form.translations.es;
         const name = spanish.name.trim();
-        if (locales.some(locale =>
-            !form.translations[locale].name.trim() ||
-            !form.translations[locale].description.trim() ||
-            !form.translations[locale].detail_description.trim()
-        )) {
+        if (locales.some(locale => !form.translations[locale].name.trim() || !form.translations[locale].description.trim() || !form.translations[locale].detail_description.trim())) {
             setError(t.editor_projects_translation_incomplete); setSaving(false); return;
         }
 
