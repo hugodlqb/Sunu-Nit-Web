@@ -1,111 +1,106 @@
 "use client";
 
-import {
-  DeviceMobile,
-  Bank,
-  Copy,
-} from "@phosphor-icons/react/dist/ssr";
-
+import { useState } from "react";
+import { Bank, CheckCircle, Copy, DeviceMobile } from "@phosphor-icons/react/dist/ssr";
 import { useLanguage } from "@/context/LanguageContext";
+import { donationConfig } from "@/lib/donation-config";
 
+type CopyTarget = "iban" | "reference";
 
 export default function PaymentMethods() {
-
   const { t } = useLanguage();
+  const [copied, setCopied] = useState<CopyTarget | null>(null);
+  const [copyError, setCopyError] = useState(false);
 
+  const iban = donationConfig.iban;
+  const reference = t.collab_transfer_reference_value;
+  const displayIban = iban.replace(/(.{4})/g, "$1 ").trim();
+
+  async function copyValue(value: string, target: CopyTarget) {
+    try {
+      await navigator.clipboard.writeText(value);
+      setCopied(target);
+      setCopyError(false);
+    } catch {
+      setCopied(null);
+      setCopyError(true);
+    }
+  }
+
+  function handleBizumDonation() {
+    // TODO: Connect the bank-provided Bizum donation flow when the association's account and donation code are ready.
+  }
 
   return (
-
     <div className="collaborate-grid grid-2 container-sm">
-
-
       <div className="collab-card highlighted-card">
-
-
-        <div className="collab-badge-wrapper">
-
-          <div className="collab-badge">
-
-            {t.collab_badge_fast}
-
-          </div>
-
-        </div>
-
-
-
+        <div className="collab-badge-wrapper"><div className="collab-badge">{t.collab_badge_fast}</div></div>
         <DeviceMobile size={45} />
-
-
-        <h3>
-          {t.collab_bizum_title}
-        </h3>
-
-
-
-        <div className="bizum-number">
-
-
-          <span>
-            +34 608 70 97 10
-          </span>
-
-
-          <button
-            className="btn-copy"
-            title={t.copied}
-          >
-
-            <Copy size={28} />
-
-          </button>
-
-
-        </div>
-
-
-        <p className="small-text text-muted">
-          {t.collab_bizum_desc}
-        </p>
-
-
-
-      </div>
-
-
-
-
-
-      <div className="collab-card">
-
-
-        <Bank size={45} />
-
-
-        <h3>
-          {t.collab_transfer_title}
-        </h3>
-
-
-        <p className="collab-transfer-desc">
-          {t.collab_transfer_desc}
-        </p>
-
-
-
-        <button className="btn btn-outline w-100">
-
-          {t.btn_request_iban}
-
+        <h3>{t.collab_bizum_title}</h3>
+        <p className="small-text text-muted">{t.collab_bizum_desc}</p>
+        <button
+          className="btn btn-outline w-100"
+          type="button"
+          onClick={handleBizumDonation}
+          disabled
+          aria-describedby="bizum-pending-note"
+        >
+          {t.collab_bizum_action}
         </button>
-
-
+        <p id="bizum-pending-note" className="collab-transfer-pending">{t.collab_bizum_pending}</p>
       </div>
 
-
-
+      <div className="collab-card collab-transfer-card">
+        <Bank size={45} />
+        <h3>{t.collab_transfer_title}</h3>
+        <p className="collab-transfer-desc">{t.collab_transfer_desc}</p>
+        <div className="collab-transfer-details">
+          <div className="collab-transfer-field">
+            <span className="collab-transfer-label">{t.collab_transfer_holder}</span>
+            <strong>ASOCIACIÓN SUNU NIT</strong>
+          </div>
+          {donationConfig.bankName && (
+            <div className="collab-transfer-field">
+              <span className="collab-transfer-label">{t.collab_transfer_bank}</span>
+              <strong>{donationConfig.bankName}</strong>
+            </div>
+          )}
+          <div className="collab-transfer-field">
+            <span className="collab-transfer-label">{t.collab_transfer_iban}</span>
+            <div className="collab-transfer-copy-row">
+              <code className="collab-transfer-iban">{displayIban}</code>
+              <button
+                className="collab-transfer-copy"
+                type="button"
+                onClick={() => copyValue(iban, "iban")}
+                aria-label={t.collab_transfer_copy_iban}
+                title={t.collab_transfer_copy_iban}
+              >
+                {copied === "iban" ? <CheckCircle size={22} /> : <Copy size={22} />}
+              </button>
+            </div>
+            {donationConfig.isExampleIban && <p className="collab-transfer-pending">{t.collab_transfer_example_notice}</p>}
+          </div>
+          <div className="collab-transfer-field">
+            <span className="collab-transfer-label">{t.collab_transfer_reference}</span>
+            <div className="collab-transfer-copy-row">
+              <strong>{reference}</strong>
+              <button
+                className="collab-transfer-copy"
+                type="button"
+                onClick={() => copyValue(reference, "reference")}
+                aria-label={t.collab_transfer_copy_reference}
+                title={t.collab_transfer_copy_reference}
+              >
+                {copied === "reference" ? <CheckCircle size={22} /> : <Copy size={22} />}
+              </button>
+            </div>
+          </div>
+        </div>
+        <p className="collab-transfer-feedback" aria-live="polite">
+          {copyError ? t.collab_transfer_copy_error : copied ? t.copied : ""}
+        </p>
+      </div>
     </div>
-
   );
-
 }
