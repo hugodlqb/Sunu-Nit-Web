@@ -665,8 +665,7 @@ export default function ProjectManager() {
                     </h2>
 
                     <p className="project-manager-subtitle">
-                        Gestiona los proyectos y su
-                        visibilidad pública.
+                        {t.editor_projects_subtitle}
                     </p>
 
                 </div>
