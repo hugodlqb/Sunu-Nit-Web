@@ -1,10 +1,13 @@
-"use client"
+"use client";
+
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function CancelPage() {
+  const { t } = useLanguage();
   return (
     <div className="container section">
-      <h1>Pago cancelado</h1>
-      <p>No hemos recibido el pago. Puedes intentar de nuevo o contactar con soporte.</p>
+      <h1>{t.donation_cancel_title}</h1>
+      <p>{t.donation_cancel_message}</p>
     </div>
   )
 }
