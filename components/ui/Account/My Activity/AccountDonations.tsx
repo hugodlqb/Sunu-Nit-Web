@@ -678,8 +678,8 @@ export default function AccountDonations() {
                                                                         >
                                                                             {receiptLoading ===
                                                                                 payment.id
-                                                                                ? "Abriendo..."
-                                                                                : `Pago ${index +
+                                                                                ? t.donation_receipt_loading
+                                                                                : `${t.payment_generic} ${index +
                                                                                 1
                                                                                 } · ${payment.amount} ${payment.currency}`}
                                                                         </button>
