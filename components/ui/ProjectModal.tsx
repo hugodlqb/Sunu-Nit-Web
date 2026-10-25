@@ -365,9 +365,7 @@ export default function ProjectModal({
                                             <div className="activity-update">
 
                                                 <p>
-                                                    Aún no hay
-                                                    actualizaciones
-                                                    sobre este proyecto.
+                                                    {t.project_no_updates}
                                                 </p>
 
                                             </div>
