@@ -25,7 +25,6 @@ import useLockBodyScroll from "@/components/hooks/useLockBodyScroll";
 type AccountSection =
   | "profile"
   | "activity"
-  | "settings"
   | "volunteer"
   | "volunteer_manager"
   | "editor"
@@ -329,16 +328,6 @@ export default function Header({
                         >
                           <HandHeart size={20} />
                           <span>{t.account_activity}</span>
-                        </button>
-
-                        <button
-                          className="user-menu-option"
-                          onClick={() =>
-                            openAccount("settings")
-                          }
-                        >
-                          <Gear size={20} />
-                          <span>{t.account_settings}</span>
                         </button>
 
                         {

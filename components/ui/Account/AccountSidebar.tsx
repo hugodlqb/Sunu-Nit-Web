@@ -53,12 +53,6 @@ export default function AccountSidebar({
                 icon: <HandHeart size={22} />
             },
 
-            {
-                id: "settings",
-                label: t.account_settings,
-                icon: <Gear size={22} />
-            },
-
             ...(hasRole("volunteer")
                 ? [{
                     id: "volunteer" as AccountSection,

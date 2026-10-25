@@ -678,3 +678,65 @@ body {
     }
 
 }
+
+/* Admin analytics date range */
+.admin-date-filter {
+    display: flex;
+    align-items: end;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+    margin: 0 0 1.5rem;
+    padding: 1rem;
+    border: 1px solid #e3eae5;
+    border-radius: 12px;
+    background: #fff;
+}
+
+.admin-date-filter label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    color: #42534a;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.admin-date-filter input {
+    min-height: 42px;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid #cfd9d2;
+    border-radius: 8px;
+    background: #fff;
+    color: #20352a;
+    font: inherit;
+}
+
+.admin-date-filter button {
+    min-height: 42px;
+    padding: 0.65rem 1rem;
+    border: 0;
+    border-radius: 8px;
+    background: #34765b;
+    color: #fff;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.admin-date-filter button:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
+@media (max-width: 600px) {
+    .admin-date-filter {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .admin-date-filter input,
+    .admin-date-filter button {
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
