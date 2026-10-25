@@ -234,6 +234,8 @@ export const translations = {
         editor_news_deleted: "Noticia eliminada correctamente.",
         editor_news_delete_confirm: "¿Quieres eliminar esta noticia y su contenido asociado?",
         editor_projects_title: "Gestión de proyectos",
+        editor_projects_subtitle: "Gestiona los proyectos y su visibilidad pública.",
+        project_no_updates: "Aún no hay actualizaciones sobre este proyecto."
         editor_projects_search: "Buscar proyectos...",
         editor_projects_create: "Crear proyecto",
         editor_projects_edit: "Editar",
@@ -562,6 +564,8 @@ export const translations = {
         editor_news_deleted: "News deleted successfully.",
         editor_news_delete_confirm: "Delete this news item and its associated content?",
         editor_projects_title: "Project management",
+        editor_projects_subtitle: "Manage projects and their public visibility.",
+        project_no_updates: "There are no updates for this project yet."
         editor_projects_search: "Search projects...",
         editor_projects_create: "Create project",
         editor_projects_edit: "Edit",
@@ -896,6 +900,8 @@ export const translations = {
         editor_news_deleted: "Actualité supprimée avec succès.",
         editor_news_delete_confirm: "Supprimer cette actualité et son contenu associé ?",
         editor_projects_title: "Gestion des projets",
+        editor_projects_subtitle: "Gérez les projets et leur visibilité publique.",
+        project_no_updates: "Il n’y a pas encore de mises à jour pour ce projet.
         editor_projects_search: "Rechercher des projets...",
         editor_projects_create: "Créer un projet",
         editor_projects_edit: "Modifier",
