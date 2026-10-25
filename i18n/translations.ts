@@ -191,10 +191,10 @@ export const translations = {
         footer_legal_title: "Información Legal",
         footer_email: "Correo electrónico",
         footer_phone: "Teléfono",
-        footer_registry: "Nº Registro Nacional de Asociaciones: 123456",
+        footer_registry: "Nº Registro Nacional de Asociaciones: 6339876",
         footer_address: "Dirección: Calle Ejemplo Solidario 42, 28001 Madrid",
-        footer_rights: "Todos los derechos reservados. Normativa vigente LOPD y RGPD. Sunu Nit Asociación sin ánimo de lucro. CIF: G-12345678",
-        footer_cif: "CIF: G-12345678",
+        footer_rights: "Todos los derechos reservados. Normativa vigente LOPD y RGPD. Sunu Nit Asociación sin ánimo de lucro. CIF: G05692090",
+        footer_cif: "CIF: G05692090",
 
 
         /*EDITOR*/
@@ -525,10 +525,10 @@ export const translations = {
         footer_legal_title: "Legal Information",
         footer_email: "Email",
         footer_phone: "Phone",
-        footer_cif: "Tax ID: G-12345678",
-        footer_registry: "National Association Registry No.: 123456",
+        footer_cif: "Tax ID: G05692090",
+        footer_registry: "National Association Registry No.: 6339876",
         footer_address: "Address: Calle Ejemplo Solidario 42, 28001 Madrid",
-        "footer_rights": "All rights reserved. Applicable LOPD and GDPR regulations. Sunu Nit, non-profit association. Tax ID: G-12345678",
+        "footer_rights": "All rights reserved. Applicable LOPD and GDPR regulations. Sunu Nit, non-profit association. Tax ID: G05692090",
 
         /*EDITOR*/
         editor_tabs_label: "Editor sections",
@@ -863,10 +863,10 @@ export const translations = {
         footer_legal_title: "Informations Légales",
         footer_email: "E-mail",
         footer_phone: "Téléphone",
-        footer_cif: "Identifiant fiscal : G-12345678",
-        footer_registry: "Nº Registre National des Associations : 123456",
+        footer_cif: "Identifiant fiscal : G05692090",
+        footer_registry: "Nº Registre National des Associations : 6339876",
         footer_address: "Adresse : Calle Ejemplo Solidario 42, 28001 Madrid",
-        "footer_rights": "Tous droits réservés. Réglementation en vigueur : LOPD et RGPD. Sunu Nit, association à but non lucratif. CIF : G-12345678",
+        "footer_rights": "Tous droits réservés. Réglementation en vigueur : LOPD et RGPD. Sunu Nit, association à but non lucratif. CIF : G05692090",
 
         /*EDITOR*/
         editor_tabs_label: "Sections de l’éditeur",
