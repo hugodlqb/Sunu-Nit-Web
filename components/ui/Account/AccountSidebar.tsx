@@ -5,6 +5,7 @@ import {
     User,
     ChartBar,
     HandHeart,
+    Gear,
     Folder
 } from "@phosphor-icons/react/dist/ssr";
 import { useLanguage } from "@/context/LanguageContext";
