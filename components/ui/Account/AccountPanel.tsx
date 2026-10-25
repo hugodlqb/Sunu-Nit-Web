@@ -5,7 +5,6 @@ import { useLanguage } from "@/context/LanguageContext";
 import AccountActivity from "@/components/ui/Account/My Activity/AccountActivity";
 import AccountSidebar from "@/components/ui/Account/AccountSidebar";
 import AccountProfile from "@/components/ui/Account/AccountProfile";
-import AccountSettings from "@/components/ui/Account/AccountSettings";
 import ProjectManager from "@/components/ui/Account/Editor/ProjectManager";
 import { AccountSection } from "./AccountTypes";
 import "@/styles/account.css";
@@ -62,10 +61,6 @@ export default function AccountPanel({
                         }
                     />
                 );
-
-            case "settings":
-
-                return <AccountSettings />;
 
             case "volunteer":
 
