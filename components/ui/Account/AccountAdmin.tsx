@@ -228,7 +228,6 @@ export default function AccountAdmin() {
     return (
         <section className="admin-dashboard">
             <header className="admin-dashboard-header">
-                <div>
                 <button className="admin-refresh-button" onClick={() => void loadAnalytics()} disabled={analyticsLoading} aria-label={t.admin_refresh}>
                     <ArrowClockwise size={18} className={analyticsLoading ? "admin-spin" : ""} />
                     <span>{t.admin_refresh}</span>
