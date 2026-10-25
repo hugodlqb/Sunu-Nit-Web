@@ -143,14 +143,13 @@ export default function SuccessPage() {
                     />
 
                     <h1>
-                        Estamos teniendo un problema
+                        {t.donation_success_problem_title}
                     </h1>
 
                     <p>{error}</p>
 
                     <p>
-                        Si el pago se ha realizado correctamente,
-                        no es necesario volver a pagar.
+                        {t.donation_success_no_repay}
                     </p>
 
                 </div>
@@ -169,15 +168,15 @@ export default function SuccessPage() {
                     />
 
                     <h1>
-                        ¡Gracias por tu donación!
+                        {t.donation_success_thanks_title}
                     </h1>
 
                     <p>
-                        Tu donación se ha realizado correctamente.
+                        {t.donation_success_completed}
                     </p>
 
                     <p>
-                        Gracias por ayudar a hacer posible nuestro trabajo.
+                        {t.donation_success_impact}
                     </p>
 
                 </div>
@@ -196,11 +195,11 @@ export default function SuccessPage() {
                     />
 
                     <h1>
-                        No hemos podido completar la donación
+                        {t.donation_success_failed_title}
                     </h1>
 
                     <p>
-                        El pago no se ha podido completar correctamente.
+                        {t.donation_success_failed}
                     </p>
 
                 </div>
@@ -219,11 +218,11 @@ export default function SuccessPage() {
                     />
 
                     <h1>
-                        Donación reembolsada
+                        {t.donation_success_refunded_title}
                     </h1>
 
                     <p>
-                        Esta donación ha sido reembolsada.
+                        {t.donation_success_refunded}
                     </p>
 
                 </div>
@@ -237,14 +236,14 @@ export default function SuccessPage() {
 
                 <div className="donation-success-spinner" />
 
-                <h1>Gracias</h1>
+                <h1>{t.donation_success_pending_title}</h1>
 
                 <p>
-                    Estamos confirmando tu donación...
+                    {t.donation_success_pending}
                 </p>
 
                 <p className="donation-success-small">
-                    Esto puede tardar unos segundos.
+                    {t.donation_success_pending_note}
                 </p>
 
             </div>
