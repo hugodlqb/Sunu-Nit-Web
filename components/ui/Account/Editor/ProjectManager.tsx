@@ -254,7 +254,7 @@ export default function ProjectManager() {
         ) {
 
             setError(
-                "El objetivo económico no es válido."
+                t.editor_projects_invalid_target
             );
 
             setSaving(false);
@@ -276,7 +276,7 @@ export default function ProjectManager() {
         ) {
 
             setError(
-                "El año del proyecto no es válido."
+                t.editor_projects_invalid_year
             );
 
             setSaving(false);
@@ -380,7 +380,7 @@ export default function ProjectManager() {
             if (!project) {
 
                 setError(
-                    "No se ha encontrado el proyecto que estás editando."
+                    t.editor_projects_not_found
                 );
 
                 setSaving(false);
@@ -485,7 +485,7 @@ export default function ProjectManager() {
             );
 
             setError(
-                "No se ha podido comprobar el dinero recaudado del proyecto."
+                t.editor_projects_delete_check_error
             );
 
             return;
@@ -503,9 +503,7 @@ export default function ProjectManager() {
         if (currentAmount > 0) {
 
             window.alert(
-                `El proyecto "${data.name}" tiene actualmente ${currentAmount.toFixed(2)} € recaudados.\n\n` +
-                `No se puede eliminar un proyecto que tenga dinero asociado.\n\n` +
-                `Contacta con un administrador para gestionar este caso.`
+                t.editor_projects_delete_blocked_title.replace("{name}", data.name).replace("{amount}", currentAmount.toFixed(2)) + "\n\n" + t.editor_projects_delete_blocked_body
             );
 
             return;
@@ -968,8 +966,8 @@ export default function ProjectManager() {
                                                                 >
                                                                     {
                                                                         project.active
-                                                                            ? "Activo"
-                                                                            : "Inactivo"
+                                                                            ? t.project_status_active
+                                                                            : t.project_status_inactive
                                                                     }
                                                                 </span>
 
@@ -982,8 +980,8 @@ export default function ProjectManager() {
                                                                 >
                                                                     {
                                                                         project.show_in_projects
-                                                                            ? "Visible en Proyectos"
-                                                                            : "Oculto en Proyectos"
+                                                                            ? t.project_visibility_visible
+                                                                            : t.project_visibility_hidden
                                                                     }
                                                                 </span>
 
