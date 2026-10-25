@@ -338,7 +338,7 @@ export const translations = {
         donation_not_found: "No se ha encontrado la donación.",
         donation_status_check_error: "No se pudo consultar el estado de la donación.",
         donation_confirmation_delayed: "La confirmación está tardando más de lo esperado.",
-        donation_status_unavailable: "No hemos podido comprobar el estado de la donación."
+        donation_status_unavailable: "No hemos podido comprobar el estado de la donación.",
         editor_projects_search: "Buscar proyectos...",
         editor_projects_create: "Crear proyecto",
         editor_projects_edit: "Editar",
@@ -771,7 +771,7 @@ export const translations = {
         donation_not_found: "The donation could not be found.",
         donation_status_check_error: "Could not check the donation status.",
         donation_confirmation_delayed: "Confirmation is taking longer than expected.",
-        donation_status_unavailable: "We couldn't verify the donation status."
+        donation_status_unavailable: "We couldn't verify the donation status.",
         editor_projects_search: "Search projects...",
         editor_projects_create: "Create project",
         editor_projects_edit: "Edit",
@@ -1210,7 +1210,7 @@ export const translations = {
         donation_not_found: "Le don est introuvable.",
         donation_status_check_error: "Impossible de vérifier l’état du don.",
         donation_confirmation_delayed: "La confirmation prend plus de temps que prévu.",
-        donation_status_unavailable: "Impossible de vérifier l’état du don."
+        donation_status_unavailable: "Impossible de vérifier l’état du don.",
         editor_projects_search: "Rechercher des projets...",
         editor_projects_create: "Créer un projet",
         editor_projects_edit: "Modifier",
