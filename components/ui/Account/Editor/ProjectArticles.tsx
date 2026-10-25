@@ -6,40 +6,28 @@ import {
 } from "react";
 import { supabase } from "@/lib/supabase";
 import { useLanguage } from "@/context/LanguageContext";
+import { ContentLocale, ProjectUpdateTranslation, normalizeContentTranslations, resolveLocalizedText } from "@/lib/project-translations";
 
+type Locale=ContentLocale;
+const locales:Locale[]=["es","en","fr"];
 interface ProjectArticle {
-    id: string;
-    project_id: string;
-    title: string;
-    description: string | null;
-    update_date: string;
-    created_at: string;
+    id:string;project_id:string;title:string;description:string|null;update_date:string;created_at:string;
+    project_update_translations:ProjectUpdateTranslation[]|ProjectUpdateTranslation|null;
 }
-
-interface ProjectArticleImage {
-    id: string;
-    update_id: string;
-    image_url: string;
-    sort_order: number;
+interface ProjectArticleImage{id:string;update_id:string;image_url:string;sort_order:number;}
+interface ArticleTranslationForm{title:string;description:string;}
+interface ArticleForm{translations:Record<Locale,ArticleTranslationForm>;date:string;imageUrls:string[];}
+interface Props{projectId:string;}
+const emptyTranslation:ArticleTranslationForm={title:"",description:""};
+const emptyForm:ArticleForm={translations:{es:{...emptyTranslation},en:{...emptyTranslation},fr:{...emptyTranslation}},date:"",imageUrls:[""]};
+function createArticleForm(article?:ProjectArticle):ArticleForm {
+    const rows=normalizeContentTranslations(article?.project_update_translations);
+    const getLocale=(locale:Locale):ArticleTranslationForm=>{
+        const row=rows.find(item=>item.locale===locale);const es=locale==="es";
+        return {title:row?.title??(es?article?.title??"":""),description:row?.description??(es?article?.description??"":"")};
+    };
+    return {translations:{es:getLocale("es"),en:getLocale("en"),fr:getLocale("fr")},date:article?.update_date??getTodayDate(),imageUrls:[""]};
 }
-
-interface ArticleForm {
-    title: string;
-    date: string;
-    description: string;
-    imageUrls: string[];
-}
-
-interface Props {
-    projectId: string;
-}
-
-const emptyForm: ArticleForm = {
-    title: "",
-    date: "",
-    description: "",
-    imageUrls: [""],
-};
 
 function getTodayDate() {
     return new Date()
@@ -118,7 +106,8 @@ export default function ProjectArticles({
                 title,
                 description,
                 update_date,
-                created_at
+                created_at,
+                project_update_translations (id, locale, title, description)
                 `
             )
             .eq(
@@ -165,28 +154,15 @@ export default function ProjectArticles({
 
     }, [projectId]);
 
-    function updateForm(
-        field: keyof ArticleForm,
-        value: string | string[]
-    ) {
-
-        setForm(prev => ({
-            ...prev,
-            [field]: value
-        }));
-
-        setMessage(null);
-        setError(null);
+    function updateForm(field:keyof Omit<ArticleForm,"translations">,value:string|string[]) {
+        setForm(prev=>({...prev,[field]:value}));setMessage(null);setError(null);
     }
-
+    function updateTranslation(locale:Locale,field:keyof ArticleTranslationForm,value:string) {
+        setForm(prev=>({...prev,translations:{...prev.translations,[locale]:{...prev.translations[locale],[field]:value}}}));
+        setMessage(null);setError(null);
+    }
     function resetForm() {
-
-        setForm({
-            ...emptyForm,
-            date: getTodayDate(),
-        });
-
-        setEditingArticleId(null);
+        setForm({...createArticleForm(),date:getTodayDate()});setEditingArticleId(null);
     }
 
     function startCreating() {
@@ -250,24 +226,7 @@ export default function ProjectArticles({
             article.id
         );
 
-        setForm({
-            title:
-                article.title ?? "",
-
-            date:
-                article.update_date,
-
-            description:
-                article.description ?? "",
-
-            imageUrls:
-                images.length > 0
-                    ? images.map(
-                        image =>
-                            image.image_url
-                    )
-                    : [""],
-        });
+        setForm({...createArticleForm(article),imageUrls:images.length>0?images.map(image=>image.image_url):[""]});
 
         setShowForm(true);
     }
@@ -353,24 +312,12 @@ export default function ProjectArticles({
         setMessage(null);
         setError(null);
 
-        const title =
-            form.title.trim();
-
-        const date =
-            form.date.trim();
-
-        const description =
-            form.description.trim();
-
-        if (!title) {
-
-            setError(
-                t.editor_project_article_title_required
-            );
-
-            setSaving(false);
-
-            return;
+        const spanish=form.translations.es;
+        const title=spanish.title.trim();
+        const date=form.date.trim();
+        const description=spanish.description.trim();
+        if(locales.some(locale=>!form.translations[locale].title.trim()||!form.translations[locale].description.trim())){
+            setError(t.editor_project_article_translation_incomplete);setSaving(false);return;
         }
 
         if (!date) {
@@ -536,6 +483,18 @@ export default function ProjectArticles({
             }
         }
 
+        if(!articleId){setError(t.editor_project_article_save_error);setSaving(false);return;}
+        const translationRows=locales.map(locale=>({
+            update_id:articleId,locale,title:form.translations[locale].title.trim(),
+            description:form.translations[locale].description.trim(),updated_at:new Date().toISOString()
+        }));
+        const {error:translationError}=await supabase.from("project_update_translations")
+            .upsert(translationRows,{onConflict:"update_id,locale"});
+        if(translationError){
+            console.error("Error guardando traducciones del artículo:",translationError);
+            setError(`${t.editor_project_article_save_error}: ${translationError.message}`);
+            setSaving(false);await loadArticles();return;
+        }
         /*
          * GUARDAR IMÁGENES
          */
@@ -716,8 +675,30 @@ export default function ProjectArticles({
                     </div>
 
                     <div className="project-articles-form-row">
-
                         <div className="project-articles-form-field">
+                            <label htmlFor="project-article-date">{t.editor_project_article_date}</label>
+                            <input id="project-article-date" className="account-date-input" type="date" value={form.date} onChange={e=>updateForm("date",e.target.value)} required />
+                        </div>
+                    </div>
+                    <fieldset className="project-manager-translations">
+                        <legend>{t.editor_project_article_translations}</legend>
+                        {locales.map(locale=>{
+                            const label=locale==="es"?t.editor_news_locale_es:locale==="en"?t.editor_news_locale_en:t.editor_news_locale_fr;
+                            return <section className="project-manager-translation" key={locale}>
+                                <h5>{label}</h5>
+                                <div className="project-articles-form-field">
+                                    <label htmlFor={`project-article-title-${locale}`}>{t.editor_project_article_title}</label>
+                                    <input id={`project-article-title-${locale}`} value={form.translations[locale].title} onChange={e=>updateTranslation(locale,"title",e.target.value)} required />
+                                </div>
+                                <div className="project-articles-form-field">
+                                    <label htmlFor={`project-article-description-${locale}`}>{t.editor_project_article_description}</label>
+                                    <textarea id={`project-article-description-${locale}`} value={form.translations[locale].description} onChange={e=>updateTranslation(locale,"description",e.target.value)} rows={5} required />
+                                </div>
+                            </section>;
+                        })}
+                    </fieldset>
+
+                    <div className="project-articles-form-field">
 
                             <label>
                                 {t.editor_project_article_title}
@@ -933,15 +914,15 @@ export default function ProjectArticles({
 
                                     <h4>
                                         {
-                                            article.title
+                                            {resolveLocalizedText(article.project_update_translations,language,"title",article.title) ?? article.title}
                                         }
                                     </h4>
 
-                                    {article.description && (
+                                    {resolveLocalizedText(article.project_update_translations,language,"description",article.description) && (
 
                                         <p>
                                             {
-                                                article.description
+                                                {resolveLocalizedText(article.project_update_translations,language,"description",article.description)}
                                             }
                                         </p>
 

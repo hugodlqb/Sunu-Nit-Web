@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import ProjectMainCard from "@/components/ui/ProjectMainCard";
 import { useLanguage } from "@/context/LanguageContext";
+import { ProjectTranslation, resolveLocalizedText } from "@/lib/project-translations";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
@@ -18,6 +19,7 @@ interface Project {
     current_amount: number;
     currency: string;
     show_in_projects: boolean;
+    project_translations: ProjectTranslation[] | ProjectTranslation | null;
 }
 
 interface Props {
@@ -39,8 +41,7 @@ export default function ProjectDonationCards({
     const [loading, setLoading] =
         useState(true);
 
-    const { t } =
-        useLanguage();
+    const { t, language } = useLanguage();
 
     useEffect(() => {
 
@@ -62,7 +63,8 @@ export default function ProjectDonationCards({
                     target_amount,
                     current_amount,
                     currency,
-                    show_in_projects
+                    show_in_projects,
+                    project_translations (locale, name, description, detail_description)
                 `
                 )
                 .eq("active", true)
@@ -166,7 +168,7 @@ export default function ProjectDonationCards({
                     <SwiperSlide key={project.id}>
                         <ProjectMainCard
                             id={project.id}
-                            name={project.name}
+                            name={resolveLocalizedText(project.project_translations,language,"name",project.name) ?? project.name}
                             image={project.image}
                             onDetails={onDetails}
                             onDonate={onDonate}

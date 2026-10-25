@@ -11,46 +11,45 @@ import { Folder, Newspaper } from "@phosphor-icons/react/dist/ssr";
 
 import { supabase } from "@/lib/supabase";
 import { useLanguage } from "@/context/LanguageContext";
+import { ContentLocale, ProjectTranslation, normalizeContentTranslations, resolveLocalizedText } from "@/lib/project-translations";
 
 import "@/styles/projectmanager.css";
 
+type Locale = ContentLocale;
+const locales: Locale[] = ["es", "en", "fr"];
 interface Project {
-    id: string;
-    key: string;
-    name: string;
-    description: string | null;
-    image: string | null;
-    target_amount: number | null;
-    current_amount: number;
-    currency: string;
-    status: string;
-    active: boolean;
-    show_in_projects: boolean;
-    detail_description: string | null;
-    created_at: string;
+    id:string; key:string; name:string; description:string|null; image:string|null;
+    target_amount:number|null; current_amount:number; currency:string; status:string;
+    active:boolean; show_in_projects:boolean; detail_description:string|null; created_at:string;
+    project_translations:ProjectTranslation[]|ProjectTranslation|null;
 }
-
+interface ProjectTranslationForm {name:string;description:string;detail_description:string;}
 interface ProjectForm {
-    name: string;
-    description: string;
-    image: string;
-    target_amount: string;
-    year: string;
-    active: boolean;
-    show_in_projects: boolean;
-    detail_description: string;
+    translations:Record<Locale,ProjectTranslationForm>;
+    image:string;target_amount:string;year:string;active:boolean;show_in_projects:boolean;
 }
-
-const emptyForm: ProjectForm = {
-    name: "",
-    description: "",
-    image: "",
-    target_amount: "",
-    year: new Date().getFullYear().toString(),
-    active: true,
-    show_in_projects: false,
-    detail_description: "",
+const emptyTranslation:ProjectTranslationForm={name:"",description:"",detail_description:""};
+const emptyForm:ProjectForm={
+    translations:{es:{...emptyTranslation},en:{...emptyTranslation},fr:{...emptyTranslation}},
+    image:"",target_amount:"",year:new Date().getFullYear().toString(),active:true,show_in_projects:false,
 };
+function createProjectForm(project?:Project):ProjectForm {
+    const rows=normalizeContentTranslations(project?.project_translations);
+    const getLocale=(locale:Locale):ProjectTranslationForm=>{
+        const row=rows.find(item=>item.locale===locale);const es=locale==="es";
+        return {
+            name:row?.name??(es?project?.name??"":""),
+            description:row?.description??(es?project?.description??"":""),
+            detail_description:row?.detail_description??(es?project?.detail_description??"":""),
+        };
+    };
+    return {
+        translations:{es:getLocale("es"),en:getLocale("en"),fr:getLocale("fr")},
+        image:project?.image??"",target_amount:project?.target_amount!=null?String(project.target_amount):"",
+        year:project?getProjectYear(project.created_at):new Date().getFullYear().toString(),
+        active:project?.active??true,show_in_projects:project?.show_in_projects??false,
+    };
+}
 
 function createProjectKey(
     name: string
@@ -153,7 +152,8 @@ export default function ProjectManager() {
                 active,
                 show_in_projects,
                 detail_description,
-                created_at
+                created_at,
+                project_translations (id, locale, name, description, detail_description)
                 `
             )
             .order(
@@ -208,137 +208,30 @@ export default function ProjectManager() {
 
     }, []);
 
-    function updateForm(
-        field: keyof ProjectForm,
-        value: string | boolean
-    ) {
-
-        setForm(prev => ({
-            ...prev,
-            [field]: value
-        }));
-
-        setMessage(null);
-        setError(null);
+    function updateForm(field:keyof Omit<ProjectForm,"translations">,value:string|boolean) {
+        setForm(prev=>({...prev,[field]:value}));setMessage(null);setError(null);
     }
-
+    function updateTranslation(locale:Locale,field:keyof ProjectTranslationForm,value:string) {
+        setForm(prev=>({...prev,translations:{...prev.translations,[locale]:{...prev.translations[locale],[field]:value}}}));
+        setMessage(null);setError(null);
+    }
     function startCreating() {
-
-        setEditingProjectId(null);
-        setArticlesProjectId(null);
-
-        setForm({
-            ...emptyForm,
-            year:
-                new Date()
-                    .getFullYear()
-                    .toString()
-        });
-
-        setMessage(null);
-        setError(null);
-        setShowForm(true);
+        setEditingProjectId(null);setArticlesProjectId(null);setForm(createProjectForm());
+        setMessage(null);setError(null);setShowForm(true);
     }
-
-    function startEditing(
-        project: Project
-    ) {
-
-        if (
-            editingProjectId ===
-            project.id
-        ) {
-
-            cancelForm();
-
-            return;
-        }
-
-        setArticlesProjectId(null);
-        setShowForm(false);
-
-        setEditingProjectId(
-            project.id
-        );
-
-        setForm({
-            name:
-                project.name ?? "",
-
-            description:
-                project.description ?? "",
-
-            image:
-                project.image ?? "",
-
-            target_amount:
-                project.target_amount !== null
-                    ? String(
-                        project.target_amount
-                    )
-                    : "",
-
-            year:
-                getProjectYear(
-                    project.created_at
-                ),
-
-            active:
-                project.active,
-
-            show_in_projects:
-                project.show_in_projects,
-
-            detail_description:
-                project.detail_description ?? "",
-        });
-
-        setMessage(null);
-        setError(null);
+    function startEditing(project:Project) {
+        if(editingProjectId===project.id){cancelForm();return;}
+        setArticlesProjectId(null);setShowForm(false);setEditingProjectId(project.id);
+        setForm(createProjectForm(project));setMessage(null);setError(null);
     }
-
-    function toggleArticles(
-        projectId: string
-    ) {
-
-        setMessage(null);
-        setError(null);
-
-        if (
-            articlesProjectId ===
-            projectId
-        ) {
-
-            setArticlesProjectId(
-                null
-            );
-
-            return;
-        }
-
-        setEditingProjectId(null);
-        setShowForm(false);
-
-        setArticlesProjectId(
-            projectId
-        );
+    function toggleArticles(projectId:string) {
+        setMessage(null);setError(null);
+        if(articlesProjectId===projectId){setArticlesProjectId(null);return;}
+        setEditingProjectId(null);setShowForm(false);setArticlesProjectId(projectId);
     }
-
     function cancelForm() {
-
-        setShowForm(false);
-        setEditingProjectId(null);
-
-        setForm({
-            ...emptyForm,
-            year:
-                new Date()
-                    .getFullYear()
-                    .toString()
-        });
-
-        setMessage(null);
-        setError(null);
+        setShowForm(false);setEditingProjectId(null);setForm(createProjectForm());
+        setMessage(null);setError(null);
     }
 
     async function handleSubmit(
@@ -351,18 +244,14 @@ export default function ProjectManager() {
         setMessage(null);
         setError(null);
 
-        const name =
-            form.name.trim();
-
-        if (!name) {
-
-            setError(
-                "El nombre del proyecto es obligatorio."
-            );
-
-            setSaving(false);
-
-            return;
+        const spanish = form.translations.es;
+        const name = spanish.name.trim();
+        if (locales.some(locale =>
+            !form.translations[locale].name.trim() ||
+            !form.translations[locale].description.trim() ||
+            !form.translations[locale].detail_description.trim()
+        )) {
+            setError(t.editor_projects_translation_incomplete); setSaving(false); return;
         }
 
         const targetAmount =
@@ -417,9 +306,7 @@ export default function ProjectManager() {
 
             name,
 
-            description:
-                form.description.trim() ||
-                null,
+            description: spanish.description.trim(),
 
             image:
                 form.image.trim() ||
@@ -434,11 +321,10 @@ export default function ProjectManager() {
             show_in_projects:
                 form.show_in_projects,
 
-            detail_description:
-                form.detail_description.trim() ||
-                null,
+            detail_description: spanish.detail_description.trim(),
         };
 
+        let savedProjectId: string | null = editingProjectId;
         /*
          * CREAR PROYECTO
          */
@@ -451,9 +337,7 @@ export default function ProjectManager() {
                 projectYear
             );
 
-            const {
-                error
-            } = await supabase
+            const { data: createdProject, error } = await supabase
                 .from("projects")
                 .insert({
 
@@ -475,7 +359,9 @@ export default function ProjectManager() {
                         createdAt.toISOString(),
 
                     ...projectData
-                });
+                })
+                .select("id")
+                .single();
 
             if (error) {
 
@@ -493,9 +379,8 @@ export default function ProjectManager() {
                 return;
             }
 
-            setMessage(
-                t.editor_projects_created
-            );
+            savedProjectId = createdProject.id;
+            setMessage(t.editor_projects_created);
         }
 
         /*
@@ -563,6 +448,20 @@ export default function ProjectManager() {
             );
         }
 
+        if (!savedProjectId) { setError(t.editor_projects_save_error); setSaving(false); return; }
+        const translationRows = locales.map(locale => ({
+            project_id:savedProjectId,locale,name:form.translations[locale].name.trim(),
+            description:form.translations[locale].description.trim(),
+            detail_description:form.translations[locale].detail_description.trim(),
+            updated_at:new Date().toISOString()
+        }));
+        const {error:translationError}=await supabase.from("project_translations")
+            .upsert(translationRows,{onConflict:"project_id,locale"});
+        if(translationError){
+            console.error("Error guardando traducciones del proyecto:",translationError);
+            setError(`${t.editor_projects_save_error}: ${translationError.message}`);
+            setSaving(false);await loadProjects(search);return;
+        }
         await loadProjects(
             search
         );
@@ -874,154 +773,40 @@ export default function ProjectManager() {
                     </div>
 
                     <div className="project-manager-form-row">
-
                         <div className="project-manager-form-field">
-
-                            <label>
-                                {
-                                    t.editor_projects_name
-                                }
-                            </label>
-
-                            <input
-                                type="text"
-                                value={
-                                    form.name
-                                }
-                                onChange={e =>
-                                    updateForm(
-                                        "name",
-                                        e.target.value
-                                    )
-                                }
-                                required
-                            />
-
+                            <label>{t.editor_projects_target}</label>
+                            <input type="number" min="0" step="0.01" value={form.target_amount} onChange={e=>updateForm("target_amount",e.target.value)} />
                         </div>
-
                         <div className="project-manager-form-field">
-
-                            <label>
-                                {
-                                    t.editor_projects_target
-                                }
-                            </label>
-
-                            <input
-                                type="number"
-                                min="0"
-                                step="0.01"
-                                value={
-                                    form.target_amount
-                                }
-                                onChange={e =>
-                                    updateForm(
-                                        "target_amount",
-                                        e.target.value
-                                    )
-                                }
-                            />
-
+                            <label>Año</label>
+                            <input type="number" min="1900" max="2100" value={form.year} onChange={e=>updateForm("year",e.target.value)} required />
                         </div>
-
-                    </div>
-
-                    <div className="project-manager-form-row">
-
                         <div className="project-manager-form-field">
-
-                            <label>
-                                Año
-                            </label>
-
-                            <input
-                                type="number"
-                                min="1900"
-                                max="2100"
-                                value={
-                                    form.year
-                                }
-                                onChange={e =>
-                                    updateForm(
-                                        "year",
-                                        e.target.value
-                                    )
-                                }
-                            />
-
+                            <label>{t.editor_projects_image}</label>
+                            <input type="text" value={form.image} placeholder="https://..." onChange={e=>updateForm("image",e.target.value)} />
                         </div>
-
-                        <div className="project-manager-form-field">
-
-                            <label>
-                                {
-                                    t.editor_projects_image
-                                }
-                            </label>
-
-                            <input
-                                type="text"
-                                value={
-                                    form.image
-                                }
-                                onChange={e =>
-                                    updateForm(
-                                        "image",
-                                        e.target.value
-                                    )
-                                }
-                                placeholder="https://..."
-                            />
-
-                        </div>
-
                     </div>
-
-                    <div className="project-manager-form-field">
-
-                        <label>
-                            {
-                                t.editor_projects_description
-                            }
-                        </label>
-
-                        <textarea
-                            value={
-                                form.description
-                            }
-                            onChange={e =>
-                                updateForm(
-                                    "description",
-                                    e.target.value
-                                )
-                            }
-                            rows={2}
-                        />
-
-                    </div>
-
-                    <div className="project-manager-form-field">
-
-                        <label>
-                            {
-                                t.editor_projects_detail_description
-                            }
-                        </label>
-
-                        <textarea
-                            value={
-                                form.detail_description
-                            }
-                            onChange={e =>
-                                updateForm(
-                                    "detail_description",
-                                    e.target.value
-                                )
-                            }
-                            rows={5}
-                        />
-
-                    </div>
+                    <fieldset className="project-manager-translations">
+                        <legend>{t.editor_projects_translations}</legend>
+                        {locales.map(locale=>{
+                            const label=locale==="es"?t.editor_news_locale_es:locale==="en"?t.editor_news_locale_en:t.editor_news_locale_fr;
+                            return <section className="project-manager-translation" key={locale}>
+                                <h4>{label}</h4>
+                                <div className="project-manager-form-field">
+                                    <label htmlFor={`project-name-${locale}`}>{t.editor_projects_name}</label>
+                                    <input id={`project-name-${locale}`} value={form.translations[locale].name} onChange={e=>updateTranslation(locale,"name",e.target.value)} required />
+                                </div>
+                                <div className="project-manager-form-field">
+                                    <label htmlFor={`project-description-${locale}`}>{t.editor_projects_description}</label>
+                                    <textarea id={`project-description-${locale}`} value={form.translations[locale].description} onChange={e=>updateTranslation(locale,"description",e.target.value)} rows={2} required />
+                                </div>
+                                <div className="project-manager-form-field">
+                                    <label htmlFor={`project-detail-description-${locale}`}>{t.editor_projects_detail_description}</label>
+                                    <textarea id={`project-detail-description-${locale}`} value={form.translations[locale].detail_description} onChange={e=>updateTranslation(locale,"detail_description",e.target.value)} rows={5} required />
+                                </div>
+                            </section>;
+                        })}
+                    </fieldset>
 
                     <div className="project-manager-checkboxes">
 
@@ -1181,14 +966,13 @@ export default function ProjectManager() {
 
                                                             <h3>
                                                                 {
-                                                                    project.name
+                                                                    resolveLocalizedText(project.project_translations,language,"name",project.name) ?? project.name
                                                                 }
                                                             </h3>
 
                                                             <p>
                                                                 {
-                                                                    project.description ||
-                                                                    "—"
+                                                                    resolveLocalizedText(project.project_translations,language,"description",project.description) || "—"
                                                                 }
                                                             </p>
 
@@ -1317,155 +1101,41 @@ export default function ProjectManager() {
 
                                                                 </div>
 
-                                                                <div className="project-manager-form-row">
-
-                                                                    <div className="project-manager-form-field">
-
-                                                                        <label>
-                                                                            {
-                                                                                t.editor_projects_name
-                                                                            }
-                                                                        </label>
-
-                                                                        <input
-                                                                            type="text"
-                                                                            value={
-                                                                                form.name
-                                                                            }
-                                                                            onChange={e =>
-                                                                                updateForm(
-                                                                                    "name",
-                                                                                    e.target.value
-                                                                                )
-                                                                            }
-                                                                            required
-                                                                        />
-
-                                                                    </div>
-
-                                                                    <div className="project-manager-form-field">
-
-                                                                        <label>
-                                                                            {
-                                                                                t.editor_projects_target
-                                                                            }
-                                                                        </label>
-
-                                                                        <input
-                                                                            type="number"
-                                                                            min="0"
-                                                                            step="0.01"
-                                                                            value={
-                                                                                form.target_amount
-                                                                            }
-                                                                            onChange={e =>
-                                                                                updateForm(
-                                                                                    "target_amount",
-                                                                                    e.target.value
-                                                                                )
-                                                                            }
-                                                                        />
-
-                                                                    </div>
-
-                                                                </div>
-
-                                                                <div className="project-manager-form-row">
-
-                                                                    <div className="project-manager-form-field">
-
-                                                                        <label>
-                                                                            Año
-                                                                        </label>
-
-                                                                        <input
-                                                                            type="number"
-                                                                            min="1900"
-                                                                            max="2100"
-                                                                            value={
-                                                                                form.year
-                                                                            }
-                                                                            onChange={e =>
-                                                                                updateForm(
-                                                                                    "year",
-                                                                                    e.target.value
-                                                                                )
-                                                                            }
-                                                                        />
-
-                                                                    </div>
-
-                                                                    <div className="project-manager-form-field">
-
-                                                                        <label>
-                                                                            {
-                                                                                t.editor_projects_image
-                                                                            }
-                                                                        </label>
-
-                                                                        <input
-                                                                            type="text"
-                                                                            value={
-                                                                                form.image
-                                                                            }
-                                                                            onChange={e =>
-                                                                                updateForm(
-                                                                                    "image",
-                                                                                    e.target.value
-                                                                                )
-                                                                            }
-                                                                            placeholder="https://..."
-                                                                        />
-
-                                                                    </div>
-
-                                                                </div>
-
-                                                                <div className="project-manager-form-field">
-
-                                                                    <label>
-                                                                        {
-                                                                            t.editor_projects_description
-                                                                        }
-                                                                    </label>
-
-                                                                    <textarea
-                                                                        value={
-                                                                            form.description
-                                                                        }
-                                                                        onChange={e =>
-                                                                            updateForm(
-                                                                                "description",
-                                                                                e.target.value
-                                                                            )
-                                                                        }
-                                                                        rows={2}
-                                                                    />
-
-                                                                </div>
-
-                                                                <div className="project-manager-form-field">
-
-                                                                    <label>
-                                                                        {
-                                                                            t.editor_projects_detail_description
-                                                                        }
-                                                                    </label>
-
-                                                                    <textarea
-                                                                        value={
-                                                                            form.detail_description
-                                                                        }
-                                                                        onChange={e =>
-                                                                            updateForm(
-                                                                                "detail_description",
-                                                                                e.target.value
-                                                                            )
-                                                                        }
-                                                                        rows={5}
-                                                                    />
-
-                                                                </div>
+                    <div className="project-manager-form-row">
+                        <div className="project-manager-form-field">
+                            <label>{t.editor_projects_target}</label>
+                            <input type="number" min="0" step="0.01" value={form.target_amount} onChange={e=>updateForm("target_amount",e.target.value)} />
+                        </div>
+                        <div className="project-manager-form-field">
+                            <label>Año</label>
+                            <input type="number" min="1900" max="2100" value={form.year} onChange={e=>updateForm("year",e.target.value)} required />
+                        </div>
+                        <div className="project-manager-form-field">
+                            <label>{t.editor_projects_image}</label>
+                            <input type="text" value={form.image} placeholder="https://..." onChange={e=>updateForm("image",e.target.value)} />
+                        </div>
+                    </div>
+                    <fieldset className="project-manager-translations">
+                        <legend>{t.editor_projects_translations}</legend>
+                        {locales.map(locale=>{
+                            const label=locale==="es"?t.editor_news_locale_es:locale==="en"?t.editor_news_locale_en:t.editor_news_locale_fr;
+                            return <section className="project-manager-translation" key={locale}>
+                                <h4>{label}</h4>
+                                <div className="project-manager-form-field">
+                                    <label htmlFor={`project-inline-name-${locale}`}>{t.editor_projects_name}</label>
+                                    <input id={`project-inline-name-${locale}`} value={form.translations[locale].name} onChange={e=>updateTranslation(locale,"name",e.target.value)} required />
+                                </div>
+                                <div className="project-manager-form-field">
+                                    <label htmlFor={`project-inline-description-${locale}`}>{t.editor_projects_description}</label>
+                                    <textarea id={`project-inline-description-${locale}`} value={form.translations[locale].description} onChange={e=>updateTranslation(locale,"description",e.target.value)} rows={2} required />
+                                </div>
+                                <div className="project-manager-form-field">
+                                    <label htmlFor={`project-inline-detail-description-${locale}`}>{t.editor_projects_detail_description}</label>
+                                    <textarea id={`project-inline-detail-description-${locale}`} value={form.translations[locale].detail_description} onChange={e=>updateTranslation(locale,"detail_description",e.target.value)} rows={5} required />
+                                </div>
+                            </section>;
+                        })}
+                    </fieldset>
 
                                                                 <div className="project-manager-checkboxes">
 
