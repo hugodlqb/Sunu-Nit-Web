@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useLanguage } from "@/context/LanguageContext";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/context/AuthContext";
 
@@ -19,6 +20,7 @@ interface Role {
 
 export default function AccountAdmin() {
 
+    const { t } = useLanguage();
     const [search, setSearch] = useState("");
     const [results, setResults] = useState<Person[]>([]);
     const [selectedPerson, setSelectedPerson] =
@@ -195,20 +197,20 @@ export default function AccountAdmin() {
         setOriginalRoles(selectedRoles);
         setSaving(false);
 
-        alert("Roles actualizados correctamente");
+        alert(t.admin_roles_saved);
     }
 
     return (
 
         <div>
 
-            <h2>Administración</h2>
+            <h2>{t.admin_title}</h2>
 
             <div>
 
                 <input
                     type="text"
-                    placeholder="Nombre o apellido..."
+                    placeholder={t.admin_search_placeholder}
                     value={search}
                     onChange={(e) =>
                         setSearch(e.target.value)
@@ -301,7 +303,7 @@ export default function AccountAdmin() {
                         onClick={saveRoles}
                         disabled={saving}
                     >
-                        {saving ? "Guardando..." : "Guardar roles"}
+                        {saving ? t.admin_saving_roles : t.admin_save_roles}
                     </button>
 
                 </div>
