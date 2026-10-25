@@ -128,7 +128,7 @@ export default function ResetPasswordPage() {
 
     return (
         <div className="reset-password-page">
-            <h1>Restablecer contraseña</h1>
+            <h1>{t.reset_password_title}</h1>
 
             {status === "loading" && <p>{t.reset_password_verifying}</p>}
 
@@ -136,7 +136,7 @@ export default function ResetPasswordPage() {
                 <>
                     <div className="auth-message error">{error}</div>
                     <button type="button" className="btn btn-secondary" onClick={goHome}>
-                        Volver al inicio
+                        {t.reset_password_home}
                     </button>
                 </>
             )}
@@ -243,7 +243,7 @@ export default function ResetPasswordPage() {
                 <>
                     <div className="auth-message success">{message}</div>
                     <button type="button" className="btn btn-primary" onClick={goHome}>
-                        Ir al inicio
+                        {t.reset_password_go_home}
                     </button>
                 </>
             )}
