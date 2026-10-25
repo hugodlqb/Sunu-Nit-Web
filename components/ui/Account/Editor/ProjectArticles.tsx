@@ -317,7 +317,7 @@ export default function ProjectArticles({
         const title=spanish.title.trim();
         const date=form.date.trim();
         const description=spanish.description.trim();
-        if(locales.some(locale=>!form.translations[locale].title.trim())){
+        if(locales.some(locale=>!form.translations[locale].title.trim()||!form.translations[locale].description.trim())){
             setError(t.editor_project_article_translation_incomplete);setSaving(false);return;
         }
 
