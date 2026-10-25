@@ -82,6 +82,8 @@ export default function AccountAdmin() {
     const [initialDateRange] = useState(getDefaultDateRange);
     const [startDate, setStartDate] = useState(initialDateRange.start);
     const [endDate, setEndDate] = useState(initialDateRange.end);
+    const [appliedStartDate, setAppliedStartDate] = useState(initialDateRange.start);
+    const [appliedEndDate, setAppliedEndDate] = useState(initialDateRange.end);
 
     const loadAnalytics = useCallback(async () => {
         setAnalyticsLoading(true);
@@ -90,7 +92,7 @@ export default function AccountAdmin() {
             const { data } = await supabase.auth.getSession();
             const token = data.session?.access_token;
             if (!token) throw new Error("No active session");
-            const params = new URLSearchParams({ startDate, endDate });
+            const params = new URLSearchParams({ startDate: appliedStartDate, endDate: appliedEndDate });
             const response = await fetch(`/api/admin/analytics?${params.toString()}`, {
                 headers: { Authorization: `Bearer ${token}` },
                 cache: "no-store",
@@ -104,7 +106,7 @@ export default function AccountAdmin() {
         } finally {
             setAnalyticsLoading(false);
         }
-    }, [t.admin_analytics_error, startDate, endDate]);
+    }, [t.admin_analytics_error, appliedStartDate, appliedEndDate]);
 
     useEffect(() => { void loadAnalytics(); }, [loadAnalytics]);
 
@@ -241,7 +243,7 @@ export default function AccountAdmin() {
             {tab === "overview" ? (
                 <div className="admin-overview">
                     {analyticsError && <div className="admin-state admin-state-error" role="alert"><span>{analyticsError}</span><button type="button" onClick={() => void loadAnalytics()}>{t.admin_retry}</button></div>}
-<form className="admin-date-filter" onSubmit={(event) => { event.preventDefault(); void loadAnalytics(); }}>
+<form className="admin-date-filter" onSubmit={(event) => { event.preventDefault(); setAppliedStartDate(startDate); setAppliedEndDate(endDate); }}>
                         <label>{t.admin_date_from}<input type="date" value={startDate} max={endDate || undefined} onChange={(event) => setStartDate(event.target.value)} required /></label>
                         <label>{t.admin_date_to}<input type="date" value={endDate} min={startDate || undefined} max={dateInputValue(new Date())} onChange={(event) => setEndDate(event.target.value)} required /></label>
                         <button type="submit" disabled={analyticsLoading || !startDate || !endDate || startDate > endDate}>{t.admin_apply_dates}</button>
