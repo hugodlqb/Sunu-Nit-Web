@@ -92,7 +92,7 @@ function changeProjectYear(
 
 export default function ProjectManager() {
 
-    const { t } = useLanguage();
+    const { t, language } = useLanguage();
 
     const [activeTab, setActiveTab] =
         useState<"projects" | "news">("projects");

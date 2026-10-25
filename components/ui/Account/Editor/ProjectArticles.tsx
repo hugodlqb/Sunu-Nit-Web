@@ -60,7 +60,7 @@ export default function ProjectArticles({
     projectId
 }: Props) {
 
-    const { t } = useLanguage();
+    const { t, language } = useLanguage();
 
     const [articles, setArticles] =
         useState<ProjectArticle[]>([]);
@@ -677,94 +677,29 @@ export default function ProjectArticles({
                     <div className="project-articles-form-row">
                         <div className="project-articles-form-field">
                             <label htmlFor="project-article-date">{t.editor_project_article_date}</label>
-                            <input id="project-article-date" className="account-date-input" type="date" value={form.date} onChange={e=>updateForm("date",e.target.value)} required />
+                            <input id="project-article-date" className="account-date-input" type="date" value={form.date}
+                                onChange={e => updateForm("date", e.target.value)} required />
                         </div>
                     </div>
                     <fieldset className="project-manager-translations">
                         <legend>{t.editor_project_article_translations}</legend>
-                        {locales.map(locale=>{
-                            const label=locale==="es"?t.editor_news_locale_es:locale==="en"?t.editor_news_locale_en:t.editor_news_locale_fr;
+                        {locales.map(locale => {
+                            const label = locale === "es" ? t.editor_news_locale_es : locale === "en" ? t.editor_news_locale_en : t.editor_news_locale_fr;
                             return <section className="project-manager-translation" key={locale}>
                                 <h5>{label}</h5>
                                 <div className="project-articles-form-field">
                                     <label htmlFor={`project-article-title-${locale}`}>{t.editor_project_article_title}</label>
-                                    <input id={`project-article-title-${locale}`} value={form.translations[locale].title} onChange={e=>updateTranslation(locale,"title",e.target.value)} required />
+                                    <input id={`project-article-title-${locale}`} value={form.translations[locale].title}
+                                        onChange={e => updateTranslation(locale, "title", e.target.value)} required />
                                 </div>
                                 <div className="project-articles-form-field">
                                     <label htmlFor={`project-article-description-${locale}`}>{t.editor_project_article_description}</label>
-                                    <textarea id={`project-article-description-${locale}`} value={form.translations[locale].description} onChange={e=>updateTranslation(locale,"description",e.target.value)} rows={5} required />
+                                    <textarea id={`project-article-description-${locale}`} value={form.translations[locale].description}
+                                        onChange={e => updateTranslation(locale, "description", e.target.value)} rows={5} required />
                                 </div>
                             </section>;
                         })}
                     </fieldset>
-
-                    <div className="project-articles-form-field">
-
-                            <label>
-                                {t.editor_project_article_title}
-                            </label>
-
-                            <input
-                                type="text"
-                                value={
-                                    form.title
-                                }
-                                onChange={e =>
-                                    updateForm(
-                                        "title",
-                                        e.target.value
-                                    )
-                                }
-                                required
-                            />
-
-                        </div>
-
-                        <div className="project-articles-form-field">
-
-                            <label>
-                                {t.editor_project_article_date}
-                            </label>
-
-                            <input
-                                className="account-date-input"
-                                type="date"
-                                value={form.date}
-                                onChange={e =>
-                                    updateForm(
-                                        "date",
-                                        e.target.value
-                                    )
-                                }
-                                required
-                            />
-
-                        </div>
-
-                    </div>
-
-                    <div className="project-articles-form-field">
-
-                        <label>
-                            {
-                                t.editor_project_article_description
-                            }
-                        </label>
-
-                        <textarea
-                            value={
-                                form.description
-                            }
-                            onChange={e =>
-                                updateForm(
-                                    "description",
-                                    e.target.value
-                                )
-                            }
-                            rows={5}
-                        />
-
-                    </div>
 
                     <div className="project-articles-form-field">
 
