@@ -197,7 +197,7 @@ export function useRegister() {
         if (!data.user) {
 
             setAuthMessage(
-                "No se pudo crear el usuario"
+                t.register_user_create_error
             );
 
             return;
