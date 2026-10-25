@@ -6,15 +6,13 @@ import { useLanguage } from "@/context/LanguageContext";
 import { donationConfig } from "@/lib/donation-config";
 
 type CopyTarget = "iban" | "reference";
-const EXAMPLE_IBAN = "ES0000000000000000000000";
 
 export default function PaymentMethods() {
   const { t } = useLanguage();
   const [copied, setCopied] = useState<CopyTarget | null>(null);
   const [copyError, setCopyError] = useState(false);
 
-  const iban = donationConfig.iban || EXAMPLE_IBAN;
-  const isExampleIban = !donationConfig.iban;
+  const iban = donationConfig.iban;
   const reference = t.collab_transfer_reference_value;
   const displayIban = iban.replace(/(.{4})/g, "$1 ").trim();
 
@@ -81,7 +79,7 @@ export default function PaymentMethods() {
                 {copied === "iban" ? <CheckCircle size={22} /> : <Copy size={22} />}
               </button>
             </div>
-            {isExampleIban && <p className="collab-transfer-pending">{t.collab_transfer_example_notice}</p>}
+            {donationConfig.isExampleIban && <p className="collab-transfer-pending">{t.collab_transfer_example_notice}</p>}
           </div>
           <div className="collab-transfer-field">
             <span className="collab-transfer-label">{t.collab_transfer_reference}</span>
