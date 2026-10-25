@@ -234,7 +234,7 @@ export default function ResetPasswordPage() {
                     </button>
 
                     <button type="button" className="btn btn-secondary" onClick={goHome}>
-                        Volver al inicio
+                        {t.reset_password_home}
                     </button>
                 </>
             )}
