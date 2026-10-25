@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useLanguage } from "@/context/LanguageContext";
 import { supabase } from "@/lib/supabase";
 import {
     Eye,
@@ -10,6 +11,7 @@ import {
 
 export default function ResetPasswordPage() {
     const router = useRouter();
+    const { t } = useLanguage();
     const [status, setStatus] = useState<"loading" | "ready" | "success" | "error">("loading");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -45,7 +47,7 @@ export default function ResetPasswordPage() {
                     } else {
                         // Handle sign-out or missing session so UI doesn't stay on the reset form
                         setStatus("error");
-                        setError("Sesión cerrada. Vuelve a solicitar el enlace de recuperación.");
+                        setError(t.reset_session_closed);
                     }
                 });
 
@@ -54,12 +56,12 @@ export default function ResetPasswordPage() {
 
                 // If no session appears within a short time, show an error to the user
                 timer = setTimeout(() => {
-                    setError("Enlace de recuperación inválido o caducado.");
+                    setError(t.reset_link_invalid);
                     setStatus("error");
                 }, 10000);
             } catch (err) {
                 console.error("Reset callback init error:", err);
-                setError("No se pudo completar el enlace de recuperación.");
+                setError(t.reset_link_failed);
                 setStatus("error");
             }
         }
@@ -83,13 +85,13 @@ export default function ResetPasswordPage() {
 
         if (!password.trim() || !confirmPassword.trim()) {
 
-            setError("Introduce la nueva contraseña y confírmala.");
+            setError(t.reset_password_confirm);
             return;
         }
 
         if (password !== confirmPassword) {
 
-            setError("Las contraseñas no coinciden.");
+            setError(t.reset_password_mismatch);
             return;
         }
 
@@ -97,7 +99,7 @@ export default function ResetPasswordPage() {
             await supabase.auth.getSession();
 
         if (!sessionData.session) {
-            setError("La sesión de recuperación no es válida. Solicita un nuevo enlace.");
+            setError(t.reset_session_invalid);
             return;
         }
 
@@ -116,7 +118,7 @@ export default function ResetPasswordPage() {
             return;
         }
 
-        setMessage("Contraseña actualizada correctamente.");
+        setMessage(t.reset_password_updated);
         setStatus("success");
     }
 
@@ -126,22 +128,22 @@ export default function ResetPasswordPage() {
 
     return (
         <div className="reset-password-page">
-            <h1>Restablecer contraseña</h1>
+            <h1>{t.reset_password_title}</h1>
 
-            {status === "loading" && <p>Verificando el enlace de recuperación...</p>}
+            {status === "loading" && <p>{t.reset_password_verifying}</p>}
 
             {status === "error" && (
                 <>
                     <div className="auth-message error">{error}</div>
                     <button type="button" className="btn btn-secondary" onClick={goHome}>
-                        Volver al inicio
+                        {t.reset_password_home}
                     </button>
                 </>
             )}
 
             {status === "ready" && (
                 <>
-                    <p>Introduce la nueva contraseña para completar el restablecimiento.</p>
+                    <p>{t.reset_password_page_instruction}</p>
 
                     <div className="password-container reset-password-field">
                         <input
@@ -149,7 +151,7 @@ export default function ResetPasswordPage() {
                             className="form-input"
                             name="new-password"
                             autoComplete="new-password"
-                            placeholder="Nueva contraseña"
+                            placeholder={t.reset_password_new_placeholder}
                             ref={passwordRef}
                             value={password}
                             onFocus={() => setPasswordFocused(true)}
@@ -170,23 +172,23 @@ export default function ResetPasswordPage() {
                         {passwordFocused && password && (
                             <div className="password-help">
                                 <p className={password.length >= 8 ? "valid" : "invalid"}>
-                                    {password.length >= 8 ? "✓" : "✗"} Mínimo 8 caracteres
+                                    {password.length >= 8 ? "✓" : "✗"} {t.reset_password_minimum}
                                 </p>
 
                                 <p className={/[A-Z]/.test(password) ? "valid" : "invalid"}>
-                                    {/[A-Z]/.test(password) ? "✓" : "✗"} Una letra mayúscula
+                                    {/[A-Z]/.test(password) ? "✓" : "✗"} {t.reset_password_uppercase}
                                 </p>
 
                                 <p className={/[a-z]/.test(password) ? "valid" : "invalid"}>
-                                    {/[a-z]/.test(password) ? "✓" : "✗"} Una letra minúscula
+                                    {/[a-z]/.test(password) ? "✓" : "✗"} {t.reset_password_lowercase}
                                 </p>
 
                                 <p className={/[0-9]/.test(password) ? "valid" : "invalid"}>
-                                    {/[0-9]/.test(password) ? "✓" : "✗"} Un número
+                                    {/[0-9]/.test(password) ? "✓" : "✗"} {t.reset_password_number}
                                 </p>
 
                                 <p className={/[^A-Za-z0-9]/.test(password) ? "valid" : "invalid"}>
-                                    {/[^A-Za-z0-9]/.test(password) ? "✓" : "✗"} Un carácter especial
+                                    {/[^A-Za-z0-9]/.test(password) ? "✓" : "✗"} {t.reset_password_special}
                                 </p>
                             </div>
                         )}
@@ -198,7 +200,7 @@ export default function ResetPasswordPage() {
                             className="form-input"
                             name="confirm-password"
                             autoComplete="new-password"
-                            placeholder="Confirmar contraseña"
+                            placeholder={t.reset_password_confirm_placeholder}
                             ref={confirmRef}
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
@@ -228,11 +230,11 @@ export default function ResetPasswordPage() {
                         onClick={handleUpdatePassword}
                         disabled={loading}
                     >
-                        {loading ? "Actualizando..." : "Actualizar contraseña"}
+                        {loading ? t.reset_password_updating : t.reset_password_update_button}
                     </button>
 
                     <button type="button" className="btn btn-secondary" onClick={goHome}>
-                        Volver al inicio
+                        {t.reset_password_home}
                     </button>
                 </>
             )}
@@ -241,7 +243,7 @@ export default function ResetPasswordPage() {
                 <>
                     <div className="auth-message success">{message}</div>
                     <button type="button" className="btn btn-primary" onClick={goHome}>
-                        Ir al inicio
+                        {t.reset_password_go_home}
                     </button>
                 </>
             )}

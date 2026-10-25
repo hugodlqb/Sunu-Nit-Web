@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useLanguage } from "@/context/LanguageContext";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/context/AuthContext";
 
@@ -19,6 +20,13 @@ interface Role {
 
 export default function AccountAdmin() {
 
+    const { t } = useLanguage();
+    const roleLabels: Record<string, string> = {
+        admin: t.role_admin,
+        editor: t.role_editor,
+        volunteer: t.role_volunteer,
+        volunteer_manager: t.role_volunteer_manager,
+    };
     const [search, setSearch] = useState("");
     const [results, setResults] = useState<Person[]>([]);
     const [selectedPerson, setSelectedPerson] =
@@ -195,20 +203,20 @@ export default function AccountAdmin() {
         setOriginalRoles(selectedRoles);
         setSaving(false);
 
-        alert("Roles actualizados correctamente");
+        alert(t.admin_roles_saved);
     }
 
     return (
 
         <div>
 
-            <h2>Administración</h2>
+            <h2>{t.admin_title}</h2>
 
             <div>
 
                 <input
                     type="text"
-                    placeholder="Nombre o apellido..."
+                    placeholder={t.admin_search_placeholder}
                     value={search}
                     onChange={(e) =>
                         setSearch(e.target.value)
@@ -223,13 +231,13 @@ export default function AccountAdmin() {
                 />
 
                 <button onClick={searchUsers}>
-                    Buscar
+                    {t.admin_search_button}
                 </button>
 
             </div>
 
             {loading && (
-                <p>Buscando...</p>
+                <p>{t.admin_searching}</p>
             )}
 
             {results.map(person => (
@@ -246,11 +254,11 @@ export default function AccountAdmin() {
                     </strong>
 
                     <div>
-                        Teléfono: {person.phone || "—"}
+                        {t.admin_phone}: {person.phone || "—"}
                     </div>
 
                     <div>
-                        País: {person.country || "—"}
+                        {t.admin_country}: {person.country || "—"}
                     </div>
 
                 </button>
@@ -269,7 +277,7 @@ export default function AccountAdmin() {
                     </h3>
 
                     <h4>
-                        Roles
+                        {t.admin_roles}
                     </h4>
 
                     {roles
@@ -291,7 +299,7 @@ export default function AccountAdmin() {
                                     }
                                 />
 
-                                {role.key}
+                                {roleLabels[role.key] ?? role.key}
 
                             </label>
 
@@ -301,7 +309,7 @@ export default function AccountAdmin() {
                         onClick={saveRoles}
                         disabled={saving}
                     >
-                        {saving ? "Guardando..." : "Guardar roles"}
+                        {saving ? t.admin_saving_roles : t.admin_save_roles}
                     </button>
 
                 </div>

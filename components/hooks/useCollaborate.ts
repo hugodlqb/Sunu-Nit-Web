@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useLanguage } from "@/context/LanguageContext";
 import { donations } from "@/data/donations";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/context/AuthContext";
@@ -24,6 +25,7 @@ export type DonationOrigin =
 
 export function useCollaborate() {
 
+    const { t } = useLanguage();
     const [selectedDonation, setSelectedDonation] =
         useState<keyof typeof donations | null>(null);
     const { user } = useAuth();
@@ -193,7 +195,7 @@ export function useCollaborate() {
 
             if (sessionError || (user && !token)) {
                 alert(
-                    "No se ha podido validar tu sesión. Recarga la página e inténtalo de nuevo."
+                    t.collaborate_session_error
                 );
                 return;
             }
@@ -247,11 +249,11 @@ export function useCollaborate() {
             );
 
             alert(
-                "No se pudo iniciar el pago. Inténtalo de nuevo."
+                t.collaborate_payment_error
             );
         } catch (error) {
             console.error(error);
-            alert("Error iniciando el pago");
+            alert(t.collaborate_payment_start_error);
         }
     }
 

@@ -36,7 +36,7 @@ export default function DonationFlow({
 
     const { t } = useLanguage();
 
-    let title = "Tu donación";
+    let title = t.donation_flow_title;
 
     let description = "";
 
@@ -64,10 +64,10 @@ export default function DonationFlow({
 
     if (origin.type === "free") {
 
-        title = "Donación libre";
+        title = t.donation_flow_free_title;
 
         description =
-            "Elige la cantidad que quieres donar.";
+            t.donation_flow_free_description;
 
     }
 
@@ -164,7 +164,7 @@ export default function DonationFlow({
                 >
                     {origin.type === "project"
                         ? t.project_donate
-                        : "Continuar"}
+                        : t.donation_flow_continue}
                     <ArrowRight size={22} />
                 </button>
 

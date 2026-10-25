@@ -260,7 +260,7 @@ export default function AccountDonations() {
 
                 alert(
                     json?.error ??
-                    "No se pudo obtener el justificante."
+                    t.donation_receipt_error
                 );
 
                 return;
@@ -314,7 +314,7 @@ export default function AccountDonations() {
         donation.donation_items?.forEach(
             (item) => {
                 result.push(
-                    `${item.donation_types?.name ?? "Donación"} ${item.amount} ${donation.currency}`
+                    `${item.donation_types?.name ?? t.donation_generic} ${item.amount} ${donation.currency}`
                 );
             }
         );
@@ -322,13 +322,13 @@ export default function AccountDonations() {
         donation.donation_projects?.forEach(
             (project) => {
                 result.push(
-                    `${project.projects?.name ?? "Proyecto"} ${project.amount} ${donation.currency}`
+                    `${project.projects?.name ?? t.project_generic} ${project.amount} ${donation.currency}`
                 );
             }
         );
 
         if (result.length === 0) {
-            return "General";
+            return t.donation_destination_general;
         }
 
         return result.join(" · ");
@@ -337,16 +337,16 @@ export default function AccountDonations() {
     function getStatusLabel(status: string) {
         switch (status) {
             case "completed":
-                return "Completada";
+                return t.donation_status_completed;
 
             case "pending":
-                return "Pendiente";
+                return t.donation_status_pending;
 
             case "failed":
-                return "Fallida";
+                return t.donation_status_failed;
 
             case "refunded":
-                return "Reembolsada";
+                return t.donation_status_refunded;
 
             default:
                 return status;
@@ -431,7 +431,7 @@ export default function AccountDonations() {
                         onClick={clearFilters}
                         className="btn btn-outline"
                     >
-                        Limpiar
+                        {t.donation_clear_filters}
                     </button>
                 )}
             </div>
@@ -439,7 +439,7 @@ export default function AccountDonations() {
             {/* TABLA */}
 
             {loading && (
-                <p>{t.reset_password_loading}</p>
+                <p>{t.donation_receipt_loading}</p>
             )}
 
             {!loading &&
@@ -625,8 +625,8 @@ export default function AccountDonations() {
                                                             {receiptLoading ===
                                                                 successfulPayments[0]
                                                                     .id
-                                                                ? "Abriendo..."
-                                                                : "Ver justificante"}
+                                                                ? t.donation_receipt_loading
+                                                                : t.donation_receipt_view}
                                                         </button>
                                                     ) : (
                                                         <details>
@@ -636,7 +636,7 @@ export default function AccountDonations() {
                                                                         "pointer",
                                                                 }}
                                                             >
-                                                                Ver justificantes (
+                                                                {t.donation_receipts_summary} (
                                                                 {
                                                                     successfulPayments.length
                                                                 }
@@ -678,8 +678,8 @@ export default function AccountDonations() {
                                                                         >
                                                                             {receiptLoading ===
                                                                                 payment.id
-                                                                                ? "Abriendo..."
-                                                                                : `Pago ${index +
+                                                                                ? t.donation_receipt_loading
+                                                                                : `${t.payment_generic} ${index +
                                                                                 1
                                                                                 } · ${payment.amount} ${payment.currency}`}
                                                                         </button>

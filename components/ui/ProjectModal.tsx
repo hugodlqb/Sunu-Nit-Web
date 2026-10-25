@@ -29,6 +29,7 @@ import "@/styles/detailsmodal.css";
 
 import { supabase } from "@/lib/supabase";
 import { useLanguage } from "@/context/LanguageContext";
+import { ProjectTranslation, ProjectUpdateTranslation, resolveLocalizedText } from "@/lib/project-translations";
 
 
 interface ProjectUpdateImage {
@@ -47,6 +48,7 @@ interface ProjectUpdate {
     description: string | null;
     update_date: string;
     project_update_images: ProjectUpdateImage[];
+    project_update_translations: ProjectUpdateTranslation[] | ProjectUpdateTranslation | null;
 
 }
 
@@ -56,6 +58,7 @@ interface ProjectDetail {
     id: string;
     name: string;
     detail_description: string | null;
+    project_translations: ProjectTranslation[] | ProjectTranslation | null;
     project_updates: ProjectUpdate[];
 
 }
@@ -79,7 +82,7 @@ export default function ProjectModal({
 
 }: Props) {
 
-    const { t } = useLanguage();
+    const { t, language } = useLanguage();
 
     const [project, setProject] =
         useState<ProjectDetail | null>(null);
@@ -120,6 +123,7 @@ export default function ProjectModal({
                     id,
                     name,
                     detail_description,
+                    project_translations (locale, name, description, detail_description),
 
                     project_updates (
 
@@ -127,6 +131,7 @@ export default function ProjectModal({
                         title,
                         description,
                         update_date,
+                        project_update_translations (locale, title, description),
 
                         project_update_images (
 
@@ -179,7 +184,7 @@ export default function ProjectModal({
                 );
 
                 setError(
-                    "No se pudo cargar la información del proyecto."
+                    t.project_modal_load_error
                 );
 
                 setLoading(false);
@@ -191,7 +196,7 @@ export default function ProjectModal({
             if (!data) {
 
                 setError(
-                    "No se encontró el proyecto."
+                    t.project_modal_not_found
                 );
 
                 setLoading(false);
@@ -324,12 +329,12 @@ export default function ProjectModal({
                                 <div className="project-modal-header-info">
 
                                     <h2>
-                                        {project.name}
+                                        {resolveLocalizedText(project.project_translations,language,"name",project.name) ?? project.name}
                                     </h2>
 
-                                    {project.detail_description && (
+                                    {resolveLocalizedText(project.project_translations,language,"detail_description",project.detail_description) && (
                                         <p className="activity-summary">
-                                            {project.detail_description}
+                                            {resolveLocalizedText(project.project_translations,language,"detail_description",project.detail_description)}
                                         </p>
                                     )}
 
@@ -341,7 +346,7 @@ export default function ProjectModal({
                                     onClick={() =>
                                         onDonate?.(
                                             project.id,
-                                            project.name
+                                            resolveLocalizedText(project.project_translations,language,"name",project.name) ?? project.name
                                         )
                                     }
                                 >
@@ -360,9 +365,7 @@ export default function ProjectModal({
                                             <div className="activity-update">
 
                                                 <p>
-                                                    Aún no hay
-                                                    actualizaciones
-                                                    sobre este proyecto.
+                                                    {t.project_no_updates}
                                                 </p>
 
                                             </div>
@@ -418,9 +421,7 @@ export default function ProjectModal({
                                                                                                 src={
                                                                                                     image.image_url
                                                                                                 }
-                                                                                                alt={
-                                                                                                    update.title
-                                                                                                }
+                                                                                                alt={resolveLocalizedText(update.project_update_translations,language,"title",update.title) ?? update.title}
                                                                                             />
 
                                                                                         </div>
@@ -461,17 +462,17 @@ export default function ProjectModal({
 
                                                         <h3>
                                                             {
-                                                                update.title
+                                                                resolveLocalizedText(update.project_update_translations,language,"title",update.title) ?? update.title
                                                             }
                                                         </h3>
 
 
                                                         {
-                                                            update.description && (
+                                                            resolveLocalizedText(update.project_update_translations,language,"description",update.description) && (
 
                                                                 <p>
                                                                     {
-                                                                        update.description
+                                                                        resolveLocalizedText(update.project_update_translations,language,"description",update.description)
                                                                     }
                                                                 </p>
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useLanguage } from "@/context/LanguageContext";
 import AccountActivity from "@/components/ui/Account/My Activity/AccountActivity";
 import AccountSidebar from "@/components/ui/Account/AccountSidebar";
 import AccountProfile from "@/components/ui/Account/AccountProfile";
@@ -30,6 +31,7 @@ export default function AccountPanel({
     closing
 
 }: Props) {
+    const { t } = useLanguage();
     const collaborate = useCollaborate();
 
     useLockBodyScroll(
@@ -67,11 +69,11 @@ export default function AccountPanel({
 
             case "volunteer":
 
-                return <div>Voluntariado - Próximamente</div>;
+                return <div>{t.account_volunteer_coming_soon}</div>;
 
             case "volunteer_manager":
 
-                return <div>Gestión de voluntarios - Próximamente</div>;
+                return <div>{t.account_volunteer_management_coming_soon}</div>;
 
             case "editor":
                 return <ProjectManager />;

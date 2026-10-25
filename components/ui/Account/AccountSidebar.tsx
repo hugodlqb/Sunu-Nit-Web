@@ -49,7 +49,7 @@ export default function AccountSidebar({
 
             {
                 id: "activity",
-                label: "Mi actividad",
+                label: t.account_activity,
                 icon: <HandHeart size={22} />
             },
 
@@ -62,7 +62,7 @@ export default function AccountSidebar({
             ...(hasRole("volunteer")
                 ? [{
                     id: "volunteer" as AccountSection,
-                    label: "Voluntariado",
+                    label: t.account_volunteering,
                     icon: <HandHeart size={22} />
                 }]
                 : []),
@@ -70,7 +70,7 @@ export default function AccountSidebar({
             ...(hasRole("volunteer_manager")
                 ? [{
                     id: "volunteer_manager" as AccountSection,
-                    label: "Gestión de voluntarios",
+                    label: t.account_volunteer_management,
                     icon: <User size={22} />
                 }]
                 : []),
@@ -78,7 +78,7 @@ export default function AccountSidebar({
             ...(hasRole("editor")
                 ? [{
                     id: "editor" as AccountSection,
-                    label: "Editor",
+                    label: t.account_editor,
                     icon: <ChartBar size={22} />
                 }]
                 : []),
@@ -86,7 +86,7 @@ export default function AccountSidebar({
             ...(hasRole("admin")
                 ? [{
                     id: "admin" as AccountSection,
-                    label: "Administración",
+                    label: t.account_administration,
                     icon: <Gear size={22} />
                 }]
                 : []),
