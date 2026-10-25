@@ -41,6 +41,20 @@ interface Analytics {
 }
 type AdminTab = "overview" | "users";
 
+function dateInputValue(date: Date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+}
+
+function getDefaultDateRange() {
+    const end = new Date();
+    const start = new Date(end);
+    start.setFullYear(start.getFullYear() - 1);
+    return { start: dateInputValue(start), end: dateInputValue(end) };
+}
+
 export default function AccountAdmin() {
     const { t, language } = useLanguage();
     const { profile } = useAuth();
@@ -65,6 +79,9 @@ export default function AccountAdmin() {
     const [analytics, setAnalytics] = useState<Analytics | null>(null);
     const [analyticsLoading, setAnalyticsLoading] = useState(true);
     const [analyticsError, setAnalyticsError] = useState("");
+    const [initialDateRange] = useState(getDefaultDateRange);
+    const [startDate, setStartDate] = useState(initialDateRange.start);
+    const [endDate, setEndDate] = useState(initialDateRange.end);
 
     const loadAnalytics = useCallback(async () => {
         setAnalyticsLoading(true);
@@ -73,7 +90,8 @@ export default function AccountAdmin() {
             const { data } = await supabase.auth.getSession();
             const token = data.session?.access_token;
             if (!token) throw new Error("No active session");
-            const response = await fetch("/api/admin/analytics", {
+            const params = new URLSearchParams({ startDate, endDate });
+            const response = await fetch(`/api/admin/analytics?${params.toString()}`, {
                 headers: { Authorization: `Bearer ${token}` },
                 cache: "no-store",
             });
@@ -86,7 +104,7 @@ export default function AccountAdmin() {
         } finally {
             setAnalyticsLoading(false);
         }
-    }, [t.admin_analytics_error]);
+    }, [t.admin_analytics_error, startDate, endDate]);
 
     useEffect(() => { void loadAnalytics(); }, [loadAnalytics]);
 
@@ -209,10 +227,6 @@ export default function AccountAdmin() {
         <section className="admin-dashboard">
             <header className="admin-dashboard-header">
                 <div>
-                    <span className="admin-eyebrow">{t.admin_eyebrow}</span>
-                    <h2>{t.admin_title}</h2>
-                    <p>{t.admin_subtitle}</p>
-                </div>
                 <button className="admin-refresh-button" onClick={() => void loadAnalytics()} disabled={analyticsLoading} aria-label={t.admin_refresh}>
                     <ArrowClockwise size={18} className={analyticsLoading ? "admin-spin" : ""} />
                     <span>{t.admin_refresh}</span>
@@ -227,6 +241,11 @@ export default function AccountAdmin() {
             {tab === "overview" ? (
                 <div className="admin-overview">
                     {analyticsError && <div className="admin-state admin-state-error" role="alert"><span>{analyticsError}</span><button type="button" onClick={() => void loadAnalytics()}>{t.admin_retry}</button></div>}
+<form className="admin-date-filter" onSubmit={(event) => { event.preventDefault(); void loadAnalytics(); }}>
+                        <label>{t.admin_date_from}<input type="date" value={startDate} max={endDate || undefined} onChange={(event) => setStartDate(event.target.value)} required /></label>
+                        <label>{t.admin_date_to}<input type="date" value={endDate} min={startDate || undefined} max={dateInputValue(new Date())} onChange={(event) => setEndDate(event.target.value)} required /></label>
+                        <button type="submit" disabled={analyticsLoading || !startDate || !endDate || startDate > endDate}>{t.admin_apply_dates}</button>
+                    </form>
                     <div className="admin-metrics-grid">
                         <article className="admin-metric-card"><span className="admin-metric-icon"><CurrencyEur size={22} /></span><span className="admin-metric-label">{t.admin_revenue_12m}</span><strong>{analyticsLoading ? "—" : formattedRevenue}</strong><small>{t.admin_revenue_caption}</small></article>
                         <article className="admin-metric-card"><span className="admin-metric-icon"><UserPlus size={22} /></span><span className="admin-metric-label">{t.admin_new_donors_12m}</span><strong>{analyticsLoading ? "—" : analytics?.newDonors ?? 0}</strong><small>{t.admin_new_donors_caption}</small></article>
@@ -268,7 +287,6 @@ export default function AccountAdmin() {
                         </article>
                     </div>
 
-                    <article className="admin-campaign-notice"><span className="admin-campaign-icon"><ChartLineUp size={22} /></span><div><h3>{t.admin_campaign_tracking_title}</h3><p>{t.admin_campaign_tracking_description}</p><small>{t.admin_campaign_tracking_next}</small></div></article>
                     <p className="admin-data-note">{t.admin_analytics_note}</p>
                 </div>
             ) : (
