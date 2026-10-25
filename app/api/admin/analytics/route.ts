@@ -9,7 +9,7 @@ async function readAllRows<T>(table: string, columns: string): Promise<T[]> {
     const rows: T[] = [];
     for (let offset = 0; ; offset += PAGE_SIZE) {
         const { data, error } = await supabaseAdmin
-            .from(table).select(columns).range(offset, offset + PAGE_SIZE - 1);
+            .from(table).select(columns).order("id", { ascending: true }).range(offset, offset + PAGE_SIZE - 1);
         if (error) throw new Error(`Failed reading ${table}: ${error.message}`);
         const page = (data ?? []) as T[];
         rows.push(...page);
