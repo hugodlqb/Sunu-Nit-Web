@@ -464,7 +464,7 @@ export default function ProjectModal({
 
                                                         <h3>
                                                             {
-                                                                {resolveLocalizedText(update.project_update_translations,language,"title",update.title) ?? update.title}
+                                                                resolveLocalizedText(update.project_update_translations,language,"title",update.title) ?? update.title
                                                             }
                                                         </h3>
 
@@ -474,7 +474,7 @@ export default function ProjectModal({
 
                                                                 <p>
                                                                     {
-                                                                        {resolveLocalizedText(update.project_update_translations,language,"description",update.description)}
+                                                                        resolveLocalizedText(update.project_update_translations,language,"description",update.description)
                                                                     }
                                                                 </p>
 

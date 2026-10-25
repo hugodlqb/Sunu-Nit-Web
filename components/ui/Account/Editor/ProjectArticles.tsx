@@ -861,7 +861,7 @@ export default function ProjectArticles({
 
                                     <h4>
                                         {
-                                            {resolveLocalizedText(article.project_update_translations,language,"title",article.title) ?? article.title}
+                                            resolveLocalizedText(article.project_update_translations,language,"title",article.title) ?? article.title
                                         }
                                     </h4>
 
@@ -869,7 +869,7 @@ export default function ProjectArticles({
 
                                         <p>
                                             {
-                                                {resolveLocalizedText(article.project_update_translations,language,"description",article.description)}
+                                                resolveLocalizedText(article.project_update_translations,language,"description",article.description)
                                             }
                                         </p>
 
