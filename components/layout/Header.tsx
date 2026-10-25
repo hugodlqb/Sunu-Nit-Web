@@ -328,7 +328,7 @@ export default function Header({
                           }
                         >
                           <HandHeart size={20} />
-                          <span>Mi actividad</span>
+                          <span>{t.account_activity}</span>
                         </button>
 
                         <button
@@ -350,7 +350,7 @@ export default function Header({
                               }}
                             >
                               <Gear size={20} />
-                              <span>Administración</span>
+                              <span>{t.account_administration}</span>
                             </button>
                           )
                         }
@@ -364,7 +364,7 @@ export default function Header({
                               }}
                             >
                               <HandHeart size={20} />
-                              <span>Voluntariado</span>
+                              <span>{t.account_volunteering}</span>
                             </button>
                           )
                         }
@@ -378,7 +378,7 @@ export default function Header({
                               }}
                             >
                               <User size={20} />
-                              <span>Gestión de voluntarios</span>
+                              <span>{t.account_volunteer_management}</span>
                             </button>
                           )
                         }
