@@ -328,7 +328,7 @@ export default function AccountDonations() {
         );
 
         if (result.length === 0) {
-            return "General";
+            return t.donation_destination_general;
         }
 
         return result.join(" · ");
@@ -337,16 +337,16 @@ export default function AccountDonations() {
     function getStatusLabel(status: string) {
         switch (status) {
             case "completed":
-                return "Completada";
+                return t.donation_status_completed;
 
             case "pending":
-                return "Pendiente";
+                return t.donation_status_pending;
 
             case "failed":
-                return "Fallida";
+                return t.donation_status_failed;
 
             case "refunded":
-                return "Reembolsada";
+                return t.donation_status_refunded;
 
             default:
                 return status;
@@ -431,7 +431,7 @@ export default function AccountDonations() {
                         onClick={clearFilters}
                         className="btn btn-outline"
                     >
-                        Limpiar
+                        {t.donation_clear_filters}
                     </button>
                 )}
             </div>
@@ -439,7 +439,7 @@ export default function AccountDonations() {
             {/* TABLA */}
 
             {loading && (
-                <p>{t.reset_password_loading}</p>
+                <p>{t.donation_receipt_loading}</p>
             )}
 
             {!loading &&
@@ -625,7 +625,7 @@ export default function AccountDonations() {
                                                             {receiptLoading ===
                                                                 successfulPayments[0]
                                                                     .id
-                                                                ? "Abriendo..."
+                                                                ? t.donation_receipt_loading
                                                                 : t.donation_receipt_view}
                                                         </button>
                                                     ) : (
@@ -636,7 +636,7 @@ export default function AccountDonations() {
                                                                         "pointer",
                                                                 }}
                                                             >
-                                                                Ver justificantes (
+                                                                {t.donation_receipts_summary} (
                                                                 {
                                                                     successfulPayments.length
                                                                 }
