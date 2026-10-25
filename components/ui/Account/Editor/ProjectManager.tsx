@@ -766,7 +766,20 @@ export default function ProjectManager() {
                     </div>
 
                     <div className="project-manager-form-row">
-                        <fieldset className="project-manager-translations">
+                        <div className="project-manager-form-field">
+                            <label>{t.editor_projects_target}</label>
+                            <input type="number" min="0" step="0.01" value={form.target_amount} onChange={e=>updateForm("target_amount",e.target.value)} />
+                        </div>
+                        <div className="project-manager-form-field">
+                            <label>Año</label>
+                            <input type="number" min="1900" max="2100" value={form.year} onChange={e=>updateForm("year",e.target.value)} required />
+                        </div>
+                        <div className="project-manager-form-field">
+                            <label>{t.editor_projects_image}</label>
+                            <input type="text" value={form.image} placeholder="https://..." onChange={e=>updateForm("image",e.target.value)} />
+                        </div>
+                    </div>
+                    <fieldset className="project-manager-translations">
                         <legend>{t.editor_projects_translations}</legend>
                         {locales.map(locale=>{
                             const label=locale==="es"?t.editor_news_locale_es:locale==="en"?t.editor_news_locale_en:t.editor_news_locale_fr;
@@ -774,18 +787,15 @@ export default function ProjectManager() {
                                 <h4>{label}</h4>
                                 <div className="project-manager-form-field">
                                     <label htmlFor={`project-name-${locale}`}>{t.editor_projects_name}</label>
-                                    <input id={`project-name-${locale}`} value={form.translations[locale].name}
-                                        onChange={e=>updateTranslation(locale,"name",e.target.value)} required />
+                                    <input id={`project-name-${locale}`} value={form.translations[locale].name} onChange={e=>updateTranslation(locale,"name",e.target.value)} required />
                                 </div>
                                 <div className="project-manager-form-field">
                                     <label htmlFor={`project-description-${locale}`}>{t.editor_projects_description}</label>
-                                    <textarea id={`project-description-${locale}`} value={form.translations[locale].description}
-                                        onChange={e=>updateTranslation(locale,"description",e.target.value)} rows={2}/>
+                                    <textarea id={`project-description-${locale}`} value={form.translations[locale].description} onChange={e=>updateTranslation(locale,"description",e.target.value)} rows={2} />
                                 </div>
                                 <div className="project-manager-form-field">
                                     <label htmlFor={`project-detail-description-${locale}`}>{t.editor_projects_detail_description}</label>
-                                    <textarea id={`project-detail-description-${locale}`} value={form.translations[locale].detail_description}
-                                        onChange={e=>updateTranslation(locale,"detail_description",e.target.value)} rows={5}/>
+                                    <textarea id={`project-detail-description-${locale}`} value={form.translations[locale].detail_description} onChange={e=>updateTranslation(locale,"detail_description",e.target.value)} rows={5} />
                                 </div>
                             </section>;
                         })}
@@ -1084,46 +1094,41 @@ export default function ProjectManager() {
 
                                                                 </div>
 
-                                                                <div className="project-manager-form-row">
-                                                                    <div className="project-manager-form-field">
-                                                                        <label>{t.editor_projects_target}</label>
-                                                                        <input type="number" min="0" step="0.01" value={form.target_amount}
-                                                                            onChange={e=>updateForm("target_amount",e.target.value)} />
-                                                                    </div>
-                                                                    <div className="project-manager-form-field">
-                                                                        <label>Año</label>
-                                                                        <input type="number" min="1900" max="2100" value={form.year}
-                                                                            onChange={e=>updateForm("year",e.target.value)} />
-                                                                    </div>
-                                                                    <div className="project-manager-form-field">
-                                                                        <label>{t.editor_projects_image}</label>
-                                                                        <input value={form.image} placeholder="https://..." onChange={e=>updateForm("image",e.target.value)} />
-                                                                    </div>
-                                                                </div>
-                                                                <fieldset className="project-manager-translations">
-                                                                    <legend>{t.editor_projects_translations}</legend>
-                                                                    {locales.map(locale=>{
-                                                                        const label=locale==="es"?t.editor_news_locale_es:locale==="en"?t.editor_news_locale_en:t.editor_news_locale_fr;
-                                                                        return <section className="project-manager-translation" key={locale}>
-                                                                            <h4>{label}</h4>
-                                                                            <div className="project-manager-form-field">
-                                                                                <label htmlFor={`project-inline-name-${locale}`}>{t.editor_projects_name}</label>
-                                                                                <input id={`project-inline-name-${locale}`} value={form.translations[locale].name}
-                                                                                    onChange={e=>updateTranslation(locale,"name",e.target.value)} required />
-                                                                            </div>
-                                                                            <div className="project-manager-form-field">
-                                                                                <label htmlFor={`project-inline-description-${locale}`}>{t.editor_projects_description}</label>
-                                                                                <textarea id={`project-inline-description-${locale}`} value={form.translations[locale].description}
-                                                                                    onChange={e=>updateTranslation(locale,"description",e.target.value)} rows={2}/>
-                                                                            </div>
-                                                                            <div className="project-manager-form-field">
-                                                                                <label htmlFor={`project-inline-detail-${locale}`}>{t.editor_projects_detail_description}</label>
-                                                                                <textarea id={`project-inline-detail-${locale}`} value={form.translations[locale].detail_description}
-                                                                                    onChange={e=>updateTranslation(locale,"detail_description",e.target.value)} rows={5}/>
-                                                                            </div>
-                                                                        </section>;
-                                                                    })}
-                                                                </fieldset>
+                    <div className="project-manager-form-row">
+                        <div className="project-manager-form-field">
+                            <label>{t.editor_projects_target}</label>
+                            <input type="number" min="0" step="0.01" value={form.target_amount} onChange={e=>updateForm("target_amount",e.target.value)} />
+                        </div>
+                        <div className="project-manager-form-field">
+                            <label>Año</label>
+                            <input type="number" min="1900" max="2100" value={form.year} onChange={e=>updateForm("year",e.target.value)} required />
+                        </div>
+                        <div className="project-manager-form-field">
+                            <label>{t.editor_projects_image}</label>
+                            <input type="text" value={form.image} placeholder="https://..." onChange={e=>updateForm("image",e.target.value)} />
+                        </div>
+                    </div>
+                    <fieldset className="project-manager-translations">
+                        <legend>{t.editor_projects_translations}</legend>
+                        {locales.map(locale=>{
+                            const label=locale==="es"?t.editor_news_locale_es:locale==="en"?t.editor_news_locale_en:t.editor_news_locale_fr;
+                            return <section className="project-manager-translation" key={locale}>
+                                <h4>{label}</h4>
+                                <div className="project-manager-form-field">
+                                    <label htmlFor={`project-inline-name-${locale}`}>{t.editor_projects_name}</label>
+                                    <input id={`project-inline-name-${locale}`} value={form.translations[locale].name} onChange={e=>updateTranslation(locale,"name",e.target.value)} required />
+                                </div>
+                                <div className="project-manager-form-field">
+                                    <label htmlFor={`project-inline-description-${locale}`}>{t.editor_projects_description}</label>
+                                    <textarea id={`project-inline-description-${locale}`} value={form.translations[locale].description} onChange={e=>updateTranslation(locale,"description",e.target.value)} rows={2} />
+                                </div>
+                                <div className="project-manager-form-field">
+                                    <label htmlFor={`project-inline-detail-description-${locale}`}>{t.editor_projects_detail_description}</label>
+                                    <textarea id={`project-inline-detail-description-${locale}`} value={form.translations[locale].detail_description} onChange={e=>updateTranslation(locale,"detail_description",e.target.value)} rows={5} />
+                                </div>
+                            </section>;
+                        })}
+                    </fieldset>
 
                                                                 <div className="project-manager-checkboxes">
 
